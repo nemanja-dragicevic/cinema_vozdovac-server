@@ -1,4 +1,4 @@
-package com.example.BioskopVozdovac;
+package com.master.BioskopVozdovac;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
