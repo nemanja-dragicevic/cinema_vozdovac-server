@@ -2,8 +2,6 @@ package com.master.BioskopVozdovac.member;
 
 import com.master.BioskopVozdovac.enums.Gender;
 import com.master.BioskopVozdovac.enums.MemberStatus;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,35 +9,26 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="members")
-public class MemberEntity extends User {
+public class MemberDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long memberID;
 
-    @NotEmpty
     private String firstName;
 
-    @NotEmpty
     private String lastName;
 
+    private Gender gender;
+
     private String address;
+
+    private MemberStatus status;
 
     private String phoneNumber;
 
     private LocalDate birthDate;
-
-    @Enumerated(EnumType.STRING)
-    private MemberStatus status;
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
 
 }
