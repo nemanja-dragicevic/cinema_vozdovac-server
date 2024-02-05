@@ -1,5 +1,8 @@
-package com.master.BioskopVozdovac.actor;
+package com.master.BioskopVozdovac.actor.controller;
 
+import com.master.BioskopVozdovac.actor.model.ActorDTO;
+import com.master.BioskopVozdovac.actor.model.ActorEntity;
+import com.master.BioskopVozdovac.actor.service.ActorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

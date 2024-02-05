@@ -1,4 +1,4 @@
-package com.master.BioskopVozdovac.actor;
+package com.master.BioskopVozdovac.movie.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -7,23 +7,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="actor")
-public class ActorEntity {
+@Table(name = "movie")
+public class MovieEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long actorID;
+    private Long movieID;
 
     @NotEmpty
-    private String firstName;
+    private String name;
 
     @NotEmpty
-    private String lastName;
+    private String description;
+
+    @NotEmpty
+    private String duration;
 
 }

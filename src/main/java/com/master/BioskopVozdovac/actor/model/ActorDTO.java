@@ -1,5 +1,6 @@
-package com.master.BioskopVozdovac.actor;
+package com.master.BioskopVozdovac.actor.model;
 
+import com.master.BioskopVozdovac.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,5 +17,7 @@ public class ActorDTO {
     private String firstName;
 
     private String lastName;
+
+    private Gender gender;
 
 }
