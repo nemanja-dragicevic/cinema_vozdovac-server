@@ -13,3 +13,10 @@ databaseChangeLog:
         - sqlFile:
             encoding: UTF-8
             path: db/changes/002_create_actor.sql
+  - changeSet:
+      id: 003
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/003_create_movie.sql

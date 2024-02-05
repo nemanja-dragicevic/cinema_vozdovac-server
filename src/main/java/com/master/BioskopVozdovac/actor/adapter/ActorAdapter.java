@@ -1,5 +1,7 @@
-package com.master.BioskopVozdovac.actor;
+package com.master.BioskopVozdovac.actor.adapter;
 
+import com.master.BioskopVozdovac.actor.model.ActorDTO;
+import com.master.BioskopVozdovac.actor.model.ActorEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,6 +16,7 @@ public class ActorAdapter {
         entity.setActorID(dto.getActorID());
         entity.setFirstName(dto.getFirstName());
         entity.setLastName(dto.getLastName());
+        entity.setGender(dto.getGender());
 
         return entity;
     }
@@ -27,6 +30,7 @@ public class ActorAdapter {
         dto.setActorID(entity.getActorID());
         dto.setFirstName(entity.getFirstName());
         dto.setLastName(entity.getLastName());
+        dto.setGender(entity.getGender());
 
         return dto;
     }
