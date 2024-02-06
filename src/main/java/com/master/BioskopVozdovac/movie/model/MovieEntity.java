@@ -1,11 +1,15 @@
 package com.master.BioskopVozdovac.movie.model;
 
+import com.master.BioskopVozdovac.role.model.RoleEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -28,5 +32,8 @@ public class MovieEntity {
 
     @NotEmpty
     private String duration;
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    private Set<RoleEntity> roles = new HashSet<>();
 
 }

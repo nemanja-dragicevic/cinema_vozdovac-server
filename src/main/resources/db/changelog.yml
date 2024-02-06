@@ -20,3 +20,10 @@ databaseChangeLog:
         - sqlFile:
             encoding: UTF-8
             path: db/changes/003_create_movie.sql
+  - changeSet:
+      id: 004
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/004_create_roles.sql
