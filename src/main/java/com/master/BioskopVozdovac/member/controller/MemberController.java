@@ -1,5 +1,8 @@
-package com.master.BioskopVozdovac.member;
+package com.master.BioskopVozdovac.member.controller;
 
+import com.master.BioskopVozdovac.member.model.MemberDTO;
+import com.master.BioskopVozdovac.member.model.MemberEntity;
+import com.master.BioskopVozdovac.member.MemberService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

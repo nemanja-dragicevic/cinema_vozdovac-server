@@ -1,4 +1,4 @@
-package com.master.BioskopVozdovac.member;
+package com.master.BioskopVozdovac.user;
 
 import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;

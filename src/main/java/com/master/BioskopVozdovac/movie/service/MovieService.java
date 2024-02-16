@@ -7,6 +7,7 @@ import com.master.BioskopVozdovac.movie.repository.MovieRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -17,9 +18,8 @@ public class MovieService {
 
     private final MovieAdapter movieAdapter;
 
-
     public MovieDTO saveMovie(MovieDTO dto) {
-        MovieEntity entity = movieRepository.saveAndFlush(movieAdapter.dtoToEntity(dto));
+        MovieEntity entity = movieRepository.save(movieAdapter.dtoToEntity(dto));
         return movieAdapter.entityToDTO(entity);
     }
 
@@ -37,5 +37,9 @@ public class MovieService {
     public String deleteMovieById(Long id) {
         movieRepository.deleteById(id);
         return "Successfully deleted movie with id: " + id;
+    }
+
+    public List<MovieDTO> getAllMovies() {
+        return movieAdapter.toDto(movieRepository.findAll());
     }
 }

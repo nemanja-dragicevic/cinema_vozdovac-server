@@ -1,11 +1,19 @@
 package com.master.BioskopVozdovac.movie.adapter;
 
+import com.master.BioskopVozdovac.genre.adapter.GenreAdapter;
 import com.master.BioskopVozdovac.movie.model.MovieDTO;
 import com.master.BioskopVozdovac.movie.model.MovieEntity;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
+@AllArgsConstructor
 public class MovieAdapter {
+
+    private final GenreAdapter genreAdapter;
 
     public MovieEntity dtoToEntity(final MovieDTO dto) {
         if (dto == null)
@@ -17,6 +25,7 @@ public class MovieAdapter {
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
         entity.setDuration(dto.getDuration());
+        entity.setGenres(genreAdapter.toEntity(dto.getGenres()));
 
         return entity;
     }
@@ -31,8 +40,16 @@ public class MovieAdapter {
         dto.setName(entity.getName());
         dto.setDescription(entity.getDescription());
         dto.setDuration(entity.getDuration());
+        dto.setGenres(genreAdapter.toDto(entity.getGenres()));
 
         return dto;
+    }
+
+    public List<MovieDTO> toDto(List<MovieEntity> entities) {
+        if (entities == null)
+            return null;
+
+        return entities.stream().map(this::entityToDTO).collect(Collectors.toList());
     }
 
 }

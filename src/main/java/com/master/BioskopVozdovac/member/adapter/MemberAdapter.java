@@ -1,5 +1,7 @@
-package com.master.BioskopVozdovac.member;
+package com.master.BioskopVozdovac.member.adapter;
 
+import com.master.BioskopVozdovac.member.model.MemberDTO;
+import com.master.BioskopVozdovac.member.model.MemberEntity;
 import org.springframework.stereotype.Component;
 
 @Component
