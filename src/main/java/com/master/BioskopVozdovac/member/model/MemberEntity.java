@@ -1,7 +1,8 @@
-package com.master.BioskopVozdovac.member;
+package com.master.BioskopVozdovac.member.model;
 
 import com.master.BioskopVozdovac.enums.Gender;
 import com.master.BioskopVozdovac.enums.MemberStatus;
+import com.master.BioskopVozdovac.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;

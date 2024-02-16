@@ -1,4 +1,4 @@
-package com.master.BioskopVozdovac.member;
+package com.master.BioskopVozdovac.member.model;
 
 import com.master.BioskopVozdovac.enums.Gender;
 import com.master.BioskopVozdovac.enums.MemberStatus;

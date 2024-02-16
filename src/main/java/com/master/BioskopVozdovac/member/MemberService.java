@@ -1,6 +1,9 @@
 package com.master.BioskopVozdovac.member;
 
 import com.master.BioskopVozdovac.exception.UserException;
+import com.master.BioskopVozdovac.member.adapter.MemberAdapter;
+import com.master.BioskopVozdovac.member.model.MemberDTO;
+import com.master.BioskopVozdovac.member.model.MemberEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

@@ -27,3 +27,17 @@ databaseChangeLog:
         - sqlFile:
             encoding: UTF-8
             path: db/changes/004_create_roles.sql
+  - changeSet:
+      id: 005
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/007_create_genre.sql
+  - changeSet:
+      id: 006
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/008_create_movie_genres.sql
