@@ -1,11 +1,14 @@
 package com.master.BioskopVozdovac.movie.model;
 
+import com.master.BioskopVozdovac.broadcast.model.BroadcastEntity;
 import com.master.BioskopVozdovac.genre.model.GenreEntity;
 import com.master.BioskopVozdovac.role.model.RoleEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,12 +35,14 @@ public class MovieEntity {
     @NotEmpty
     private String duration;
 
+    @NotNull
+    private LocalDate startTime;
+
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     private Set<RoleEntity> roles = new HashSet<>();
 
-//    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
-//    @JsonBackReference
-//    private Set<BroadcastEntity> broadcasts = new HashSet<>();
+    @OneToMany(mappedBy = "movie")
+    private Set<BroadcastEntity> broadcasts = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

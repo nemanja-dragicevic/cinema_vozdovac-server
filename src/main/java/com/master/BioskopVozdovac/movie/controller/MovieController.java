@@ -1,11 +1,14 @@
 package com.master.BioskopVozdovac.movie.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.master.BioskopVozdovac.movie.model.MovieDTO;
 import com.master.BioskopVozdovac.movie.service.MovieService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -16,9 +19,17 @@ public class MovieController {
 
     private final MovieService movieService;
 
-    @PostMapping
-    public ResponseEntity<MovieDTO> saveMovie(@RequestBody MovieDTO dto) {
-        return new ResponseEntity<>(movieService.saveMovie(dto), HttpStatus.OK);
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<MovieDTO> saveMovie(@RequestParam("movie") String movieJSON, @RequestParam("file") MultipartFile file) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            objectMapper.findAndRegisterModules();  // Zbog Java-e 8 nece da se parsira LocalDate
+            MovieDTO dto = objectMapper.readValue(movieJSON, MovieDTO.class);
+            return new ResponseEntity<>(movieService.saveMovie(dto, file), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @GetMapping("/{id}")
@@ -39,6 +50,11 @@ public class MovieController {
     @GetMapping("/all")
     public ResponseEntity<List<MovieDTO>> getAllMovies() {
         return new ResponseEntity<>(movieService.getAllMovies(), HttpStatus.OK);
+    }
+
+    @GetMapping("/allWithAWS")
+    public ResponseEntity<List<MovieDTO>> getAllMoviesAWS() {
+        return new ResponseEntity<>(movieService.getAllMoviesWithAWS(), HttpStatus.OK);
     }
 
 }

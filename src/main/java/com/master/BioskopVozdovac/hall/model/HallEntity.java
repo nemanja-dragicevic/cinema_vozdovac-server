@@ -1,6 +1,5 @@
 package com.master.BioskopVozdovac.hall.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.master.BioskopVozdovac.broadcast.model.BroadcastEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -28,8 +27,7 @@ public class HallEntity {
     @NotNull
     private String hallName;
 
-    @OneToMany(mappedBy = "hall", cascade = CascadeType.ALL)
-    @JsonBackReference
+    @OneToMany(mappedBy = "hall")
     private Set<BroadcastEntity> broadcasts = new HashSet<>();
 
 }
