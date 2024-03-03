@@ -33,7 +33,6 @@ public class BroadcastAdapter {
         dto.setId(entity.getBroadcastID());
         dto.setMovie(movieAdapter.entityToDTO(entity.getMovie()));
         dto.setHall(hallAdapter.entityToDTO(entity.getHall()));
-        dto.setBroadcastDateTime(entity.getBroadcastDateTime());
 
         return dto;
     }
@@ -47,7 +46,6 @@ public class BroadcastAdapter {
         entity.setBroadcastID(dto.getId());
         entity.setMovie(prepareMovie(dto.getMovie()));
         entity.setHall(prepareHall(dto.getHall()));
-        entity.setBroadcastDateTime(dto.getBroadcastDateTime());
 
         return entity;
     }

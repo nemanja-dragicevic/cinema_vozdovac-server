@@ -8,14 +8,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "hall")
+@Table(name = "broadcast")
 public class BroadcastEntity {
 
     @Id
@@ -23,15 +24,16 @@ public class BroadcastEntity {
     @Column(name = "broadcast_id", nullable = false)
     private Long broadcastID;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "movie_id")
     private MovieEntity movie;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "hall_id")
     private HallEntity hall;
 
-    @Column(name = "broadcast_datetime", nullable = false)
-    private LocalDateTime broadcastDateTime;
+    @ElementCollection
+    @Column(name = "time")
+    private Set<String> times = new HashSet<>();
 
 }

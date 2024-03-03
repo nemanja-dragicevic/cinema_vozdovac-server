@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
@@ -17,6 +18,10 @@ public class MovieDTO {
     private Long movieID;
 
     private String name;
+
+    private LocalDate startTime;
+
+    private String base64Image;
 
     private String description;
 
