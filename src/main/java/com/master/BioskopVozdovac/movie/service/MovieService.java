@@ -60,19 +60,27 @@ public class MovieService {
 
         for (MovieDTO dto : dtos) {
             try {
-                var s3Object = s3Service.getFile(dto.getName() + ".webp");
-                var content = s3Object.getObjectContent();
-                // Read the image content into a byte array
-                byte[] bytes = IOUtils.toByteArray(content);
-
-                // Encode the byte array to Base64
-                String base64Image = Base64.getEncoder().encodeToString(bytes);
-                dto.setBase64Image(base64Image);
+                dto.setSmallPicture(getPicture(dto.getName()));
+                dto.setBigPicture(getPicture(dto.getName() + " bigg"));
             } catch (Exception e) {
-                dto.setBase64Image(null);
+                dto.setSmallPicture(null);
             }
         }
-
         return dtos;
     }
+
+    private String getPicture(String filename) {
+        try {
+            var s3Object = s3Service.getFile(filename + ".webp");
+            var content = s3Object.getObjectContent();
+            // Read the image content into a byte array
+            byte[] bytes = IOUtils.toByteArray(content);
+
+            // Encode the byte array to Base64
+            return Base64.getEncoder().encodeToString(bytes);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }
