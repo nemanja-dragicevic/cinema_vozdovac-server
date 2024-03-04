@@ -21,7 +21,9 @@ public class MovieDTO {
 
     private LocalDate startTime;
 
-    private String base64Image;
+    private String smallPicture;
+
+    private String bigPicture;
 
     private String description;
 
