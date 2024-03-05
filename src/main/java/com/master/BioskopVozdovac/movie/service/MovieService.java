@@ -52,7 +52,8 @@ public class MovieService {
     }
 
     public List<MovieDTO> getAllMovies() {
-        return movieAdapter.toDto(movieRepository.findAll());
+        List<MovieEntity> entities = movieRepository.findAll();
+        return movieAdapter.toDto(entities);
     }
 
     public List<MovieDTO> getAllMoviesWithAWS() {
