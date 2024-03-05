@@ -1,19 +1,25 @@
 package com.master.BioskopVozdovac.movie.adapter;
 
+import com.master.BioskopVozdovac.actor.adapter.ActorAdapter;
+import com.master.BioskopVozdovac.actor.model.ActorDTO;
 import com.master.BioskopVozdovac.genre.adapter.GenreAdapter;
 import com.master.BioskopVozdovac.movie.model.MovieDTO;
 import com.master.BioskopVozdovac.movie.model.MovieEntity;
-import lombok.AllArgsConstructor;
+import com.master.BioskopVozdovac.role.model.RoleEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-@AllArgsConstructor
 public class MovieAdapter {
 
-    private final GenreAdapter genreAdapter;
+    @Autowired
+    private GenreAdapter genreAdapter;
+
+    @Autowired
+    private ActorAdapter actorAdapter;
 
     public MovieEntity dtoToEntity(final MovieDTO dto) {
         if (dto == null)
@@ -43,6 +49,10 @@ public class MovieAdapter {
         dto.setDescription(entity.getDescription());
         dto.setDuration(entity.getDuration());
         dto.setGenres(genreAdapter.toDto(entity.getGenres()));
+        dto.setActors(entity.getRoles().stream().map(RoleEntity::getActor)
+                .map(actorEntity -> new ActorDTO(actorEntity.getActorID(), actorEntity.getFirstName(),
+                        actorEntity.getLastName(), actorEntity.getGender()))
+                .collect(Collectors.toSet()));
 
         return dto;
     }
