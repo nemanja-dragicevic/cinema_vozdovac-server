@@ -38,6 +38,8 @@ public class MovieEntity {
     @NotNull
     private LocalDate startTime;
 
+    private LocalDate endTime;
+
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     private Set<RoleEntity> roles = new HashSet<>();
 
