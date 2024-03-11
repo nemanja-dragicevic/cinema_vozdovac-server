@@ -22,6 +22,8 @@ public class MovieDTO {
 
     private LocalDate startTime;
 
+    private LocalDate endTime;
+
     private String smallPicture;
 
     private String bigPicture;
