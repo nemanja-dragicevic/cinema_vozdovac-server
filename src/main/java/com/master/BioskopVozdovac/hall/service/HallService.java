@@ -4,13 +4,13 @@ import com.master.BioskopVozdovac.hall.adapter.HallAdapter;
 import com.master.BioskopVozdovac.hall.model.HallDTO;
 import com.master.BioskopVozdovac.hall.model.HallEntity;
 import com.master.BioskopVozdovac.hall.repository.HallRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class HallService {
 
     private final HallRepository hallRepository;

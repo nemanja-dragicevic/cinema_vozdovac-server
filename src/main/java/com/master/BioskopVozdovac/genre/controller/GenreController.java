@@ -2,7 +2,7 @@ package com.master.BioskopVozdovac.genre.controller;
 
 import com.master.BioskopVozdovac.genre.model.GenreDTO;
 import com.master.BioskopVozdovac.genre.service.GenreService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/genre")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GenreController {
 
     private final GenreService genreService;

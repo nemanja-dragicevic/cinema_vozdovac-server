@@ -10,13 +10,13 @@ import com.master.BioskopVozdovac.movie.adapter.MovieAdapter;
 import com.master.BioskopVozdovac.movie.model.MovieDTO;
 import com.master.BioskopVozdovac.movie.model.MovieEntity;
 import com.master.BioskopVozdovac.movie.repository.MovieRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.NoSuchElementException;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProjectAdapter {
 
     private final MovieAdapter movieAdapter;

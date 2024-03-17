@@ -2,7 +2,6 @@ package com.master.BioskopVozdovac.genre.adapter;
 
 import com.master.BioskopVozdovac.genre.model.GenreDTO;
 import com.master.BioskopVozdovac.genre.model.GenreEntity;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-@AllArgsConstructor
 public class GenreAdapter {
 
     public GenreDTO entityToDTO(final GenreEntity entity) {

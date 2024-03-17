@@ -5,14 +5,14 @@ import com.master.BioskopVozdovac.actor.model.ActorDTO;
 import com.master.BioskopVozdovac.actor.model.ActorEntity;
 import com.master.BioskopVozdovac.actor.repository.ActorRepository;
 import com.master.BioskopVozdovac.exception.UserException;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ActorService {
 
     private final ActorRepository actorRepository;
