@@ -28,7 +28,7 @@ public class MovieService {
     public MovieDTO saveMovie(MovieDTO dto, MultipartFile file) {
         MovieEntity entity = movieRepository.save(movieAdapter.dtoToEntity(dto));
         try {
-            s3Service.uploadFile(dto.getName() + ".png", file);
+            s3Service.uploadFile(dto.getName() + ".webp", file);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
