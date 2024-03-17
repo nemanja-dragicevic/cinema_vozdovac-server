@@ -1,39 +1,40 @@
-package com.master.BioskopVozdovac.broadcast.model;
+package com.master.BioskopVozdovac.project.model;
 
 import com.master.BioskopVozdovac.hall.model.HallEntity;
 import com.master.BioskopVozdovac.movie.model.MovieEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "broadcast")
-public class BroadcastEntity {
+@Table(name = "projects")
+public class ProjectEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "broadcast_id", nullable = false)
-    private Long broadcastID;
+    @Column(name = "project_id", nullable = false)
+    private Long projectID;
 
     @ManyToOne
-    @JoinColumn(name = "movie_id")
+    @NotNull
+    @JoinColumn(name = "movie_id", referencedColumnName = "id")
     private MovieEntity movie;
 
     @ManyToOne
-    @JoinColumn(name = "hall_id")
+    @NotNull
+    @JoinColumn(name = "hall_id", referencedColumnName = "id")
     private HallEntity hall;
 
-    @ElementCollection
     @Column(name = "time")
-    private Set<String> times = new HashSet<>();
+    private LocalDateTime time;
 
 }

@@ -1,6 +1,6 @@
 package com.master.BioskopVozdovac.movie.model;
 
-import com.master.BioskopVozdovac.broadcast.model.BroadcastEntity;
+import com.master.BioskopVozdovac.project.model.ProjectEntity;
 import com.master.BioskopVozdovac.genre.model.GenreEntity;
 import com.master.BioskopVozdovac.role.model.RoleEntity;
 import jakarta.persistence.*;
@@ -43,8 +43,8 @@ public class MovieEntity {
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     private Set<RoleEntity> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "movie")
-    private Set<BroadcastEntity> broadcasts = new HashSet<>();
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    private Set<ProjectEntity> projects = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
