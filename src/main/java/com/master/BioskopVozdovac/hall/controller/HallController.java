@@ -2,7 +2,7 @@ package com.master.BioskopVozdovac.hall.controller;
 
 import com.master.BioskopVozdovac.hall.model.HallDTO;
 import com.master.BioskopVozdovac.hall.service.HallService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/hall")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class HallController {
 
     private final HallService hallService;

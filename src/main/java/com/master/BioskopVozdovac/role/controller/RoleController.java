@@ -2,7 +2,7 @@ package com.master.BioskopVozdovac.role.controller;
 
 import com.master.BioskopVozdovac.role.model.RoleDTO;
 import com.master.BioskopVozdovac.role.service.RoleService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/api/role")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RoleController {
 
     private final RoleService roleService;

@@ -3,13 +3,13 @@ package com.master.BioskopVozdovac.member.controller;
 import com.master.BioskopVozdovac.member.model.MemberDTO;
 import com.master.BioskopVozdovac.member.model.MemberEntity;
 import com.master.BioskopVozdovac.member.MemberService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping(value = "/api/members")
 public class MemberController {
 

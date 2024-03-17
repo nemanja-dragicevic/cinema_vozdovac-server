@@ -3,7 +3,7 @@ package com.master.BioskopVozdovac.actor.controller;
 import com.master.BioskopVozdovac.actor.model.ActorDTO;
 import com.master.BioskopVozdovac.actor.model.ActorEntity;
 import com.master.BioskopVozdovac.actor.service.ActorService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/actor")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ActorController {
 
     private final ActorService actorService;

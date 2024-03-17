@@ -8,7 +8,7 @@ import com.master.BioskopVozdovac.movie.model.MovieEntity;
 import com.master.BioskopVozdovac.movie.repository.MovieRepository;
 import com.master.BioskopVozdovac.role.model.RoleEntity;
 import com.master.BioskopVozdovac.role.service.RoleService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,7 +19,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MovieService {
 
     private final MovieRepository movieRepository;

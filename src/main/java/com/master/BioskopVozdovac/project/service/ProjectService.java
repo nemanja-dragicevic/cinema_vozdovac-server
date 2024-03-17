@@ -3,13 +3,13 @@ package com.master.BioskopVozdovac.project.service;
 import com.master.BioskopVozdovac.project.adapter.ProjectAdapter;
 import com.master.BioskopVozdovac.project.model.ProjectDTO;
 import com.master.BioskopVozdovac.project.repository.ProjectRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProjectService {
 
     private final ProjectRepository broadcastRepository;

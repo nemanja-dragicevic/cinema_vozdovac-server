@@ -4,13 +4,13 @@ import com.master.BioskopVozdovac.genre.adapter.GenreAdapter;
 import com.master.BioskopVozdovac.genre.model.GenreDTO;
 import com.master.BioskopVozdovac.genre.model.GenreEntity;
 import com.master.BioskopVozdovac.genre.repository.GenreRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GenreService {
 
     private final GenreRepository genreRepository;

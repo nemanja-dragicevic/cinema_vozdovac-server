@@ -6,7 +6,7 @@ import com.master.BioskopVozdovac.role.adapter.RoleAdapter;
 import com.master.BioskopVozdovac.role.model.RoleDTO;
 import com.master.BioskopVozdovac.role.model.RoleEntity;
 import com.master.BioskopVozdovac.role.repository.RoleRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RoleService {
 
     private final RoleRepository roleRepository;

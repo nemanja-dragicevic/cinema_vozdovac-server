@@ -4,7 +4,7 @@ import com.master.BioskopVozdovac.exception.UserException;
 import com.master.BioskopVozdovac.member.adapter.MemberAdapter;
 import com.master.BioskopVozdovac.member.model.MemberDTO;
 import com.master.BioskopVozdovac.member.model.MemberEntity;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.NoSuchElementException;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MemberService {
 
     private final MemberAdapter memberAdapter;

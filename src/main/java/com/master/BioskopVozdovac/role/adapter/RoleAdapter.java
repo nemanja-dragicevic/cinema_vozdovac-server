@@ -6,7 +6,7 @@ import com.master.BioskopVozdovac.movie.model.MovieEntity;
 import com.master.BioskopVozdovac.movie.repository.MovieRepository;
 import com.master.BioskopVozdovac.role.model.RoleDTO;
 import com.master.BioskopVozdovac.role.model.RoleEntity;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.NoSuchElementException;
@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RoleAdapter {
 
     private final MovieRepository movieRepository;
