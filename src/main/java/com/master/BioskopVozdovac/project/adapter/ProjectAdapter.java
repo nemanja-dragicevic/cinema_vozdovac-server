@@ -1,7 +1,7 @@
-package com.master.BioskopVozdovac.broadcast.adapter;
+package com.master.BioskopVozdovac.project.adapter;
 
-import com.master.BioskopVozdovac.broadcast.model.BroadcastDTO;
-import com.master.BioskopVozdovac.broadcast.model.BroadcastEntity;
+import com.master.BioskopVozdovac.project.model.ProjectDTO;
+import com.master.BioskopVozdovac.project.model.ProjectEntity;
 import com.master.BioskopVozdovac.hall.adapter.HallAdapter;
 import com.master.BioskopVozdovac.hall.model.HallDTO;
 import com.master.BioskopVozdovac.hall.model.HallEntity;
@@ -17,35 +17,35 @@ import java.util.NoSuchElementException;
 
 @Component
 @AllArgsConstructor
-public class BroadcastAdapter {
+public class ProjectAdapter {
 
     private final MovieAdapter movieAdapter;
     private final HallAdapter hallAdapter;
     private final MovieRepository movieRepository;
     private final HallRepository hallRepository;
 
-    public BroadcastDTO entityToDTO(final BroadcastEntity entity) {
+    public ProjectDTO entityToDTO(final ProjectEntity entity) {
         if (entity == null)
             return null;
 
-        final BroadcastDTO dto = new BroadcastDTO();
+        final ProjectDTO dto = new ProjectDTO();
 
-        dto.setId(entity.getBroadcastID());
-        dto.setMovie(movieAdapter.entityToDTO(entity.getMovie()));
-        dto.setHall(hallAdapter.entityToDTO(entity.getHall()));
+        dto.setId(entity.getProjectID());
+        dto.setMovieID(movieAdapter.entityToDTO(entity.getMovie()));
+        dto.setHallID(hallAdapter.entityToDTO(entity.getHall()));
 
         return dto;
     }
 
-    public BroadcastEntity dtoToEntity(final BroadcastDTO dto) {
+    public ProjectEntity dtoToEntity(final ProjectDTO dto) {
         if (dto == null)
             return null;
 
-        final BroadcastEntity entity = new BroadcastEntity();
+        final ProjectEntity entity = new ProjectEntity();
 
-        entity.setBroadcastID(dto.getId());
-        entity.setMovie(prepareMovie(dto.getMovie()));
-        entity.setHall(prepareHall(dto.getHall()));
+        entity.setProjectID(dto.getId());
+        entity.setMovie(prepareMovie(dto.getMovieID()));
+        entity.setHall(prepareHall(dto.getHallID()));
 
         return entity;
     }

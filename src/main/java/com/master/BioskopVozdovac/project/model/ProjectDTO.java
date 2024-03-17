@@ -1,4 +1,4 @@
-package com.master.BioskopVozdovac.broadcast.model;
+package com.master.BioskopVozdovac.project.model;
 
 import com.master.BioskopVozdovac.hall.model.HallDTO;
 import com.master.BioskopVozdovac.movie.model.MovieDTO;
@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class BroadcastDTO {
+public class ProjectDTO {
 
     private Long id;
-    private MovieDTO movie;
-    private HallDTO hall;
-    private LocalDateTime broadcastDateTime;
+    private MovieDTO movieID;
+    private HallDTO hallID;
+    private LocalDateTime projectTime;
 
 }

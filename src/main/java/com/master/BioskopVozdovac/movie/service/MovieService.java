@@ -6,6 +6,8 @@ import com.master.BioskopVozdovac.movie.adapter.MovieAdapter;
 import com.master.BioskopVozdovac.movie.model.MovieDTO;
 import com.master.BioskopVozdovac.movie.model.MovieEntity;
 import com.master.BioskopVozdovac.movie.repository.MovieRepository;
+import com.master.BioskopVozdovac.role.model.RoleEntity;
+import com.master.BioskopVozdovac.role.service.RoleService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +16,7 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -25,10 +28,18 @@ public class MovieService {
 
     private final S3Service s3Service;
 
+    private final RoleService roleService;
+
     public MovieDTO saveMovie(MovieDTO dto, MultipartFile file) {
         MovieEntity entity = movieRepository.save(movieAdapter.dtoToEntity(dto));
+        Long movieId = entity.getMovieID();
+
+        Set<RoleEntity> roles = entity.getRoles();
+
+        roleService.updateAllRoles(roles, movieId);
+
         try {
-            s3Service.uploadFile(dto.getName() + ".png", file);
+            s3Service.uploadFile(dto.getName() + ".webp", file);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

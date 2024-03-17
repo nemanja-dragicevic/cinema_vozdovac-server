@@ -1,7 +1,7 @@
-package com.master.BioskopVozdovac.broadcast.controller;
+package com.master.BioskopVozdovac.project.controller;
 
-import com.master.BioskopVozdovac.broadcast.model.BroadcastDTO;
-import com.master.BioskopVozdovac.broadcast.service.BroadcastService;
+import com.master.BioskopVozdovac.project.model.ProjectDTO;
+import com.master.BioskopVozdovac.project.service.ProjectService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +14,12 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/api/screen")
-public class BroadcastController {
+public class ProjectController {
 
-    private final BroadcastService broadcastService;
+    private final ProjectService broadcastService;
 
     @GetMapping(value = "/all")
-    public ResponseEntity<List<BroadcastDTO>> getAllDTOs() {
+    public ResponseEntity<List<ProjectDTO>> getAllDTOs() {
         return new ResponseEntity<>(broadcastService.getAllDTOs(), HttpStatus.OK);
     }
 

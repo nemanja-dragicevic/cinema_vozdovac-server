@@ -1,6 +1,6 @@
 package com.master.BioskopVozdovac.hall.model;
 
-import com.master.BioskopVozdovac.broadcast.model.BroadcastEntity;
+import com.master.BioskopVozdovac.project.model.ProjectEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -28,6 +27,6 @@ public class HallEntity {
     private String hallName;
 
     @OneToMany(mappedBy = "hall")
-    private Set<BroadcastEntity> broadcasts = new HashSet<>();
+    private Set<ProjectEntity> broadcasts;
 
 }

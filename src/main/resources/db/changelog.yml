@@ -41,3 +41,17 @@ databaseChangeLog:
         - sqlFile:
             encoding: UTF-8
             path: db/changes/008_create_movie_genres.sql
+  - changeSet:
+      id: 007
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/005_create_hall.sql
+  - changeSet:
+      id: 008
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/006_create_projects.sql
