@@ -9,8 +9,8 @@ import com.master.BioskopVozdovac.role.model.RoleEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -46,11 +46,11 @@ public class RoleAdapter {
         return movie.getMovieID();
     }
 
-    public List<RoleDTO> toDTOs(final List<RoleEntity> list) {
+    public Set<RoleDTO> toDTOs(final Set<RoleEntity> list) {
         if(list == null)
             return null;
 
-        return list.stream().map(this::toDTO).collect(Collectors.toList());
+        return list.stream().map(this::toDTO).collect(Collectors.toSet());
     }
 
     public RoleEntity toEntity(final RoleDTO dto) {
@@ -81,4 +81,10 @@ public class RoleAdapter {
                 new NoSuchElementException("Couldn't find actor with id: " + id));
     }
 
+    public Set<RoleEntity> toEntities(Set<RoleDTO> roles) {
+        if (roles == null)
+            return null;
+
+        return roles.stream().map(this::toEntity).collect(Collectors.toSet());
+    }
 }

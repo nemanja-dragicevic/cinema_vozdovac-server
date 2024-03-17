@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class ActorService {
@@ -35,5 +37,9 @@ public class ActorService {
     public String deleteActorById(Long id) {
         actorRepository.deleteById(id);
         return "Successfully deleted actor with id: " + id;
+    }
+
+    public List<ActorDTO> getAll() {
+        return actorAdapter.toDTO(actorRepository.findAll());
     }
 }

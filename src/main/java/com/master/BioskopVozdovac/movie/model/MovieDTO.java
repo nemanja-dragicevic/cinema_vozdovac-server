@@ -1,7 +1,7 @@
 package com.master.BioskopVozdovac.movie.model;
 
-import com.master.BioskopVozdovac.actor.model.ActorDTO;
 import com.master.BioskopVozdovac.genre.model.GenreDTO;
+import com.master.BioskopVozdovac.role.model.RoleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +34,6 @@ public class MovieDTO {
 
     private Set<GenreDTO> genres;
 
-    private Set<ActorDTO> actors;
+    private Set<RoleDTO> roles;
 
 }

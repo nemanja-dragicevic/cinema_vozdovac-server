@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 public class ProjectDTO {
 
     private Long id;
-    private MovieDTO movie;
-    private HallDTO hall;
-    private LocalDateTime broadcastDateTime;
+    private MovieDTO movieID;
+    private HallDTO hallID;
+    private LocalDateTime projectTime;
 
 }

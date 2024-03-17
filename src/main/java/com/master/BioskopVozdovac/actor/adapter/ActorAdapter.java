@@ -4,7 +4,7 @@ import com.master.BioskopVozdovac.actor.model.ActorDTO;
 import com.master.BioskopVozdovac.actor.model.ActorEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -38,11 +38,11 @@ public class ActorAdapter {
         return dto;
     }
 
-    public Set<ActorDTO> toDTO(final Set<ActorEntity> entities) {
+    public List<ActorDTO> toDTO(final List<ActorEntity> entities) {
         if (entities == null)
             return null;
 
-        return entities.stream().map(this::entityToDTO).collect(Collectors.toSet());
+        return entities.stream().map(this::entityToDTO).collect(Collectors.toList());
     }
 
 }
