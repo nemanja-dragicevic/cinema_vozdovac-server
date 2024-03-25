@@ -31,8 +31,6 @@ public class MemberEntity extends User {
     @NotEmpty
     private String lastName;
 
-    private String address;
-
     private String phoneNumber;
 
     private LocalDate birthDate;
@@ -42,5 +40,11 @@ public class MemberEntity extends User {
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+    private String email;
+
+    private String username;
+
+    private String password;
 
 }
