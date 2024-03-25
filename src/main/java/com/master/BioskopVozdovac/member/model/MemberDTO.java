@@ -31,4 +31,8 @@ public class MemberDTO {
 
     private LocalDate birthDate;
 
+    private String username;
+
+    private String password;
+
 }
