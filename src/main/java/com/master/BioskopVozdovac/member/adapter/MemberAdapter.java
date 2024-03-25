@@ -38,6 +38,8 @@ public class MemberAdapter {
         dto.setBirthDate(entity.getBirthDate());
         dto.setGender(entity.getGender());
         dto.setStatus(entity.getStatus());
+        dto.setUsername(entity.getUsername());
+        dto.setPassword(entity.getPassword());
 
         return dto;
     }

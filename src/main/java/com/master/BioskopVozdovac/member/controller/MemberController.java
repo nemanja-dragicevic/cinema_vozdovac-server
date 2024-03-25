@@ -2,7 +2,7 @@ package com.master.BioskopVozdovac.member.controller;
 
 import com.master.BioskopVozdovac.member.model.MemberDTO;
 import com.master.BioskopVozdovac.member.model.MemberEntity;
-import com.master.BioskopVozdovac.member.MemberService;
+import com.master.BioskopVozdovac.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +15,14 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping
-    public ResponseEntity<MemberEntity> saveMember(@RequestBody MemberDTO dto) {
-        return new ResponseEntity<>(memberService.saveMember(dto), HttpStatus.OK);
+    @PostMapping("/register")
+    public ResponseEntity<MemberDTO> register(@RequestBody MemberDTO dto) {
+        return new ResponseEntity<>(memberService.register(dto), HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<MemberDTO> login(@RequestBody MemberDTO dto) {
+        return new ResponseEntity<>(memberService.login(dto), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
