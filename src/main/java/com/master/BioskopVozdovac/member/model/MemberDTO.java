@@ -23,13 +23,13 @@ public class MemberDTO {
 
     private Gender gender;
 
-    private String address;
-
     private MemberStatus status;
 
     private String phoneNumber;
 
     private LocalDate birthDate;
+
+    private String email;
 
     private String username;
 

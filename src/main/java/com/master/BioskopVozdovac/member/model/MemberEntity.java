@@ -41,6 +41,8 @@ public class MemberEntity extends User {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    private String email;
+
     private String username;
 
     private String password;
