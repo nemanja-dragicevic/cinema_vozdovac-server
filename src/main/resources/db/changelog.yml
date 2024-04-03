@@ -62,3 +62,10 @@ databaseChangeLog:
         - sqlFile:
             encoding: UTF-8
             path: db/changes/009_alter_members.sql
+  - changeSet:
+      id: 010
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/010_alter_members_phone.sql
