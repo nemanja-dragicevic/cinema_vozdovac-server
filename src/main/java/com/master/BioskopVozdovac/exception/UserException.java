@@ -13,7 +13,7 @@ public class UserException extends RuntimeException {
 
     public UserException(String message, HttpStatus status) {
         super(message);
-        this.title = "USER_ERROR";
+        this.title = message;
         this.status = status;
     }
 

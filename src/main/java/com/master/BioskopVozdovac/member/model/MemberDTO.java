@@ -25,8 +25,6 @@ public class MemberDTO {
 
     private MemberStatus status;
 
-    private String phoneNumber;
-
     private LocalDate birthDate;
 
     private String email;
