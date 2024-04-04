@@ -23,7 +23,7 @@ public class MovieController {
     public ResponseEntity<MovieDTO> saveMovie(@RequestParam("movie") String movieJSON, @RequestParam("file") MultipartFile file) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            objectMapper.findAndRegisterModules();  // Zbog Java-e 8 nece da se parsira LocalDate
+            objectMapper.findAndRegisterModules();  // Nece da se parsira LocalDate
             MovieDTO dto = objectMapper.readValue(movieJSON, MovieDTO.class);
             return new ResponseEntity<>(movieService.saveMovie(dto, file), HttpStatus.OK);
         } catch (Exception e) {
