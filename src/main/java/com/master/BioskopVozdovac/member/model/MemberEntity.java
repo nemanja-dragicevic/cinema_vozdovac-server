@@ -1,7 +1,7 @@
 package com.master.BioskopVozdovac.member.model;
 
 import com.master.BioskopVozdovac.enums.Gender;
-import com.master.BioskopVozdovac.enums.MemberStatus;
+import com.master.BioskopVozdovac.enums.MemberRole;
 import com.master.BioskopVozdovac.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -31,12 +31,10 @@ public class MemberEntity extends User {
     @NotEmpty
     private String lastName;
 
-    private String phoneNumber;
-
     private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
-    private MemberStatus status;
+    private MemberRole role;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
