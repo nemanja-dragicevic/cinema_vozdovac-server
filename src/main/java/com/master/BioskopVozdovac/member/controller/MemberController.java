@@ -3,6 +3,7 @@ package com.master.BioskopVozdovac.member.controller;
 import com.master.BioskopVozdovac.member.model.MemberDTO;
 import com.master.BioskopVozdovac.member.model.MemberEntity;
 import com.master.BioskopVozdovac.member.service.MemberService;
+import com.master.BioskopVozdovac.security.MemberAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,13 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    private final MemberAuthenticationProvider provider;
+
     @PostMapping("/register")
     public ResponseEntity<MemberDTO> register(@RequestBody MemberDTO dto) {
-        return new ResponseEntity<>(memberService.register(dto), HttpStatus.OK);
+        MemberDTO response = memberService.register(dto);
+        response.setToken(provider.createToken(response));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/login")

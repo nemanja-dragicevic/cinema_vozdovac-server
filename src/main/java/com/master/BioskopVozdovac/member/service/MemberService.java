@@ -1,5 +1,6 @@
 package com.master.BioskopVozdovac.member.service;
 
+import com.master.BioskopVozdovac.enums.MemberRole;
 import com.master.BioskopVozdovac.exception.UserException;
 import com.master.BioskopVozdovac.member.adapter.MemberAdapter;
 import com.master.BioskopVozdovac.member.model.MemberDTO;
@@ -32,8 +33,11 @@ public class MemberService {
             throw new UserException("Username already taken", HttpStatus.CONFLICT);
 
         dto.setPassword(passwordEncoder.encode(CharBuffer.wrap(dto.getPassword())));
+        dto.setRole(MemberRole.USER);
 
         MemberEntity entity = memberRepository.saveAndFlush(memberAdapter.dtoToEntity(dto));
+        entity.setPassword(null);
+
         return memberAdapter.entityToDTO(entity);
     }
 
@@ -68,5 +72,11 @@ public class MemberService {
 
         entity.setPassword(null);
         return memberAdapter.entityToDTO(entity);
+    }
+
+    public MemberDTO findByUsername(String username) {
+        MemberEntity member = memberRepository.findByUsername(username)
+                .orElseThrow(() -> new UserException("There is no such username", HttpStatus.NOT_FOUND));
+        return memberAdapter.entityToDTO(member);
     }
 }
