@@ -1,7 +1,7 @@
 package com.master.BioskopVozdovac.member.model;
 
 import com.master.BioskopVozdovac.enums.Gender;
-import com.master.BioskopVozdovac.enums.MemberStatus;
+import com.master.BioskopVozdovac.enums.MemberRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +23,7 @@ public class MemberDTO {
 
     private Gender gender;
 
-    private MemberStatus status;
+    private MemberRole role;
 
     private LocalDate birthDate;
 
@@ -32,5 +32,7 @@ public class MemberDTO {
     private String username;
 
     private String password;
+
+    private String token;
 
 }

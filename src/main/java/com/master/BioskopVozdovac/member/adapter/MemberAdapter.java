@@ -18,7 +18,7 @@ public class MemberAdapter {
         entity.setLastName(dto.getLastName());
         entity.setBirthDate(dto.getBirthDate());
         entity.setGender(dto.getGender());
-        entity.setStatus(dto.getStatus());
+        entity.setRole(dto.getRole());
         entity.setEmail(dto.getEmail());
         entity.setUsername(dto.getUsername());
         entity.setPassword(dto.getPassword());
@@ -36,7 +36,7 @@ public class MemberAdapter {
         dto.setLastName(entity.getLastName());
         dto.setBirthDate(entity.getBirthDate());
         dto.setGender(entity.getGender());
-        dto.setStatus(entity.getStatus());
+        dto.setRole(entity.getRole());
         dto.setEmail(entity.getEmail());
         dto.setUsername(entity.getUsername());
         dto.setPassword(entity.getPassword());

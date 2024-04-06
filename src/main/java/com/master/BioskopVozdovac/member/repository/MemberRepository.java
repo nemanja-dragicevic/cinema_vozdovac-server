@@ -12,4 +12,5 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
 
     @Query("select m from MemberEntity m where m.username = ?1")
     Optional<MemberEntity> findByUsername(String username);
+    //TODO: Translate into named query
 }
