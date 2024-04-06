@@ -27,7 +27,9 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity<MemberDTO> login(@RequestBody MemberDTO dto) {
-        return new ResponseEntity<>(memberService.login(dto), HttpStatus.OK);
+        MemberDTO user = memberService.login(dto);
+        user.setToken(provider.createToken(user));
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
