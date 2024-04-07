@@ -1,6 +1,5 @@
 package com.master.BioskopVozdovac.role.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.master.BioskopVozdovac.actor.model.ActorEntity;
 import com.master.BioskopVozdovac.movie.model.MovieEntity;
 import jakarta.persistence.*;
@@ -29,7 +28,6 @@ public class RoleEntity {
 
     @ManyToOne
     @NotNull
-    @JsonManagedReference
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
     private MovieEntity movie;
 
