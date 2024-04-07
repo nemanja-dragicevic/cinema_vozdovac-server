@@ -76,3 +76,10 @@ databaseChangeLog:
         - sqlFile:
             encoding: UTF-8
             path: db/changes/011_alter_members_role.sql
+  - changeSet:
+      id: 012
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/012_alter_roles.sql
