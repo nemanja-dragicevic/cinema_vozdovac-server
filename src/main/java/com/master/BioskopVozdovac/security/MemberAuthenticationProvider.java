@@ -34,7 +34,7 @@ public class MemberAuthenticationProvider {
 
     public String createToken(MemberDTO dto) {
         Date now = new Date();
-        Date validity = new Date(now.getTime() + 360000); // 1 hour valid
+        Date validity = new Date(now.getTime() + 3600000); // 1 hour valid
 
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         return JWT.create()
