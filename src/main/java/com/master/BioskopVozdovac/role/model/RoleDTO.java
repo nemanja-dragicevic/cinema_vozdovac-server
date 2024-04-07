@@ -1,5 +1,7 @@
 package com.master.BioskopVozdovac.role.model;
 
+import com.master.BioskopVozdovac.actor.model.ActorDTO;
+import com.master.BioskopVozdovac.movie.model.MovieDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,9 +15,9 @@ public class RoleDTO {
 
     private Long roleID;
 
-    private Long actorID;
+    private ActorDTO actor;
 
-    private Long movieID;
+    private MovieDTO movie;
 
     private String roleName;
 
