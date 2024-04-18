@@ -6,6 +6,7 @@ import com.master.BioskopVozdovac.actor.service.ActorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class ActorController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ActorEntity> saveActor(@RequestBody ActorDTO dto) {
         return new ResponseEntity<>(actorService.saveActor(dto), HttpStatus.OK);
     }
@@ -33,11 +35,13 @@ public class ActorController {
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ActorDTO> updateActor(@RequestBody ActorDTO dto) {
         return new ResponseEntity<>(actorService.updateActor(dto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteActor(@PathVariable Long id) {
         return new ResponseEntity<>(actorService.deleteActorById(id), HttpStatus.OK);
     }
