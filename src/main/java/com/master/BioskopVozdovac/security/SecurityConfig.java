@@ -30,6 +30,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests.
                         requestMatchers(HttpMethod.POST, "/api/members/register", "/api/members/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/movie/allWithAWS", "/api/role/**").permitAll()
                         .anyRequest().authenticated());
         return http.build();
     }

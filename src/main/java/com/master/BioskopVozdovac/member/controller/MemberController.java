@@ -7,6 +7,7 @@ import com.master.BioskopVozdovac.security.MemberAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -38,11 +39,13 @@ public class MemberController {
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<MemberEntity> updateMember(@RequestBody MemberDTO dto) {
         return new ResponseEntity<>(memberService.updateMember(dto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<String> deleteMember(@PathVariable Long id) {
         return new ResponseEntity<>(memberService.deleteMember(id), HttpStatus.OK);
     }
