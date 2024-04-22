@@ -19,8 +19,9 @@ public class ActorService {
 
     private final ActorAdapter actorAdapter;
 
-    public ActorEntity saveActor(ActorDTO dto) {
-        return actorRepository.saveAndFlush(actorAdapter.dtoToEntity(dto));
+    public ActorDTO saveActor(ActorDTO dto) {
+        ActorEntity entity = actorRepository.saveAndFlush(actorAdapter.dtoToEntity(dto));
+        return actorAdapter.entityToDTO(entity);
     }
 
     public ActorDTO getActorById(Long id) {

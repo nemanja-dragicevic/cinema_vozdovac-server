@@ -1,7 +1,6 @@
 package com.master.BioskopVozdovac.actor.controller;
 
 import com.master.BioskopVozdovac.actor.model.ActorDTO;
-import com.master.BioskopVozdovac.actor.model.ActorEntity;
 import com.master.BioskopVozdovac.actor.service.ActorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +24,7 @@ public class ActorController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<ActorEntity> saveActor(@RequestBody ActorDTO dto) {
+    public ResponseEntity<ActorDTO> saveActor(@RequestBody ActorDTO dto) {
         return new ResponseEntity<>(actorService.saveActor(dto), HttpStatus.OK);
     }
 
