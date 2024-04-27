@@ -1,6 +1,6 @@
 package com.master.BioskopVozdovac.hall.model;
 
-import com.master.BioskopVozdovac.project.model.ProjectEntity;
+import com.master.BioskopVozdovac.seat.model.SeatEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,9 +25,17 @@ public class HallEntity {
     private Long hallID;
 
     @NotNull
+    @Column(name = "hall_name")
     private String hallName;
 
-    @OneToMany(mappedBy = "hall")
-    private Set<ProjectEntity> broadcasts;
+    @NotNull
+    @Column(name = "capacity")
+    private int hallCapacity;
+
+    @OneToMany(mappedBy = "hall", cascade = CascadeType.ALL)
+    private List<SeatEntity> seats = new ArrayList<>();
+
+//    @OneToMany(mappedBy = "hall")
+//    private Set<ProjectEntity> broadcasts;
 
 }

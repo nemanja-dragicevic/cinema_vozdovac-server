@@ -1,5 +1,6 @@
 package com.master.BioskopVozdovac.hall.controller;
 
+import com.master.BioskopVozdovac.hall.model.CreateHall;
 import com.master.BioskopVozdovac.hall.model.HallDTO;
 import com.master.BioskopVozdovac.hall.service.HallService;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,8 @@ public class HallController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<HallDTO> createHall(@RequestBody HallDTO dto) {
-        return new ResponseEntity<>(hallService.createHall(dto), HttpStatus.OK);
+    public ResponseEntity<HallDTO> createHall(@RequestBody CreateHall createHall) {
+        return new ResponseEntity<>(hallService.createHall(createHall.getDto(), createHall.getNumberOfRows(), createHall.getSeatsPerRow()), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

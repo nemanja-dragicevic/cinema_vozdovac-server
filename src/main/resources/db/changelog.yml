@@ -83,3 +83,10 @@ databaseChangeLog:
         - sqlFile:
             encoding: UTF-8
             path: db/changes/012_alter_roles.sql
+  - changeSet:
+      id: 013
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/013_create_seat_alter_hall.sql
