@@ -4,6 +4,7 @@ import com.master.BioskopVozdovac.hall.adapter.HallAdapter;
 import com.master.BioskopVozdovac.hall.model.HallDTO;
 import com.master.BioskopVozdovac.hall.model.HallEntity;
 import com.master.BioskopVozdovac.hall.repository.HallRepository;
+import com.master.BioskopVozdovac.seat.model.SeatEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +18,20 @@ public class HallService {
 
     private final HallAdapter hallAdapter;
 
-    public HallDTO createHall(HallDTO dto) {
-        return hallAdapter.entityToDTO(hallRepository.save(hallAdapter.dtoToEntity(dto)));
+    public HallDTO createHall(HallDTO dto, int numberOfRows, int seatsPerRow) {
+        HallEntity entity = hallAdapter.dtoToEntity(dto);
+
+        for (int i = 1; i <= numberOfRows; i++) {
+            for (int j = 1; j <= seatsPerRow; j++) {
+                SeatEntity seat = new SeatEntity();
+                seat.setRowNumber(i);
+                seat.setSeatNumber(j);
+                seat.setHall(entity);
+                entity.getSeats().add(seat);
+            }
+        }
+
+        return hallAdapter.entityToDTO(hallRepository.save(entity));
     }
 
     public String deleteWithId(Long id) {

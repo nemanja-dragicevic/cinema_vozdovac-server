@@ -32,7 +32,7 @@ public class ActorController {
     public ResponseEntity<ActorDTO> getActorById(@PathVariable Long id) {
         return new ResponseEntity<>(actorService.getActorById(id), HttpStatus.OK);
     }
-
+    //TODO: While saving and updating, no double records in database
     @PutMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ActorDTO> updateActor(@RequestBody ActorDTO dto) {
