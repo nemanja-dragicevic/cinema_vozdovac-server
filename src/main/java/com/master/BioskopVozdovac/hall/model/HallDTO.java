@@ -18,7 +18,9 @@ public class HallDTO {
 
     private String hallName;
 
-    private int hallCapacity;
+    private int rowsCount;
+
+    private int seatsPerRow;
 
     private List<SeatDTO> seats;
 
