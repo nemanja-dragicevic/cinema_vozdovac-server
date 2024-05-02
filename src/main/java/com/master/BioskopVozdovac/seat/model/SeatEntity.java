@@ -30,7 +30,7 @@ public class SeatEntity {
     private int seatNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hall_id", nullable = false)
+    @JoinColumn(name = "hall_id")
     private HallEntity hall;
 
 }
