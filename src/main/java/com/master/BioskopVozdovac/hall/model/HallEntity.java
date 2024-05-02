@@ -29,13 +29,14 @@ public class HallEntity {
     private String hallName;
 
     @NotNull
-    @Column(name = "capacity")
-    private int hallCapacity;
+    @Column(name = "rows_count")
+    private int rowsCount;
 
-    @OneToMany(mappedBy = "hall", cascade = CascadeType.ALL)
+    @NotNull
+    @Column(name = "seats_per_row")
+    private int seatsPerRow;
+
+    @OneToMany(mappedBy = "hall", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SeatEntity> seats = new ArrayList<>();
-
-//    @OneToMany(mappedBy = "hall")
-//    private Set<ProjectEntity> broadcasts;
 
 }

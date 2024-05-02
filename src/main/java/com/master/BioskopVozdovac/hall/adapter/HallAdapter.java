@@ -21,7 +21,8 @@ public class HallAdapter {
 
         final HallDTO dto = new HallDTO();
         dto.setHallID(entity.getHallID());
-        dto.setHallCapacity(entity.getHallCapacity());
+        dto.setRowsCount(entity.getRowsCount());
+        dto.setSeatsPerRow(entity.getSeatsPerRow());
         dto.setHallName(entity.getHallName());
         dto.setSeats(seatAdapter.toDTOs(entity.getSeats()));
 
@@ -34,7 +35,8 @@ public class HallAdapter {
 
         final HallEntity entity = new HallEntity();
         entity.setHallID(dto.getHallID());
-        entity.setHallCapacity(dto.getHallCapacity());
+        entity.setRowsCount(dto.getRowsCount());
+        entity.setSeatsPerRow(dto.getSeatsPerRow());
         entity.setHallName(dto.getHallName());
 
         return entity;
