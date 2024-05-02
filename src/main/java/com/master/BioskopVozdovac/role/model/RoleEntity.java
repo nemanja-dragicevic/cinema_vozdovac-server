@@ -26,7 +26,7 @@ public class RoleEntity {
     @JoinColumn(name = "actor_id", referencedColumnName = "id")
     private ActorEntity actor;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @NotNull
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
     private MovieEntity movie;

@@ -61,4 +61,20 @@ public class MovieController {
         return new ResponseEntity<>(movieService.getAllMoviesWithAWS(), HttpStatus.OK);
     }
 
+//    @RequestParam("movie") String movieJSON, @RequestParam("times") List<HallProjections> projects
+    @PostMapping(value = "/try")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<MovieDTO> saveMovie(@RequestBody MovieDTO dto) {
+        return new ResponseEntity<>(movieService.trySaveMovie(dto), HttpStatus.OK);
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        try {
+//            objectMapper.findAndRegisterModules();
+//            MovieDTO dto = objectMapper.readValue(movieJSON, MovieDTO.class);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(movieService.trySaveMovie(project.getMovie(), project.getProjections()), HttpStatus.OK);
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+    }
+
 }

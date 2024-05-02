@@ -23,6 +23,7 @@ public class MovieAdapter {
         entity.setMovieID(dto.getMovieID());
         entity.setName(dto.getName());
         entity.setStartTime(dto.getStartTime());
+        entity.setEndTime(dto.getEndTime());
         entity.setDescription(dto.getDescription());
         entity.setDuration(dto.getDuration());
         entity.setGenres(genreAdapter.toEntity(dto.getGenres()));
@@ -39,6 +40,7 @@ public class MovieAdapter {
         dto.setMovieID(entity.getMovieID());
         dto.setName(entity.getName());
         dto.setStartTime(entity.getStartTime());
+        dto.setEndTime(entity.getEndTime());
         dto.setDescription(entity.getDescription());
         dto.setDuration(entity.getDuration());
         dto.setGenres(genreAdapter.toDto(entity.getGenres()));
