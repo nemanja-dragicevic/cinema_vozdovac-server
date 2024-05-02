@@ -31,8 +31,9 @@ public class ProjectAdapter {
         final ProjectDTO dto = new ProjectDTO();
 
         dto.setId(entity.getProjectID());
-        dto.setMovieID(movieAdapter.entityToDTO(entity.getMovie()));
-        dto.setHallID(hallAdapter.entityToDTO(entity.getHall()));
+        dto.setMovie(movieAdapter.entityToDTO(entity.getMovie()));
+        dto.setHall(hallAdapter.entityToDTO(entity.getHall()));
+        dto.setPrice(entity.getPrice());
 
         return dto;
     }
@@ -44,8 +45,9 @@ public class ProjectAdapter {
         final ProjectEntity entity = new ProjectEntity();
 
         entity.setProjectID(dto.getId());
-        entity.setMovie(prepareMovie(dto.getMovieID()));
-        entity.setHall(prepareHall(dto.getHallID()));
+        entity.setMovie(prepareMovie(dto.getMovie()));
+        entity.setHall(prepareHall(dto.getHall()));
+        entity.setPrice(dto.getPrice());
 
         return entity;
     }

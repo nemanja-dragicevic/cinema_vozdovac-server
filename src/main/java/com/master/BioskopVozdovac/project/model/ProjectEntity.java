@@ -34,7 +34,10 @@ public class ProjectEntity {
     @JoinColumn(name = "hall_id", referencedColumnName = "id")
     private HallEntity hall;
 
-    @Column(name = "time")
+    @Column(name = "project")
     private LocalDateTime time;
+
+    @Column(name = "price")
+    private int price;
 
 }

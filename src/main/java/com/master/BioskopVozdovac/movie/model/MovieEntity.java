@@ -5,7 +5,6 @@ import com.master.BioskopVozdovac.genre.model.GenreEntity;
 import com.master.BioskopVozdovac.role.model.RoleEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -35,7 +34,6 @@ public class MovieEntity {
     @NotEmpty
     private String duration;
 
-    @NotNull
     private LocalDate startTime;
 
     private LocalDate endTime;

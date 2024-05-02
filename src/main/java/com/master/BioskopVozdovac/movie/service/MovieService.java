@@ -6,17 +6,14 @@ import com.master.BioskopVozdovac.movie.adapter.MovieAdapter;
 import com.master.BioskopVozdovac.movie.model.MovieDTO;
 import com.master.BioskopVozdovac.movie.model.MovieEntity;
 import com.master.BioskopVozdovac.movie.repository.MovieRepository;
+import com.master.BioskopVozdovac.role.adapter.RoleAdapter;
 import com.master.BioskopVozdovac.role.model.RoleEntity;
-import com.master.BioskopVozdovac.role.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Base64;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,15 +25,17 @@ public class MovieService {
 
     private final S3Service s3Service;
 
-    private final RoleService roleService;
+    private final RoleAdapter roleAdapter;
 
     public MovieDTO saveMovie(MovieDTO dto, MultipartFile file) {
-        MovieEntity entity = movieRepository.save(movieAdapter.dtoToEntity(dto));
-        Long movieId = entity.getMovieID();
+        Set<RoleEntity> roleEntities = roleAdapter.toEntities(dto.getRoleDTO());
+        MovieEntity entity = movieAdapter.dtoToEntity(dto);
 
-        Set<RoleEntity> roles = entity.getRoles();
+        for (RoleEntity r : roleEntities)
+            r.setMovie(entity);
+        entity.setRoles(roleEntities);
 
-        roleService.updateAllRoles(roles, movieId);
+        entity = movieRepository.save(entity);
 
         try {
             s3Service.uploadFile(dto.getName() + ".webp", file);
@@ -95,4 +94,40 @@ public class MovieService {
         }
     }
 
+    public MovieDTO trySaveMovie(MovieDTO dto) {
+//        LocalDate currentDate = dto.getStartTime();
+//        LocalTime time = LocalTime.of(7, 0);
+        Set<RoleEntity> roleEntities = roleAdapter.toEntities(dto.getRoleDTO());
+        MovieEntity entity = movieAdapter.dtoToEntity(dto);
+
+        for (RoleEntity r : roleEntities)
+            r.setMovie(entity);
+        entity.setRoles(roleEntities);
+
+        MovieEntity movieEntity = movieRepository.save(entity);
+
+//        for (String s : times) {
+//            System.out.println(LocalTime.parse(s));
+//        }
+
+//        List<HallEntity> halls = hallRepository.findAll();
+//        HallEntity hall = halls.get(0);
+//        while (!currentDate.isAfter(dto.getEndTime())) {
+//            ProjectDTO project = new ProjectDTO();
+//            project.setMovie(dto);
+//            for (HallProjections hp : times) {
+//                project.setHall(hp.getHall());
+//                project.setProjectTime(LocalDateTime.of(currentDate, time));
+//            }
+//            project.setMovie(movieAdapter.dtoToEntity(dto));
+//            project.getMovie().setMovieID(7L);
+//            project.setTime(cTime);
+//            projectRepository.save(project);
+////            System.out.println(cTime);
+//            currentDate = currentDate.plusDays(1);
+//        }
+
+        return movieAdapter.entityToDTO(entity);
+//        return null;
+    }
 }
