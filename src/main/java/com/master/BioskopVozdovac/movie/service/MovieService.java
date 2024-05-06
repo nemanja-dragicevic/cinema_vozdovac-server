@@ -39,6 +39,7 @@ public class MovieService {
 
         try {
             s3Service.uploadFile(dto.getName() + ".webp", file);
+            s3Service.uploadFile(dto.getName() + " big.webp", file);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -57,7 +58,12 @@ public class MovieService {
     }
 
     public String deleteMovieById(Long id) {
-        movieRepository.deleteById(id);
+        MovieEntity entity = movieRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("There is no movie with id: " + id)
+        );
+        movieRepository.delete(entity);
+        s3Service.deleteFileFromS3Bucket(entity.getName() + ".webp");
+        s3Service.deleteFileFromS3Bucket(entity.getName() + " big.webp");
         return "Successfully deleted movie with id: " + id;
     }
 
@@ -72,7 +78,7 @@ public class MovieService {
         for (MovieDTO dto : dtos) {
             try {
                 dto.setSmallPicture(getPicture(dto.getName()));
-                dto.setBigPicture(getPicture(dto.getName() + " bigg"));
+                dto.setBigPicture(getPicture(dto.getName() + " big"));
             } catch (Exception e) {
                 dto.setSmallPicture(null);
             }
