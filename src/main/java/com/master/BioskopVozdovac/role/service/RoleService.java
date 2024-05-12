@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -52,8 +51,8 @@ public class RoleService {
         }
     }
 
-    public List<RoleDTO> getRolesForMovie(Long movieID) {
-        List<RoleEntity> entities = roleRepository.getRolesForMovieWithID(movieID);
+    public Set<RoleDTO> getRolesForMovie(Long movieID) {
+        Set<RoleEntity> entities = roleRepository.getRolesForMovieWithID(movieID);
         return roleAdapter.toDTOs(entities);
     }
 
