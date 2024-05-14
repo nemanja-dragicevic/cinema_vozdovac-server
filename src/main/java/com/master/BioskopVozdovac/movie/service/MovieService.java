@@ -8,6 +8,7 @@ import com.master.BioskopVozdovac.movie.model.MovieEntity;
 import com.master.BioskopVozdovac.movie.repository.MovieRepository;
 import com.master.BioskopVozdovac.role.adapter.RoleAdapter;
 import com.master.BioskopVozdovac.role.model.RoleEntity;
+import com.master.BioskopVozdovac.role.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +25,8 @@ public class MovieService {
     private final MovieAdapter movieAdapter;
 
     private final S3Service s3Service;
+
+    private final RoleService roleService;
 
     private final RoleAdapter roleAdapter;
 
@@ -52,9 +55,26 @@ public class MovieService {
         return movieAdapter.entityToDTO(entity);
     }
 
-    public MovieDTO updateMovie(MovieDTO dto) {
-        MovieEntity entity = movieAdapter.dtoToEntity(dto);
-        return movieAdapter.entityToDTO(movieRepository.saveAndFlush(entity));
+    public MovieDTO updateMovie(MovieDTO dto, MultipartFile small, MultipartFile big) {
+        try {
+            Set<RoleEntity> roleEntities = roleAdapter.toEntities(dto.getRoleDTO());
+            MovieEntity entity = movieAdapter.dtoToEntity(dto);
+
+            for (RoleEntity r : roleEntities)
+                r.setMovie(entity);
+            entity.setRoles(roleEntities);
+
+            entity = movieRepository.save(entity);
+
+            if (small != null)
+                s3Service.uploadFile(dto.getName() + ".webp", small);
+            if (big != null)
+                s3Service.uploadFile(dto.getName() + " big.webp", big);
+
+            return movieAdapter.entityToDTO(entity);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String deleteMovieById(Long id) {
@@ -73,12 +93,17 @@ public class MovieService {
     }
 
     public List<MovieDTO> getAllMoviesWithAWS() {
-        List<MovieDTO> dtos = movieAdapter.toDto(movieRepository.findAllShowing());
+//        List<MovieDTO> dtos = movieAdapter.toDto(movieRepository.findAllShowing());
+        List<MovieEntity> entities = movieRepository.findAllShowing();
+        List<MovieDTO> dtos = new ArrayList<>();
 
-        for (MovieDTO dto : dtos) {
+        for (MovieEntity entity : entities) {
+            MovieDTO dto = movieAdapter.entityToDTO(entity);
             try {
+                dto.setRoleDTO(roleService.getRolesForMovie(dto.getMovieID()));
                 dto.setSmallPicture(getPicture(dto.getName()));
                 dto.setBigPicture(getPicture(dto.getName() + " big"));
+                dtos.add(dto);
             } catch (Exception e) {
                 dto.setSmallPicture(null);
             }

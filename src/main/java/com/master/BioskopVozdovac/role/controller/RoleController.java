@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -28,7 +27,7 @@ public class RoleController {
     }
 
     @GetMapping("/{movieID}")
-    public ResponseEntity<List<RoleDTO>> getRolesForMovieID(@PathVariable Long movieID) {
+    public ResponseEntity<Set<RoleDTO>> getRolesForMovieID(@PathVariable Long movieID) {
         return new ResponseEntity<>(roleService.getRolesForMovie(movieID), HttpStatus.OK);
     }
 
