@@ -41,8 +41,18 @@ public class MovieController {
 
     @PutMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<MovieDTO> updateMovie(@RequestBody MovieDTO dto) {
-        return new ResponseEntity<>(movieService.updateMovie(dto), HttpStatus.OK);
+    public ResponseEntity<MovieDTO> updateMovie(@RequestParam("movie") String movieJSON,
+                                                @RequestParam("smallPicture") MultipartFile small,
+                                                @RequestParam("bigPicture") MultipartFile big) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            objectMapper.findAndRegisterModules();
+            MovieDTO dto = objectMapper.readValue(movieJSON, MovieDTO.class);
+            return new ResponseEntity<>(movieService.updateMovie(dto, small, big), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @DeleteMapping("/{id}")

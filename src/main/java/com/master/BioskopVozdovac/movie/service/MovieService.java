@@ -55,9 +55,26 @@ public class MovieService {
         return movieAdapter.entityToDTO(entity);
     }
 
-    public MovieDTO updateMovie(MovieDTO dto) {
-        MovieEntity entity = movieAdapter.dtoToEntity(dto);
-        return movieAdapter.entityToDTO(movieRepository.saveAndFlush(entity));
+    public MovieDTO updateMovie(MovieDTO dto, MultipartFile small, MultipartFile big) {
+        try {
+            Set<RoleEntity> roleEntities = roleAdapter.toEntities(dto.getRoleDTO());
+            MovieEntity entity = movieAdapter.dtoToEntity(dto);
+
+            for (RoleEntity r : roleEntities)
+                r.setMovie(entity);
+            entity.setRoles(roleEntities);
+
+            entity = movieRepository.save(entity);
+
+            if (small != null)
+                s3Service.uploadFile(dto.getName() + ".webp", small);
+            if (big != null)
+                s3Service.uploadFile(dto.getName() + " big.webp", big);
+
+            return movieAdapter.entityToDTO(entity);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String deleteMovieById(Long id) {
