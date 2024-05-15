@@ -28,6 +28,12 @@ public class GenreController {
         return new ResponseEntity<>(genreService.saveGenre(dto), HttpStatus.OK);
     }
 
+    @PutMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<GenreDTO> updateGenre(@RequestBody GenreDTO dto) {
+        return new ResponseEntity<>(genreService.updateGenre(dto), HttpStatus.OK);
+    }
+
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteGenre(@PathVariable Long id) {
