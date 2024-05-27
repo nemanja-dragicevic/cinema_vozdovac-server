@@ -1,7 +1,7 @@
 package com.master.BioskopVozdovac.member.controller;
 
+import com.master.BioskopVozdovac.member.model.ChangePassword;
 import com.master.BioskopVozdovac.member.model.MemberDTO;
-import com.master.BioskopVozdovac.member.model.MemberEntity;
 import com.master.BioskopVozdovac.member.service.MemberService;
 import com.master.BioskopVozdovac.security.MemberAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
@@ -40,8 +40,14 @@ public class MemberController {
 
     @PutMapping
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<MemberEntity> updateMember(@RequestBody MemberDTO dto) {
+    public ResponseEntity<MemberDTO> updateMember(@RequestBody MemberDTO dto) {
         return new ResponseEntity<>(memberService.updateMember(dto), HttpStatus.OK);
+    }
+
+    @PutMapping("/change-pass")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<MemberDTO> changePassword(@RequestBody ChangePassword dto) {
+        return new ResponseEntity<>(memberService.changePassword(dto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

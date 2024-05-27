@@ -3,6 +3,7 @@ package com.master.BioskopVozdovac.member.service;
 import com.master.BioskopVozdovac.enums.MemberRole;
 import com.master.BioskopVozdovac.exception.UserException;
 import com.master.BioskopVozdovac.member.adapter.MemberAdapter;
+import com.master.BioskopVozdovac.member.model.ChangePassword;
 import com.master.BioskopVozdovac.member.model.MemberDTO;
 import com.master.BioskopVozdovac.member.model.MemberEntity;
 import com.master.BioskopVozdovac.member.repository.MemberRepository;
@@ -47,13 +48,13 @@ public class MemberService {
         return memberAdapter.entityToDTO(entity);
     }
 
-    public MemberEntity updateMember(@RequestBody MemberDTO dto) {
+    public MemberDTO updateMember(@RequestBody MemberDTO dto) {
         MemberEntity entity = memberRepository.findById(dto.getMemberID()).orElseThrow(()
                     -> new UserException("Member with id: " + dto.getMemberID() + " doesn't exist",
                     HttpStatus.NOT_FOUND));
         MemberEntity updated = memberAdapter.dtoToEntity(dto);
         updated.setPassword(entity.getPassword());
-        return memberRepository.saveAndFlush(updated);
+        return memberAdapter.entityToDTO(memberRepository.saveAndFlush(updated));
     }
 
     public String deleteMember(Long id) {
@@ -76,5 +77,17 @@ public class MemberService {
         MemberEntity member = memberRepository.findByUsername(username)
                 .orElseThrow(() -> new UserException("There is no such username", HttpStatus.NOT_FOUND));
         return memberAdapter.entityToDTO(member);
+    }
+
+    public MemberDTO changePassword(ChangePassword dto) {
+        MemberEntity entity = memberRepository.findByUsername(dto.getMember().getUsername()).
+                orElseThrow(() -> new UserException("User not found", HttpStatus.NOT_FOUND));
+
+        if (!passwordEncoder.matches(CharBuffer.wrap(dto.getOldPassword()), entity.getPassword()))
+            throw new UserException("Wrong password", HttpStatus.UNAUTHORIZED);
+
+        entity.setPassword(passwordEncoder.encode(CharBuffer.wrap(dto.getNewPassword())));
+
+        return memberAdapter.entityToDTO(memberRepository.save(entity));
     }
 }
