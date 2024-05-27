@@ -52,9 +52,7 @@ public class MemberService {
                     -> new UserException("Member with id: " + dto.getMemberID() + " doesn't exist",
                     HttpStatus.NOT_FOUND));
         MemberEntity updated = memberAdapter.dtoToEntity(dto);
-        updated.setUsername(entity.getUsername());
         updated.setPassword(entity.getPassword());
-        updated.setEmail(entity.getEmail());
         return memberRepository.saveAndFlush(updated);
     }
 
