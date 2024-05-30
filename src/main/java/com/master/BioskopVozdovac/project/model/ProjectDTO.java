@@ -17,6 +17,7 @@ public class ProjectDTO {
     private MovieDTO movie;
     private HallDTO hall;
     private LocalDateTime projectTime;
+    private LocalDateTime projectEnd;
     private int price;
 
 }
