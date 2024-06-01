@@ -13,7 +13,9 @@ import com.master.BioskopVozdovac.movie.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -47,9 +49,18 @@ public class ProjectAdapter {
         entity.setProjectID(dto.getId());
         entity.setMovie(prepareMovie(dto.getMovie()));
         entity.setHall(prepareHall(dto.getHall()));
+        entity.setTime(dto.getProjectTime());
+        entity.setProjectEnd(dto.getProjectEnd());
         entity.setPrice(dto.getPrice());
 
         return entity;
+    }
+
+    public List<ProjectDTO> toDTOs(final List<ProjectEntity> entities) {
+        if (entities == null)
+            return null;
+
+        return entities.stream().map(this::entityToDTO).collect(Collectors.toList());
     }
 
     private MovieEntity prepareMovie(MovieDTO movie) {
