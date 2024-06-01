@@ -32,7 +32,7 @@ public class MovieEntity {
     private String description;
 
     @NotEmpty
-    private String duration;
+    private int duration;
 
     private LocalDate startTime;
 

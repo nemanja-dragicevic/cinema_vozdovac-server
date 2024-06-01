@@ -30,7 +30,7 @@ public class MovieDTO {
 
     private String description;
 
-    private String duration;
+    private int duration;
 
     private Set<GenreDTO> genres;
 
