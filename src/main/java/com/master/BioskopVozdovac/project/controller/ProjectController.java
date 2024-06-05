@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -43,10 +44,22 @@ public class ProjectController {
         return new ResponseEntity<>(projectService.getAvailableTimes(dto), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+//    @GetMapping("/{id}")
+//    @PreAuthorize("hasAuthority('ADMIN')")
+//    public ResponseEntity<List<ProjectDTO>> getProjectionsForMovie(@PathVariable Long id) {
+//        return new ResponseEntity<>(projectService.getProjectionsForMovie(id), HttpStatus.OK);
+//    }
+
+    @GetMapping("/{date}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<List<ProjectDTO>> getProjectionsForMovie(@PathVariable Long id) {
-        return new ResponseEntity<>(projectService.getProjectionsForMovie(id), HttpStatus.OK);
+    public ResponseEntity<List<ProjectDTO>> getProjectionsForDate(@PathVariable Date date) {
+        return new ResponseEntity<>(projectService.getProjectionsForMovie(date), HttpStatus.OK);
+    }
+
+    @GetMapping("/{date}/{hallID}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<ProjectTimes>> getTimesForHallAndDate(@PathVariable Date date, @PathVariable Long hallID) {
+        return new ResponseEntity<>(projectService.getProjectionsForDateAndHall(date, hallID), HttpStatus.OK);
     }
 
     @GetMapping

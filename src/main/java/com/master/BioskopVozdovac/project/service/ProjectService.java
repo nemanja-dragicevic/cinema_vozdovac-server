@@ -9,10 +9,12 @@ import com.master.BioskopVozdovac.project.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -104,9 +106,17 @@ public class ProjectService {
         return false;
     }
 
-    public List<ProjectDTO> getProjectionsForMovie(final Long id) {
-        List<ProjectEntity> entities = projectRepository.findAllByMovieMovieID(id);
+    public List<ProjectDTO> getProjectionsForMovie(final Date date) {
+        List<ProjectEntity> entities = projectRepository.findAllByDate(date);
 
         return projectAdapter.toDTOs(entities);
     }
+
+    public List<ProjectTimes> getProjectionsForDateAndHall(final Date date, final Long hallID) {
+        List<Object[]> results = projectRepository.findAllByDateAndHall(date, hallID);
+
+        return results.stream().map(result -> new ProjectTimes(result[0].toString(),
+                result[1].toString())).toList();
+    }
+
 }

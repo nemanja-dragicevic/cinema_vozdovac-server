@@ -35,6 +35,8 @@ public class ProjectAdapter {
         dto.setId(entity.getProjectID());
         dto.setMovie(movieAdapter.entityToDTO(entity.getMovie()));
         dto.setHall(hallAdapter.entityToDTO(entity.getHall()));
+        dto.setProjectTime(entity.getTime());
+        dto.setProjectEnd(entity.getProjectEnd());
         dto.setPrice(entity.getPrice());
 
         return dto;
