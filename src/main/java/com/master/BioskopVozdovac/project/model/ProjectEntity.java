@@ -37,6 +37,9 @@ public class ProjectEntity {
     @Column(name = "project")
     private LocalDateTime time;
 
+    @Column(name = "project_end")
+    private LocalDateTime projectEnd;
+
     @Column(name = "price")
     private int price;
 
