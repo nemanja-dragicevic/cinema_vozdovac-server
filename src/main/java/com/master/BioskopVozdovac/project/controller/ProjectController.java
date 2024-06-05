@@ -67,5 +67,10 @@ public class ProjectController {
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> deleteProjectionWithID(@PathVariable Long id) {
+        return new ResponseEntity<>(projectService.deleteProjectionWithID(id), HttpStatus.OK);
+    }
 
 }

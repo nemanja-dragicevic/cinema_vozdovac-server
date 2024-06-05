@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -119,4 +119,12 @@ public class ProjectService {
                 result[1].toString())).toList();
     }
 
+    public String deleteProjectionWithID(Long id) {
+        ProjectEntity entity = projectRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("There is no such projection")
+        );
+
+        projectRepository.deleteById(id);
+        return "Successfully deleted projection";
+    }
 }
