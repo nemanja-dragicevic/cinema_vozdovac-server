@@ -88,7 +88,7 @@ public class MovieService {
     }
 
     public List<MovieDTO> getAllMovies() {
-        List<MovieEntity> entities = movieRepository.findAllShowing();
+        List<MovieEntity> entities = movieRepository.findCurrentAndUpcomingMovies();
         return movieAdapter.toDto(entities);
     }
 
