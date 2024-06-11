@@ -127,4 +127,13 @@ public class ProjectService {
         projectRepository.deleteById(id);
         return "Successfully deleted projection";
     }
+
+    public ProjectDTO updateProjection(ProjectDTO dto) {
+
+        if (!projectRepository.existsById(dto.getId())) {
+            throw new IllegalStateException("Projection with given id doesn't exist!");
+        }
+
+        return projectAdapter.entityToDTO(projectRepository.save(projectAdapter.dtoToEntity(dto)));
+    }
 }
