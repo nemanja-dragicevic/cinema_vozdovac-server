@@ -2,6 +2,7 @@ package com.master.BioskopVozdovac.member.model;
 
 import com.master.BioskopVozdovac.enums.Gender;
 import com.master.BioskopVozdovac.enums.MemberRole;
+import com.master.BioskopVozdovac.ticket.model.TicketEntity;
 import com.master.BioskopVozdovac.user.User;
 import com.master.BioskopVozdovac.util.PatternUtils;
 import jakarta.persistence.*;
@@ -14,6 +15,8 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -52,5 +55,8 @@ public class MemberEntity extends User {
     @NotEmpty
     @Pattern(regexp = PatternUtils.PASSWORD_PATTERN)
     private String password;
+
+    @OneToMany(mappedBy = "member")
+    private Set<TicketEntity> tickets = new HashSet<>();
 
 }
