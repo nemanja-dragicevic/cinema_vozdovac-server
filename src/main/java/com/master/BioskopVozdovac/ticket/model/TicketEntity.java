@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -35,10 +37,17 @@ public class TicketEntity {
     private LocalDateTime payinTime;
 
     @NotNull
-    private int price;
+    private int total;
 
     @NotEmpty
     @Enumerated(EnumType.STRING)
     private TicketStatus status;
+
+    @NotEmpty
+    @Column(name = "total_seats")
+    private int totalSeats;
+
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
+    private Set<TicketItemEntity> ticketItems = new HashSet<>();
 
 }

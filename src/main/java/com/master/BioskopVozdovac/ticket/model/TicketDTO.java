@@ -18,7 +18,7 @@ public class TicketDTO {
     private Long id;
     private MemberDTO member;
     private LocalDateTime payinTime;
-    private int price;
+    private int total;
     private TicketStatus status;
 
 }

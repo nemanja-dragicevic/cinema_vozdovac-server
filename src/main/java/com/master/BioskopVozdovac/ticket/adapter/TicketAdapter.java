@@ -19,7 +19,7 @@ public class TicketAdapter {
         final TicketDTO dto = new TicketDTO();
         dto.setId(entity.getId());
         dto.setMember(memberAdapter.entityToDTO(entity.getMember()));
-        dto.setPrice(entity.getPrice());
+        dto.setTotal(entity.getTotal());
         dto.setPayinTime(entity.getPayinTime());
         dto.setStatus(entity.getStatus());
 
@@ -33,7 +33,7 @@ public class TicketAdapter {
         final TicketEntity entity = new TicketEntity();
         entity.setId(dto.getId());
         entity.setMember(memberAdapter.dtoToEntity(dto.getMember()));
-        entity.setPrice(dto.getPrice());
+        entity.setTotal(dto.getTotal());
         entity.setPayinTime(dto.getPayinTime());
         entity.setStatus(dto.getStatus());
 

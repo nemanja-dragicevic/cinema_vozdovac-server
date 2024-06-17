@@ -2,6 +2,7 @@ package com.master.BioskopVozdovac.project.model;
 
 import com.master.BioskopVozdovac.hall.model.HallEntity;
 import com.master.BioskopVozdovac.movie.model.MovieEntity;
+import com.master.BioskopVozdovac.ticket.model.TicketItemEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -42,5 +44,8 @@ public class ProjectEntity {
 
     @Column(name = "price")
     private int price;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private Set<TicketItemEntity> ticketItems;
 
 }

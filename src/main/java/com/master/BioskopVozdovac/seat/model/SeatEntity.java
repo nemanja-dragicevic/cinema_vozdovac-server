@@ -1,6 +1,7 @@
 package com.master.BioskopVozdovac.seat.model;
 
 import com.master.BioskopVozdovac.hall.model.HallEntity;
+import com.master.BioskopVozdovac.ticket.model.TicketItemEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -32,5 +33,8 @@ public class SeatEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hall_id")
     private HallEntity hall;
+
+    @OneToOne(mappedBy = "seat")
+    private TicketItemEntity ticketItem;
 
 }
