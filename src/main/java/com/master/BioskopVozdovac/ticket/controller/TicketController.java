@@ -1,8 +1,9 @@
 package com.master.BioskopVozdovac.ticket.controller;
 
 import com.master.BioskopVozdovac.stripe_config.StripeService;
+import com.master.BioskopVozdovac.stripe_config.model.StripeResponse;
+import com.master.BioskopVozdovac.ticket.model.TicketDTO;
 import com.master.BioskopVozdovac.ticket.service.TicketService;
-import com.stripe.net.StripeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,9 +21,11 @@ public class TicketController {
     private final StripeService stripeService;
 
     @PostMapping("/create_payment")
-    public ResponseEntity<StripeResponse> createPayment(@RequestBody Object createPaymentRequest) {
-//        StripeResponse response = stripeService.cre
-        return null;
+    public ResponseEntity<StripeResponse> createPayment(@RequestBody TicketDTO dto) {
+        StripeResponse response = stripeService.createPayment(dto);
+        return ResponseEntity
+                .status(response.getHttpStatus())
+                .body(response);
     }
 
 }

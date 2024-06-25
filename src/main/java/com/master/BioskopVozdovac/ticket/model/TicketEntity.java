@@ -37,7 +37,7 @@ public class TicketEntity {
     private LocalDateTime payinTime;
 
     @NotNull
-    private int total;
+    private Long total;
 
     @NotEmpty
     @Enumerated(EnumType.STRING)
