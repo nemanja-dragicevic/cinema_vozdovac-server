@@ -1,16 +1,22 @@
 package com.master.BioskopVozdovac.ticket.adapter;
 
-import com.master.BioskopVozdovac.member.adapter.MemberAdapter;
+import com.master.BioskopVozdovac.member.repository.MemberRepository;
 import com.master.BioskopVozdovac.ticket.model.TicketDTO;
 import com.master.BioskopVozdovac.ticket.model.TicketEntity;
+import com.master.BioskopVozdovac.ticket.model.TicketItemDTO;
+import com.master.BioskopVozdovac.ticket.model.TicketItemEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class TicketAdapter {
 
-    private final MemberAdapter memberAdapter;
+    private final MemberRepository memberRepository;
+    private final TicketItemAdapter ticketItemAdapter;
 
     public TicketDTO entityToDTO(final TicketEntity entity) {
         if (entity == null)
@@ -18,10 +24,11 @@ public class TicketAdapter {
 
         final TicketDTO dto = new TicketDTO();
         dto.setId(entity.getId());
-        dto.setMember(memberAdapter.entityToDTO(entity.getMember()));
+        dto.setMemberID(entity.getMember().getMemberID());
         dto.setTotal(entity.getTotal());
         dto.setPayinTime(entity.getPayinTime());
         dto.setStatus(entity.getStatus());
+        dto.setTotalSeats(entity.getTotalSeats());
 
         return dto;
     }
@@ -32,12 +39,20 @@ public class TicketAdapter {
 
         final TicketEntity entity = new TicketEntity();
         entity.setId(dto.getId());
-        entity.setMember(memberAdapter.dtoToEntity(dto.getMember()));
+        entity.setMember(memberRepository.findById(dto.getMemberID()).orElseThrow(
+                () -> new RuntimeException("User not found")
+        ));
         entity.setTotal(dto.getTotal());
         entity.setPayinTime(dto.getPayinTime());
         entity.setStatus(dto.getStatus());
+        entity.setTotalSeats(dto.getTotalSeats());
+        entity.setTicketItems(prepareTicketItems(dto.getTicketItems()));
 
         return entity;
+    }
+
+    private Set<TicketItemEntity> prepareTicketItems(final Set<TicketItemDTO> ticketItems) {
+        return ticketItems.stream().map(ticketItemAdapter::entityToDTO).collect(Collectors.toSet());
     }
 
 }

@@ -1,7 +1,6 @@
 package com.master.BioskopVozdovac.ticket.model;
 
 import com.master.BioskopVozdovac.enums.TicketStatus;
-import com.master.BioskopVozdovac.member.model.MemberDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +17,7 @@ import java.util.Set;
 public class TicketDTO {
 
     private Long id;
-    private MemberDTO member;
+    private Long memberID;
     private LocalDateTime payinTime;
     private Long total;
     private TicketStatus status;

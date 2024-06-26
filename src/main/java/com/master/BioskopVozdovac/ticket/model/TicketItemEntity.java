@@ -3,7 +3,6 @@ package com.master.BioskopVozdovac.ticket.model;
 import com.master.BioskopVozdovac.project.model.ProjectEntity;
 import com.master.BioskopVozdovac.seat.model.SeatEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,10 +24,10 @@ public class TicketItemEntity {
     @ManyToOne
     @JoinColumn(name = "ticket_id")
     private TicketEntity ticket;
-
-    @NotEmpty
-    @Column(name = "number_of_seats")
-    private int numberOfSeats;
+//
+//    @NotEmpty
+//    @Column(name = "number_of_seats")
+//    private int numberOfSeats;
 
     @ManyToOne
     @JoinColumn(name = "project_id")
