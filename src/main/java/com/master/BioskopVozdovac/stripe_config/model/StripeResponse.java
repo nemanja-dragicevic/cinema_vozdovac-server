@@ -3,6 +3,7 @@ package com.master.BioskopVozdovac.stripe_config.model;
 import lombok.*;
 
 @Data
+@NoArgsConstructor
 @Builder
 public class StripeResponse<T> {
 
