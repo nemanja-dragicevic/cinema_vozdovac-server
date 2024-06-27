@@ -89,4 +89,11 @@ databaseChangeLog:
       changes:
         - sqlFile:
             encoding: UTF-8
-            path: db/changes/013_create_seat_alter_hall.sql
+            path: db/changes/013_create_seat.sql
+  - changeSet:
+      id: 014
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/014_create_ticket_and_ticket_item.sql

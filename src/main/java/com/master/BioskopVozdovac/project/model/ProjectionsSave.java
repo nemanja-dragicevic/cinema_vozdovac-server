@@ -20,6 +20,6 @@ public class ProjectionsSave {
     private MovieDTO movie;
     private HallDTO hall;
     private List<LocalTime> projectionTime;
-    private int price;
+    private Long price;
 
 }

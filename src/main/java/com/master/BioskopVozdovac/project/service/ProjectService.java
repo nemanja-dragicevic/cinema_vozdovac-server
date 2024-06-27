@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -135,5 +136,10 @@ public class ProjectService {
         }
 
         return projectAdapter.entityToDTO(projectRepository.save(projectAdapter.dtoToEntity(dto)));
+    }
+
+    public List<ProjectDTO> getProjectionsForDateAndMovie(Date date, Long id) {
+        List<ProjectEntity> projections = projectRepository.findAllByDateAndMovie(date, id);
+        return projections.stream().map(projectAdapter::entityToDTO).collect(Collectors.toList());
     }
 }

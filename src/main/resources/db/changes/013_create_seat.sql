@@ -1,6 +1,3 @@
-alter table hall
-add capacity integer;
-
 create table seat
 (
     hall_id         integer,

@@ -4,7 +4,6 @@ CREATE TABLE members
     first_name     VARCHAR(255),
     last_name      VARCHAR(255),
     gender         VARCHAR(32),
-    status         varchar(32),
     address        VARCHAR(255),
     phone_number   VARCHAR(55),
     birth_date     DATE,

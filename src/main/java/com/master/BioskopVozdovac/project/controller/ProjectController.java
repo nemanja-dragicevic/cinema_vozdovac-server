@@ -11,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
-import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -56,16 +55,23 @@ public class ProjectController {
         return new ResponseEntity<>(projectService.getProjectionsForMovie(date), HttpStatus.OK);
     }
 
+    @GetMapping
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<List<ProjectDTO>> getProjectionsForDateAndMovie(@RequestParam("date")  Date date,
+                                                                          @RequestParam("id") Long id) {
+        return new ResponseEntity<>(projectService.getProjectionsForDateAndMovie(date, id), HttpStatus.OK);
+    }
+
     @GetMapping("/{date}/{hallID}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<ProjectTimes>> getTimesForHallAndDate(@PathVariable Date date, @PathVariable Long hallID) {
         return new ResponseEntity<>(projectService.getProjectionsForDateAndHall(date, hallID), HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<String> train(@RequestBody List<LocalTime> time) {
-        return new ResponseEntity<>("success", HttpStatus.OK);
-    }
+//    @GetMapping
+//    public ResponseEntity<String> train(@RequestBody List<LocalTime> time) {
+//        return new ResponseEntity<>("success", HttpStatus.OK);
+//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<ProjectDTO> updateProjection(@RequestBody ProjectDTO dto) {
