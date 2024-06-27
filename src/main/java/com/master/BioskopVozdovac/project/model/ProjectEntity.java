@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -36,16 +37,16 @@ public class ProjectEntity {
     @JoinColumn(name = "hall_id", referencedColumnName = "id")
     private HallEntity hall;
 
-    @Column(name = "project")
+    @Column(name = "starts_at")
     private LocalDateTime time;
 
-    @Column(name = "project_end")
+    @Column(name = "ends_at")
     private LocalDateTime projectEnd;
 
     @Column(name = "price")
-    private int price;
+    private Long price;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private Set<TicketItemEntity> ticketItems;
+    private Set<TicketItemEntity> ticketItems = new HashSet<>();
 
 }

@@ -18,6 +18,6 @@ public class ProjectDTO {
     private HallDTO hall;
     private LocalDateTime projectTime;
     private LocalDateTime projectEnd;
-    private int price;
+    private Long price;
 
 }
