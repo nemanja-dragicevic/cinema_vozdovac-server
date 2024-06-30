@@ -71,6 +71,12 @@ public class MovieController {
         return new ResponseEntity<>(movieService.getAllMoviesWithAWS(), HttpStatus.OK);
     }
 
+    @GetMapping("/save-projections")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<MovieDTO>> getMoviesWithoutProjections() {
+        return new ResponseEntity<>(movieService.getMoviesWithoutProjections(), HttpStatus.OK);
+    }
+
 //    @RequestParam("movie") String movieJSON, @RequestParam("times") List<HallProjections> projects
     @PostMapping(value = "/try")
     @PreAuthorize("hasAuthority('ADMIN')")

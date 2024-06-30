@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -160,5 +161,10 @@ public class MovieService {
 
         return movieAdapter.entityToDTO(entity);
 //        return null;
+    }
+
+    public List<MovieDTO> getMoviesWithoutProjections() {
+        List<MovieEntity> movies = movieRepository.findAllWOProjections();
+        return movies.stream().map(movieAdapter::entityToDTO).collect(Collectors.toList());
     }
 }
