@@ -16,4 +16,7 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
     @Query("select m from MovieEntity m where (m.startTime <= current_date and m.endTime > current_date) or " +
             "m.startTime is null")
     List<MovieEntity> findCurrentAndUpcomingMovies();
+
+    @Query(value = "select m from MovieEntity m where (m.startTime is null or m.endTime is null) ")
+    List<MovieEntity> findAllWOProjections();
 }
