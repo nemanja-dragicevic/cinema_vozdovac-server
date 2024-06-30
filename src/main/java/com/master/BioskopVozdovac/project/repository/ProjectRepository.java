@@ -45,6 +45,15 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Long> {
             "order by 1", nativeQuery = true)
     List<ProjectEntity> findAllByDateAndMovie(final Date date, final Long id);
 
+    @Query(value = "select distinct to_char(p.starts_at, 'HH24:MI') as start_time, " +
+            "to_char(p.ends_at, 'HH24:MI') as end_time " +
+            "from \"public\".projects p " +
+            "where p.hall_id = ?1 " +
+            "and cast(p.starts_at as date) >= ?2 " +
+            "and cast(p.starts_at as date) <= ?3 " +
+            "order by 1", nativeQuery = true)
+    List<Object[]> findAllByHallAndDates(Long hallID, Date startDate, Date endDate);
+
 //    @Query(value = "with filtered as (select distinct to_char(p.project, 'HH24:MI') as hour " +
 //            "from \"public\".projects p " +
 //            "where p.hall_id = ?1 " +

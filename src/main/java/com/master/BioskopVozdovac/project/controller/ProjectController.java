@@ -27,27 +27,15 @@ public class ProjectController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<ProjectDTO> saveMovieProjections(@RequestBody ProjectionsSave dto) {
+    public ResponseEntity<String> saveMovieProjections(@RequestBody ProjectionsSave dto) {
         return new ResponseEntity<>(projectService.saveMovieProjections(dto), HttpStatus.OK);
     }
-
-//    @GetMapping("/available")
-//    @PreAuthorize("hasAuthority('ADMIN')")
-//    public ResponseEntity<List<String>> getAvailableTimes(@RequestBody ProjectionsSave dto) {
-//        return new ResponseEntity<>(projectService.getAvailableTimes(dto), HttpStatus.OK);
-//    }
 
     @GetMapping("/available")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<ProjectTimes>> getAvailableTimes(@RequestBody ProjectionsSave dto) {
         return new ResponseEntity<>(projectService.getAvailableTimes(dto), HttpStatus.OK);
     }
-
-//    @GetMapping("/{id}")
-//    @PreAuthorize("hasAuthority('ADMIN')")
-//    public ResponseEntity<List<ProjectDTO>> getProjectionsForMovie(@PathVariable Long id) {
-//        return new ResponseEntity<>(projectService.getProjectionsForMovie(id), HttpStatus.OK);
-//    }
 
     @GetMapping("/{date}")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -62,16 +50,19 @@ public class ProjectController {
         return new ResponseEntity<>(projectService.getProjectionsForDateAndMovie(date, id), HttpStatus.OK);
     }
 
+    @GetMapping("/get-projections")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<ProjectTimes>> getProjectionsForHall( @RequestParam("hallID") Long hallID,
+                                                                   @RequestParam("startDate") Date startDate,
+                                                                   @RequestParam("endDate") Date endDate) {
+        return new ResponseEntity<>(projectService.getProjectionsForHallAndDates(hallID, startDate, endDate), HttpStatus.OK);
+    }
+
     @GetMapping("/{date}/{hallID}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<ProjectTimes>> getTimesForHallAndDate(@PathVariable Date date, @PathVariable Long hallID) {
         return new ResponseEntity<>(projectService.getProjectionsForDateAndHall(date, hallID), HttpStatus.OK);
     }
-
-//    @GetMapping
-//    public ResponseEntity<String> train(@RequestBody List<LocalTime> time) {
-//        return new ResponseEntity<>("success", HttpStatus.OK);
-//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<ProjectDTO> updateProjection(@RequestBody ProjectDTO dto) {

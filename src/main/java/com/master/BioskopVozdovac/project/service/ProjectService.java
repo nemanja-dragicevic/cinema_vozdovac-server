@@ -29,7 +29,7 @@ public class ProjectService {
         return null;
     }
 
-    public ProjectDTO saveMovieProjections(ProjectionsSave dto) {
+    public String saveMovieProjections(ProjectionsSave dto) {
         LocalDate startDate = dto.getMovie().getStartTime();
         LocalDate endDate = dto.getMovie().getEndTime();
 
@@ -40,48 +40,15 @@ public class ProjectService {
             project.setPrice(dto.getPrice());
 
             for (LocalTime lt : dto.getProjectionTime()) {
-//                project.setProjectTime(LocalDateTime.of(startDate, LocalTime.parse(s)));
-
                 project.setProjectTime(LocalDateTime.of(startDate, lt));
+                project.setProjectEnd(LocalDateTime.of(startDate, lt.plusMinutes(dto.getMovie().getDuration())));
                 projectRepository.save(projectAdapter.dtoToEntity(project));
             }
             startDate = startDate.plusDays(1);
         }
 
-        return null;
+        return "Successfully saved movie projection(s)!!!";
     }
-
-//    public List<String> getAvailableTimes(ProjectionsSave dto) {
-////        long days = ChronoUnit.DAYS.between(dto.getMovie().getStartTime(), dto.getMovie().getEndTime()) + 1;
-//        List<LocalTime> valid = new ArrayList<>();
-//
-//        int duration = (int) Math.ceil((double) dto.getMovie().getDuration() / 60);
-////        List<Object[]> val = projectRepository.getAvailableTimes(
-////                dto.getHall().getHallID(),
-////                dto.getMovie().getStartTime().atTime(12, 0, 0),
-////                dto.getMovie().getEndTime().atTime(23, 0, 0),
-////                0);
-//        List<ProjectTimes> values = projectRepository.getAvailableTimes(
-//                dto.getHall().getHallID(),
-//                dto.getMovie().getStartTime().atTime(12, 0, 0),
-//                dto.getMovie().getEndTime().atTime(23, 0, 0),
-//                0).stream()
-//                .map(result -> new ProjectTimes(
-//                        LocalTime.parse(result[0].toString()),
-//                        LocalTime.parse(result[1].toString())
-//                )).toList();
-//
-//        LocalTime startTime = LocalTime.of(12, 0);
-//        LocalTime endTime = LocalTime.of(23 - duration, 0);
-//
-//        while (startTime.isBefore(endTime)) {
-//            if (isTimeValid(values, startTime, startTime.plusHours(duration))) valid.add(startTime);
-//
-//            startTime = startTime.plusHours(1);
-//        }
-//
-//        return null;
-//    }
 
     public List<ProjectTimes> getAvailableTimes(ProjectionsSave dto) {
         return projectRepository.getAvailableTimes(
@@ -141,5 +108,12 @@ public class ProjectService {
     public List<ProjectDTO> getProjectionsForDateAndMovie(Date date, Long id) {
         List<ProjectEntity> projections = projectRepository.findAllByDateAndMovie(date, id);
         return projections.stream().map(projectAdapter::entityToDTO).collect(Collectors.toList());
+    }
+
+    public List<ProjectTimes> getProjectionsForHallAndDates(Long hallID, Date startDate, Date endDate) {
+        List<Object[]> results = projectRepository.findAllByHallAndDates(hallID, startDate, endDate);
+
+        return results.stream().map(result -> new ProjectTimes(result[0].toString(),
+                result[1].toString())).toList();
     }
 }
