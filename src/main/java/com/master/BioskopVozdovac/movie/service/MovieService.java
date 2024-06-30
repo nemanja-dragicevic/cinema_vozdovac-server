@@ -126,6 +126,10 @@ public class MovieService {
         }
     }
 
+    public void saveStartAndEndDates(final MovieDTO dto) {
+        movieRepository.save(movieAdapter.dtoToEntity(dto));
+    }
+
     public MovieDTO trySaveMovie(MovieDTO dto) {
 //        LocalDate currentDate = dto.getStartTime();
 //        LocalTime time = LocalTime.of(7, 0);
