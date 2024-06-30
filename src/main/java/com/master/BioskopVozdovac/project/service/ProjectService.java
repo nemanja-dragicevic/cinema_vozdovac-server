@@ -1,5 +1,6 @@
 package com.master.BioskopVozdovac.project.service;
 
+import com.master.BioskopVozdovac.movie.service.MovieService;
 import com.master.BioskopVozdovac.project.adapter.ProjectAdapter;
 import com.master.BioskopVozdovac.project.model.ProjectDTO;
 import com.master.BioskopVozdovac.project.model.ProjectEntity;
@@ -24,6 +25,7 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
 
     private final ProjectAdapter projectAdapter;
+    private final MovieService movieService;
 
     public List<ProjectDTO> getAllDTOs() {
         return null;
@@ -32,6 +34,9 @@ public class ProjectService {
     public String saveMovieProjections(ProjectionsSave dto) {
         LocalDate startDate = dto.getMovie().getStartTime();
         LocalDate endDate = dto.getMovie().getEndTime();
+
+        dto.getMovie().setStartTime(startDate);
+        dto.getMovie().setEndTime(endDate);
 
         while (!startDate.isAfter(endDate)) {
             ProjectDTO project = new ProjectDTO();
@@ -46,6 +51,7 @@ public class ProjectService {
             }
             startDate = startDate.plusDays(1);
         }
+        movieService.saveStartAndEndDates(dto.getMovie());
 
         return "Successfully saved movie projection(s)!!!";
     }
