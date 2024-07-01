@@ -2,11 +2,14 @@ package com.master.BioskopVozdovac.hall.model;
 
 import com.master.BioskopVozdovac.seat.model.SeatEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "hall")
+@SuperBuilder(toBuilder = true)
 public class HallEntity {
 
     @Id
@@ -24,15 +28,17 @@ public class HallEntity {
     @Column(name = "id", nullable = false)
     private Long hallID;
 
-    @NotNull
+    @NotEmpty
     @Column(name = "hall_name")
     private String hallName;
 
     @NotNull
+    @Positive
     @Column(name = "rows_count")
     private int rowsCount;
 
     @NotNull
+    @Positive
     @Column(name = "seats_per_row")
     private int seatsPerRow;
 
