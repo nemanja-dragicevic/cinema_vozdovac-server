@@ -122,4 +122,12 @@ public class ProjectService {
         return results.stream().map(result -> new ProjectTimes(result[0].toString(),
                 result[1].toString())).toList();
     }
+
+    public List<ProjectDTO> getProjectionsForCertainMovie(Long id) {
+        LocalDate currentDate = LocalDate.now();
+        Date startDate = Date.valueOf(currentDate);
+        Date endDate = Date.valueOf(currentDate.plusDays(2));
+        List<ProjectEntity> projections = projectRepository.findByMovieMovieID(id, startDate, endDate);
+        return projections.stream().map(projectAdapter::entityToDTO).collect(Collectors.toList());
+    }
 }

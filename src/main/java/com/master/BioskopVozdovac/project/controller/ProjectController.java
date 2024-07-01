@@ -58,6 +58,12 @@ public class ProjectController {
         return new ResponseEntity<>(projectService.getProjectionsForHallAndDates(hallID, startDate, endDate), HttpStatus.OK);
     }
 
+    @GetMapping("/projections/{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<List<ProjectDTO>> getProjectionsForMovie(@PathVariable Long id) {
+        return new ResponseEntity<>(projectService.getProjectionsForCertainMovie(id), HttpStatus.OK);
+    }
+
     @GetMapping("/{date}/{hallID}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<ProjectTimes>> getTimesForHallAndDate(@PathVariable Date date, @PathVariable Long hallID) {

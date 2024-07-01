@@ -22,7 +22,12 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Long> {
             "order by 1 ", nativeQuery = true)
     List<Object[]> getAvailableTimes(final Long hallID, final LocalDateTime startTime, final LocalDateTime endTime, final long duration);
 
-    List<ProjectEntity> findAllByMovieMovieID(Long id);
+    @Query(value = "select * " +
+            "from \"public\".projects p " +
+            "where cast(p.starts_at as date) >= ?2 " +
+            "and cast(p.starts_at as date) <= ?3 " +
+            "and p.movie_id = ?1", nativeQuery = true)
+    List<ProjectEntity> findByMovieMovieID(final Long id, final Date startDate, final Date endDate);
 
     @Query(value = "select * " +
             "from \"public\".projects p " +
