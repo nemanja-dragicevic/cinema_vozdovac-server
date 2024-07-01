@@ -27,6 +27,10 @@ public class MemberService {
 
     private final PasswordEncoder passwordEncoder;
 
+    public MemberDTO create(MemberEntity entity) {
+        return memberAdapter.entityToDTO(memberRepository.saveAndFlush(entity));
+    }
+
     public MemberDTO register(MemberDTO dto) {
         Optional<MemberEntity> entities = memberRepository.findByUsername(dto.getUsername());
 

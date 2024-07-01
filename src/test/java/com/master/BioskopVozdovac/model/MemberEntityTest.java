@@ -1,6 +1,6 @@
 package com.master.BioskopVozdovac.model;
 
-import com.master.BioskopVozdovac.input.MemberEntityData;
+import com.master.BioskopVozdovac.input.MemberData;
 import com.master.BioskopVozdovac.member.model.MemberEntity;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -25,7 +25,7 @@ public class MemberEntityTest {
         this.validatorFactory = Validation.buildDefaultValidatorFactory();
         this.validator = validatorFactory.getValidator();
 
-        this.entity = MemberEntityData.MEMBER_ENTITY.toBuilder().build();
+        this.entity = MemberData.MEMBER_ENTITY.toBuilder().build();
     }
 
     @Test
