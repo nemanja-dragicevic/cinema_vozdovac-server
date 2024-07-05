@@ -46,13 +46,17 @@ public class TicketAdapter {
         entity.setPayinTime(dto.getPayinTime());
         entity.setStatus(dto.getStatus());
         entity.setTotalSeats(dto.getTotalSeats());
-        entity.setTicketItems(prepareTicketItems(dto.getTicketItems()));
+        entity.setTicketItems(prepareTicketItems(entity, dto.getTicketItems()));
 
         return entity;
     }
 
-    private Set<TicketItemEntity> prepareTicketItems(final Set<TicketItemDTO> ticketItems) {
-        return ticketItems.stream().map(ticketItemAdapter::entityToDTO).collect(Collectors.toSet());
+    private Set<TicketItemEntity> prepareTicketItems(final TicketEntity ticket, final Set<TicketItemDTO> ticketItems) {
+        return ticketItems.stream().map(ticketItemDTO -> {
+            TicketItemEntity item = ticketItemAdapter.dtoToEntity(ticketItemDTO);
+            item.setTicket(ticket);
+            return item;
+        }).collect(Collectors.toSet());
     }
 
 }
