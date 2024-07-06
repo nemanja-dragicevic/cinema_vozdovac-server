@@ -3,7 +3,6 @@ package com.master.BioskopVozdovac.ticket.model;
 import com.master.BioskopVozdovac.enums.TicketStatus;
 import com.master.BioskopVozdovac.member.model.MemberEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,22 +27,22 @@ public class TicketEntity {
     private Long id;
 
     @ManyToOne
-    @NotEmpty
+    @NotNull
     @JoinColumn(name = "member_id", referencedColumnName = "id")
     private MemberEntity member;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "payin_time")
     private LocalDateTime payinTime;
 
     @NotNull
     private Long total;
 
-    @NotEmpty
+    @NotNull
     @Enumerated(EnumType.STRING)
     private TicketStatus status;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "total_seats")
     private int totalSeats;
 

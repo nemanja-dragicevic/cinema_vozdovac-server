@@ -1,12 +1,16 @@
 package com.master.BioskopVozdovac.stripe_config;
 
+import com.master.BioskopVozdovac.enums.TicketStatus;
+import com.master.BioskopVozdovac.exception.ExceptionResponse;
 import com.master.BioskopVozdovac.project.model.ProjectEntity;
 import com.master.BioskopVozdovac.project.repository.ProjectRepository;
-import com.master.BioskopVozdovac.stripe_config.model.CapturePaymentResponse;
 import com.master.BioskopVozdovac.stripe_config.model.CreatePaymentResponse;
 import com.master.BioskopVozdovac.stripe_config.model.StripeResponse;
+import com.master.BioskopVozdovac.ticket.adapter.TicketAdapter;
 import com.master.BioskopVozdovac.ticket.model.TicketDTO;
+import com.master.BioskopVozdovac.ticket.model.TicketEntity;
 import com.master.BioskopVozdovac.ticket.model.TicketItemDTO;
+import com.master.BioskopVozdovac.ticket.repository.TicketRepository;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
@@ -16,8 +20,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -29,25 +36,29 @@ public class StripeService {
 
     private final ProjectRepository projectRepository;
 
+    private final TicketAdapter ticketAdapter;
+
+    private final TicketRepository ticketRepository;
+
     public StripeResponse createPayment(TicketDTO ticket) {
-        // Set your secret key. Remember to switch to your live secret key in production!
         Stripe.apiKey = key;
 
         List<SessionCreateParams.LineItem> lineItems = new ArrayList<>();
+        Map<String, String> metadata = new HashMap<>();
+        long amount = 0;
 
         for(TicketItemDTO item : ticket.getTicketItems()) {
             String currency = "rsd";
-            ProjectEntity project = projectRepository.findById(item.getProjectId()).orElseThrow(
+            ProjectEntity project = projectRepository.findById(item.getProjectionId()).orElseThrow(
                     () -> new RuntimeException("Projection not found")
             );
-
-            System.out.println(project.getMovie().getName());
+            amount += project.getPrice();
             // Create a PaymentIntent with the order amount and currency
             SessionCreateParams.LineItem.PriceData.ProductData productData =
                     SessionCreateParams.LineItem.PriceData.ProductData.builder()
                             .setName(project.getMovie().getName())
                             .build();
-            System.out.println(project.getMovie().getName());
+
             // Create new line item with the above product data and associated price
             SessionCreateParams.LineItem.PriceData priceData =
                     SessionCreateParams.LineItem.PriceData.builder()
@@ -65,15 +76,22 @@ public class StripeService {
                             .build();
 
             lineItems.add(lineItem);
+
+            metadata.put("item_" + item.getSeatId() + item.getProjectionId(), item.getProjectionId() + "," + item.getSeatId());
         }
+
+        metadata.put("memberID", ticket.getMemberID().toString());
+        metadata.put("total", Long.toString(amount));
+        metadata.put("totalSeats", Integer.toString(lineItems.size()));
 
         // Create new session with the line items
         SessionCreateParams params =
                 SessionCreateParams.builder()
                         .setMode(SessionCreateParams.Mode.PAYMENT)
-                        .setSuccessUrl("http://localhost:3000")
-                        .setCancelUrl("http://localhost:3000")
+                        .setSuccessUrl("http://localhost:3000/success")
+                        .setCancelUrl("http://localhost:3000/failure")
                         .addAllLineItem(lineItems)
+                        .putAllMetadata(metadata)
                         .build();
 
         // Create new session
@@ -106,7 +124,7 @@ public class StripeService {
                 .build();
     }
 
-    public StripeResponse capturePayment(String sessionId) {
+    public TicketDTO capturePayment(String sessionId) {
         Stripe.apiKey = key;
 
         try {
@@ -118,30 +136,35 @@ public class StripeService {
                 log.info("Payment successfully captured.");
             }
 
-            CapturePaymentResponse responseData = CapturePaymentResponse
-                    .builder()
-                    .sessionId(sessionId)
-                    .sessionStatus(status)
-                    .paymentStatus(session.getPaymentStatus())
-                    .build();
+            Map<String, String> metadata = session.getMetadata();
 
-            return StripeResponse
-                    .builder()
-                    .status(Constant.SUCCESS)
-                    .message("Payment successfully captured.")
-                    .httpStatus(200)
-                    .data(responseData)
-                    .build();
+            TicketDTO ticket = new TicketDTO();
+            ticket.setMemberID(Long.parseLong(metadata.get("memberID")));
+            ticket.setTotalSeats(Integer.parseInt(metadata.get("totalSeats")));
+            ticket.setStatus(TicketStatus.PAID);
+            ticket.setPayinTime(LocalDateTime.now());
+            ticket.setTotal(Long.parseLong(metadata.get("total")));
+
+            for(Map.Entry<String, String> entry : metadata.entrySet()) {
+                if (entry.getKey().startsWith("item_")) {
+                    String[] itemData = entry.getValue().split(",");
+
+                    TicketItemDTO ticketItem = new TicketItemDTO();
+                    ticketItem.setProjectionId(Long.parseLong(itemData[0]));
+                    ticketItem.setSeatId(Long.parseLong(itemData[1]));
+
+                    ticket.getTicketItems().add(ticketItem);
+                }
+            }
+
+            TicketEntity entity = ticketAdapter.dtoToEntity(ticket);
+            ticketRepository.save(entity);
+
+            return ticket;
         } catch (StripeException e) {
             // Handle capture failure, log the error, and return false
             e.printStackTrace();
-            return StripeResponse
-                    .builder()
-                    .status(Constant.FAILURE)
-                    .message("Payment capture failed due to a server error.")
-                    .httpStatus(500)
-                    .data(null)
-                    .build();
+            throw new ExceptionResponse("Payment capture failed", e.getMessage());
         }
     }
 

@@ -2,7 +2,6 @@ package com.master.BioskopVozdovac.ticket.adapter;
 
 import com.master.BioskopVozdovac.project.repository.ProjectRepository;
 import com.master.BioskopVozdovac.seat.repository.SeatRepository;
-import com.master.BioskopVozdovac.ticket.repository.TicketRepository;
 import com.master.BioskopVozdovac.ticket.model.TicketItemDTO;
 import com.master.BioskopVozdovac.ticket.model.TicketItemEntity;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TicketItemAdapter {
 
-    private final TicketRepository ticketRepository;
     private final SeatRepository seatRepository;
     private final ProjectRepository projectRepository;
 
@@ -22,13 +20,13 @@ public class TicketItemAdapter {
 
         final TicketItemDTO dto = new TicketItemDTO();
         dto.setId(entity.getId());
-        dto.setProjectId(entity.getProject().getProjectID());
+        dto.setProjectionId(entity.getProject().getProjectID());
         dto.setSeatId(entity.getSeat().getId());
 
         return dto;
     }
 
-    public TicketItemEntity entityToDTO(final TicketItemDTO dto) {
+    public TicketItemEntity dtoToEntity(final TicketItemDTO dto) {
         if (dto == null)
             return null;
 
@@ -37,7 +35,7 @@ public class TicketItemAdapter {
         entity.setSeat(seatRepository.findById(dto.getSeatId()).orElseThrow(
                 () -> new RuntimeException("Seat not found")
         ));
-        entity.setProject(projectRepository.findById(dto.getProjectId()).orElseThrow(
+        entity.setProject(projectRepository.findById(dto.getProjectionId()).orElseThrow(
                 () -> new RuntimeException("Projection not found")
         ));
 
