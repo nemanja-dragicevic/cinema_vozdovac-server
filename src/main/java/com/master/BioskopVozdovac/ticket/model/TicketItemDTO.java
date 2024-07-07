@@ -12,6 +12,7 @@ import lombok.Setter;
 public class TicketItemDTO {
 
     private Long id;
+    private Long ticketId;
     private Long projectionId;
     private Long seatId;
 

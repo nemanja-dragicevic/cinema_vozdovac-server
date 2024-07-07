@@ -20,6 +20,7 @@ public class TicketItemAdapter {
 
         final TicketItemDTO dto = new TicketItemDTO();
         dto.setId(entity.getId());
+        dto.setTicketId(entity.getTicket().getId());
         dto.setProjectionId(entity.getProject().getProjectID());
         dto.setSeatId(entity.getSeat().getId());
 
