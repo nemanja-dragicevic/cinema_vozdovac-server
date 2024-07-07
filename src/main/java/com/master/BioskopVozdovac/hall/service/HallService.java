@@ -11,14 +11,33 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service class for handling operations related to halls.
+ *
+ * This service provides methods for creating, retrieving, updating, and deleting halls.
+ *
+ * @author Nemanja Dragićević
+ */
 @Service
 @RequiredArgsConstructor
 public class HallService {
 
+    /**
+     * Repository for accessing hall data
+     */
     private final HallRepository hallRepository;
 
+    /**
+     * Adapter for converting between DTOs and entities
+     */
     private final HallAdapter hallAdapter;
 
+    /**
+     * Creates a new hall with seats based on the provided HallDTO.
+     *
+     * @param dto The HallDTO containing hall details including number of rows and seats per row.
+     * @return The created HallDTO after saving to the database.
+     */
     public HallDTO createHall(HallDTO dto) {
         HallEntity entity = hallAdapter.dtoToEntity(dto);
         int numberOfRows = dto.getRowsCount(), seatsPerRow = dto.getSeatsPerRow();
@@ -36,18 +55,34 @@ public class HallService {
         return hallAdapter.entityToDTO(hallRepository.save(entity));
     }
 
+    /**
+     * Deletes a hall by the specified ID.
+     *
+     * @param id The ID of the hall to delete.
+     * @return A success message indicating the deletion of the hall.
+     */
     public String deleteWithId(Long id) {
-        //TODO: When there are movies currently projecting in this hall, no delete allowed
+        //TODO: When there are movies currently projecting in this hall, or if it is used earlier, no delete allowed
         hallRepository.deleteById(id);
         return "Successfully deleted hall";
     }
 
+    /**
+     * Retrieves all halls from the database.
+     *
+     * @return A list of HallDTOs representing all halls found in the database.
+     */
     public List<HallDTO> getAll() {
         List<HallEntity> entities = hallRepository.findAll();
         return hallAdapter.toDTO(entities);
     }
 
-//    @Transactional
+    /**
+     * Updates an existing hall based on the provided HallDTO.
+     *
+     * @param dto The HallDTO containing updated hall details including number of rows and seats per row.
+     * @return The updated HallDTO after saving the updated entity to the database.
+     */
     public HallDTO updateHall(HallDTO dto) {
         HallEntity entity = hallAdapter.dtoToEntity(dto);
         entity.setSeats(new ArrayList<>());
