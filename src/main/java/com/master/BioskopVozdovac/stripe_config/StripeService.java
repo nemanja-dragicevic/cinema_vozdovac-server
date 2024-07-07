@@ -13,7 +13,9 @@ import com.master.BioskopVozdovac.ticket.model.TicketItemDTO;
 import com.master.BioskopVozdovac.ticket.repository.TicketRepository;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Refund;
 import com.stripe.model.checkout.Session;
+import com.stripe.param.RefundCreateParams;
 import com.stripe.param.checkout.SessionCreateParams;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,18 +28,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Service class for interacting with Stripe API to handle payment operations.
+ *
+ * @author Nemanja Dragićević
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class StripeService {
 
+    /**
+     * Stripe API key for authentication.
+     */
     @Value("${STRIPE_SECRET_KEY}")
     private String key;
 
+    /**
+     * Repository for managing projection entities in the database.
+     */
     private final ProjectRepository projectRepository;
 
+    /**
+     * Adapter for converting between DTOs and entities related to tickets.
+     */
     private final TicketAdapter ticketAdapter;
 
+    /**
+     * Repository for managing ticket entities in the database.
+     */
     private final TicketRepository ticketRepository;
 
     public StripeResponse createPayment(TicketDTO ticket) {
@@ -124,6 +143,13 @@ public class StripeService {
                 .build();
     }
 
+    /**
+     * Captures a payment using the provided Stripe session ID.
+     *
+     * @param sessionId The Stripe session ID used to retrieve payment details.
+     * @return TicketDTO representing the captured payment details.
+     * @throws ExceptionResponse if there is a failure in capturing the payment.
+     */
     public TicketDTO capturePayment(String sessionId) {
         Stripe.apiKey = key;
 
@@ -158,6 +184,7 @@ public class StripeService {
             }
 
             TicketEntity entity = ticketAdapter.dtoToEntity(ticket);
+            entity.setPaymentIntent(session.getPaymentIntent());
             ticketRepository.save(entity);
 
             return ticket;
@@ -168,4 +195,24 @@ public class StripeService {
         }
     }
 
+    /**
+     * Refunds a payment associated with the given payment ID.
+     *
+     * @param id The ID of the payment to be refunded.
+     * @return A message indicating the success or failure of the refund operation.
+     */
+    public String refund(Long id) {
+        Stripe.apiKey = key;
+
+        TicketEntity entity = ticketRepository.findById(id).orElseThrow(
+                () -> new ExceptionResponse("There is no such ticket", "Please check your ticket id")
+        );
+        RefundCreateParams params = RefundCreateParams.builder().setPaymentIntent(entity.getPaymentIntent()).build();
+        try {
+            Refund refund = Refund.create(params);
+        } catch (StripeException e) {
+            throw new RuntimeException(e);
+        }
+        return "Successfully refunded ticket with id: " + id;
+    }
 }
