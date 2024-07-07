@@ -31,6 +31,18 @@ public class MemberService {
         return memberAdapter.entityToDTO(memberRepository.saveAndFlush(entity));
     }
 
+    /**
+     * Registers a new member based on the provided MemberDTO.
+     * This method checks if the username is already taken, encodes the password using
+     * the password encoder, assigns a default role to the member, saves the member entity
+     * to the database, and returns the corresponding MemberDTO.
+     *
+     * @param dto The MemberDTO containing registration details.
+     *
+     * @return The registered MemberDTO without the password.
+     *
+     * @throws UserException if the username provided in the DTO is already taken.
+     */
     public MemberDTO register(MemberDTO dto) {
         Optional<MemberEntity> entities = memberRepository.findByUsername(dto.getUsername());
 
