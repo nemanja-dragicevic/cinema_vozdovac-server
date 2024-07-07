@@ -11,6 +11,11 @@ import lombok.Setter;
 
 import java.util.Set;
 
+/**
+ * Represents a genre entity in the application.
+ *
+ * @author Nemanja Dragićević
+ */
 @Entity
 @Getter
 @Setter
@@ -19,14 +24,24 @@ import java.util.Set;
 @Table(name = "genre")
 public class GenreEntity {
 
+    /**
+     * Unique identifier for the genre.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "genre_id", nullable = false)
     private Long genreID;
 
+    /**
+     * The name of the genre.
+     */
     @NotEmpty
     private String name;
 
+    /**
+     * Set of movies associated with this genre.
+     * Represents the many-to-many relationship between GenreEntity and MovieEntity.
+     */
     @ManyToMany(mappedBy = "genres")
 //    @JoinTable(
 //            name = "movie_genres",
