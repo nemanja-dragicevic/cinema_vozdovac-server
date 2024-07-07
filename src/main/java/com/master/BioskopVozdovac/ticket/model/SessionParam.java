@@ -9,11 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TicketItemDTO {
+public class SessionParam {
 
-    private Long id;
-    private Long ticketId;
-    private Long projectionId;
-    private Long seatId;
+    private String sessionId;
 
 }

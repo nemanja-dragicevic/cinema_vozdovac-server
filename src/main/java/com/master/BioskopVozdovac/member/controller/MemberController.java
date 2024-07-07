@@ -10,15 +10,34 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller class that handles HTTP requests related to members.
+ *
+ * @author Nemanja Dragićević
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/members")
 public class MemberController {
 
+    /**
+     * Private field that holds an instance of the MemberService.
+     * This service is responsible for managing member-related operations.
+     */
     private final MemberService memberService;
 
+    /**
+     * Authentication provider for creating and validating tokens
+     */
     private final MemberAuthenticationProvider provider;
 
+    /**
+     * Endpoint for registering a new member.
+     *
+     * @param dto The MemberDTO containing registration details.
+     *
+     * @return ResponseEntity with MemberDTO and HTTP status OK if registration is successful.
+     */
     @PostMapping("/register")
     public ResponseEntity<MemberDTO> register(@RequestBody MemberDTO dto) {
         MemberDTO response = memberService.register(dto);
@@ -26,6 +45,13 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * Endpoint for member login.
+     *
+     * @param dto The MemberDTO containing login credentials.
+     *
+     * @return ResponseEntity with MemberDTO and HTTP status OK if login is successful.
+     */
     @PostMapping("/login")
     public ResponseEntity<MemberDTO> login(@RequestBody MemberDTO dto) {
         MemberDTO user = memberService.login(dto);

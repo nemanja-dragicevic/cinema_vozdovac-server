@@ -1,5 +1,7 @@
 package com.master.BioskopVozdovac.ticket.model;
 
+import com.master.BioskopVozdovac.project.model.ProjectDTO;
+import com.master.BioskopVozdovac.seat.model.SeatDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,11 +11,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TicketItemDTO {
+public class TicketItems {
 
-    private Long id;
-    private Long ticketId;
-    private Long projectionId;
-    private Long seatId;
+    private ProjectDTO projectDTO;
+    private SeatDTO seatDTO;
 
 }

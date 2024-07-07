@@ -8,6 +8,7 @@ import com.master.BioskopVozdovac.ticket.model.TicketItemEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,8 +30,16 @@ public class TicketAdapter {
         dto.setPayinTime(entity.getPayinTime());
         dto.setStatus(entity.getStatus());
         dto.setTotalSeats(entity.getTotalSeats());
+        dto.setTicketItems(prepareEntityItems(entity.getTicketItems()));
 
         return dto;
+    }
+
+    private Set<TicketItemDTO> prepareEntityItems(Set<TicketItemEntity> ticketItems) {
+        if (ticketItems == null)
+            return null;
+
+        return ticketItems.stream().map(ticketItemAdapter::toDTO).collect(Collectors.toSet());
     }
 
     public TicketEntity dtoToEntity(final TicketDTO dto) {
@@ -57,6 +66,13 @@ public class TicketAdapter {
             item.setTicket(ticket);
             return item;
         }).collect(Collectors.toSet());
+    }
+
+    public List<TicketDTO> toDTOs(final List<TicketEntity> entities) {
+        if (entities == null)
+            return null;
+
+        return entities.stream().map(this::entityToDTO).collect(Collectors.toList());
     }
 
 }

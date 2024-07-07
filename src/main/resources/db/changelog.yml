@@ -97,3 +97,17 @@ databaseChangeLog:
         - sqlFile:
             encoding: UTF-8
             path: db/changes/014_create_ticket_and_ticket_item.sql
+  - changeSet:
+      id: 015
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/015_add_payment_intent.sql
+  - changeSet:
+      id: 016
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/016_insert_members.sql
