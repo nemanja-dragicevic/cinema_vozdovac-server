@@ -13,13 +13,31 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+/**
+ * Controller class for handling movie-related operations.
+ *
+ * This controller provides endpoints for managing movies, including saving, retrieving, updating, and deleting movies.
+ *
+ * @author Nemanja Dragićević
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/movie")
 public class MovieController {
 
+    /**
+     * Service layer for movie-related operations
+     */
     private final MovieService movieService;
 
+    /**
+     * Endpoint for saving a new movie.
+     *
+     * @param movieJSON JSON string representing the MovieDTO.
+     * @param file      MultipartFile representing the movie poster image.
+     * @return ResponseEntity containing the saved MovieDTO and HttpStatus.OK on success,
+     *         or INTERNAL_SERVER_ERROR status on failure.
+     */
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<MovieDTO> saveMovie(@RequestParam("movie") String movieJSON, @RequestParam("file") MultipartFile file) {
@@ -39,6 +57,15 @@ public class MovieController {
         return new ResponseEntity<>(movieService.getMovieById(id), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint for updating an existing movie.
+     *
+     * @param movieJSON JSON string representing the updated MovieDTO.
+     * @param small     MultipartFile representing the small picture (thumbnail) of the movie.
+     * @param big       MultipartFile representing the big picture (poster) of the movie.
+     * @return ResponseEntity containing the updated MovieDTO and HttpStatus.OK on success,
+     *         or INTERNAL_SERVER_ERROR status on failure.
+     */
     @PutMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<MovieDTO> updateMovie(@RequestParam("movie") String movieJSON,
@@ -55,6 +82,13 @@ public class MovieController {
         }
     }
 
+    /**
+     * Endpoint for deleting a movie by its ID.
+     *
+     * @param id The ID of the movie to delete.
+     * @return ResponseEntity with a success message and HttpStatus.OK on successful deletion,
+     *         or NOT_FOUND status if the movie with the specified ID does not exist.
+     */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteMovie(@PathVariable Long id) {
@@ -77,7 +111,6 @@ public class MovieController {
         return new ResponseEntity<>(movieService.getMoviesWithoutProjections(), HttpStatus.OK);
     }
 
-//    @RequestParam("movie") String movieJSON, @RequestParam("times") List<HallProjections> projects
     @PostMapping(value = "/try")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<MovieDTO> saveMovie(@RequestBody MovieDTO dto) {

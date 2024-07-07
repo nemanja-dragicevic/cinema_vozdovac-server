@@ -17,20 +17,48 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service class that handles movie-related business logic and interactions with repositories and external services.
+ *
+ * @author Nemanja Dragićević
+ */
 @Service
 @RequiredArgsConstructor
 public class MovieService {
 
+    /**
+     * Repository for movie entities
+     */
     private final MovieRepository movieRepository;
 
+    /**
+     * Adapter for converting between MovieDTO and MovieEntity
+     */
     private final MovieAdapter movieAdapter;
 
+    /**
+     * Service for interacting with AWS S3 bucket
+     */
     private final S3Service s3Service;
 
+    /**
+     * Service for handling movie roles
+     */
     private final RoleService roleService;
 
+    /**
+     * Adapter for converting between RoleDTO and RoleEntity
+     */
     private final RoleAdapter roleAdapter;
 
+    /**
+     * Saves a new movie along with its poster image to the database and S3 storage.
+     *
+     * @param dto  The MovieDTO containing movie details.
+     * @param file The MultipartFile representing the movie poster image.
+     * @return The saved MovieDTO.
+     * @throws RuntimeException if there is an error during file upload to S3.
+     */
     public MovieDTO saveMovie(MovieDTO dto, MultipartFile file) {
         Set<RoleEntity> roleEntities = roleAdapter.toEntities(dto.getRoleDTO());
         MovieEntity entity = movieAdapter.dtoToEntity(dto);
@@ -50,12 +78,28 @@ public class MovieService {
         return movieAdapter.entityToDTO(entity);
     }
 
+    /**
+     * Retrieves a movie by its ID from the database.
+     *
+     * @param id The ID of the movie to retrieve.
+     * @return The MovieDTO representing the retrieved movie.
+     * @throws NoSuchElementException if no movie exists with the given ID.
+     */
     public MovieDTO getMovieById(Long id) {
         MovieEntity entity = movieRepository.findById(id).orElseThrow(()
                     -> new NoSuchElementException("No element with id: " + id));
         return movieAdapter.entityToDTO(entity);
     }
 
+    /**
+     * Updates an existing movie with new details and optionally updates poster images on S3.
+     *
+     * @param dto   The MovieDTO containing updated movie details.
+     * @param small The MultipartFile representing the updated small picture (thumbnail).
+     * @param big   The MultipartFile representing the updated big picture (poster).
+     * @return The updated MovieDTO.
+     * @throws RuntimeException if there is an error during file upload to S3.
+     */
     public MovieDTO updateMovie(MovieDTO dto, MultipartFile small, MultipartFile big) {
         try {
             Set<RoleEntity> roleEntities = roleAdapter.toEntities(dto.getRoleDTO());
@@ -78,6 +122,13 @@ public class MovieService {
         }
     }
 
+    /**
+     * Deletes a movie by its ID from the database and removes associated poster images from S3.
+     *
+     * @param id The ID of the movie to delete.
+     * @return A success message indicating the deletion.
+     * @throws NoSuchElementException if no movie exists with the given ID.
+     */
     public String deleteMovieById(Long id) {
         MovieEntity entity = movieRepository.findById(id).orElseThrow(
                 () -> new NoSuchElementException("There is no movie with id: " + id)
@@ -93,6 +144,11 @@ public class MovieService {
         return movieAdapter.toDto(entities);
     }
 
+    /**
+     * Retrieves all movies with AWS details, including roles and poster images.
+     *
+     * @return A list of MovieDTOs with AWS details.
+     */
     public List<MovieDTO> getAllMoviesWithAWS() {
 //        List<MovieDTO> dtos = movieAdapter.toDto(movieRepository.findAllShowing());
         List<MovieEntity> entities = movieRepository.findAllShowing();
