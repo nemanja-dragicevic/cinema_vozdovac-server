@@ -196,23 +196,41 @@ public class StripeService {
     }
 
     /**
-     * Refunds a payment associated with the given payment ID.
+     * Initiates a refund for a ticket identified by the provided ID.
      *
-     * @param id The ID of the payment to be refunded.
-     * @return A message indicating the success or failure of the refund operation.
+     * This method performs the following steps:
+     * 1. Retrieves the ticket entity from the database using the given ID.
+     * 2. Sets up parameters for creating a refund using the Stripe API based on the ticket's payment intent.
+     * 3. Calls the Stripe API to create the refund.
+     * 4. Updates the status of the ticket entity to {@link TicketStatus#REVOKE}.
+     * 5. Saves the updated ticket entity back to the database.
+     * 6. Converts the updated ticket entity to a DTO (Data Transfer Object) for returning as part of the response.
+     *
+     * @param id The ID of the ticket to refund.
+     * @return A {@link TicketDTO} representing the updated ticket after refund.
+     * @throws RuntimeException If there is an error processing the refund, either due to Stripe API errors
+     *                          (wrapped as {@link StripeException}) or other general exceptions.
+     * @throws ExceptionResponse If no ticket is found with the given ID in the database.
      */
-    public String refund(Long id) {
-        Stripe.apiKey = key;
-
-        TicketEntity entity = ticketRepository.findById(id).orElseThrow(
-                () -> new ExceptionResponse("There is no such ticket", "Please check your ticket id")
-        );
-        RefundCreateParams params = RefundCreateParams.builder().setPaymentIntent(entity.getPaymentIntent()).build();
+    public TicketDTO refund(Long id) {
         try {
+            Stripe.apiKey = key;
+
+            TicketEntity entity = ticketRepository.findById(id).orElseThrow(
+                    () -> new ExceptionResponse("There is no such ticket", "Please check your ticket id")
+            );
+            RefundCreateParams params = RefundCreateParams.builder().setPaymentIntent(entity.getPaymentIntent()).build();
+
             Refund refund = Refund.create(params);
+
+            entity.setStatus(TicketStatus.REVOKE);
+            ticketRepository.saveAndFlush(entity);
+            return ticketAdapter.entityToDTO(entity);
         } catch (StripeException e) {
             throw new RuntimeException(e);
+        } catch (Exception e) {
+            // General exception handling
+            throw new RuntimeException("Failed to process refund for ticket with id " + id, e);
         }
-        return "Successfully refunded ticket with id: " + id;
     }
 }
