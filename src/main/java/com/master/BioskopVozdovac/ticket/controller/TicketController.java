@@ -68,9 +68,14 @@ public class TicketController {
     }
 
     @GetMapping("/items/{id}")
-    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<List<TicketItems>> getTicketItems(@PathVariable Long id) {
         return new ResponseEntity<>(ticketService.getTicketItems(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/revoke/{memberID}/{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<TicketDTO> revokeForApproval(@PathVariable Long memberID, @PathVariable Long id) {
+        return new ResponseEntity<>(ticketService.sendForApproval(memberID, id), HttpStatus.OK);
     }
 
     /**
@@ -81,8 +86,19 @@ public class TicketController {
      */
     @PostMapping("/refund/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<String> refundPayment(@PathVariable Long id) {
+    public ResponseEntity<TicketDTO> refundPayment(@PathVariable Long id) {
         return new ResponseEntity<>(stripeService.refund(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/for-refund")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<TicketDTO>> refundRequests() {
+        return new ResponseEntity<>(ticketService.getRefundRequests(), HttpStatus.OK);
+    }
+
+    @GetMapping("/booked-seats/{id}")
+    public ResponseEntity<List<TicketItems>> bookedSeatsForProjection(@PathVariable Long id) {
+        return new ResponseEntity<>(ticketService.getBookedSeatsForProjection(id), HttpStatus.OK);
     }
 
 }

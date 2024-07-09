@@ -1,6 +1,5 @@
-package com.master.BioskopVozdovac.model;
+package com.master.BioskopVozdovac.actor.model;
 
-import com.master.BioskopVozdovac.actor.model.ActorEntity;
 import com.master.BioskopVozdovac.input.ActorData;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
