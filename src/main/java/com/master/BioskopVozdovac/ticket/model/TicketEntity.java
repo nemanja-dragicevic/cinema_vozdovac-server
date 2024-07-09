@@ -3,7 +3,9 @@ package com.master.BioskopVozdovac.ticket.model;
 import com.master.BioskopVozdovac.enums.TicketStatus;
 import com.master.BioskopVozdovac.member.model.MemberEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -54,6 +56,7 @@ public class TicketEntity {
      * The total amount paid for the ticket.
      */
     @NotNull
+    @Positive
     private Long total;
 
     /**
@@ -66,7 +69,7 @@ public class TicketEntity {
     /**
      * The total number of seats booked in the ticket.
      */
-    @NotNull
+    @Positive
     @Column(name = "total_seats")
     private int totalSeats;
 
@@ -74,6 +77,7 @@ public class TicketEntity {
      * Set of ticket items associated with this ticket.
      * Represents the one-to-many relationship between TicketEntity and TicketItemEntity.
      */
+    @NotEmpty
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
     private Set<TicketItemEntity> ticketItems = new HashSet<>();
 

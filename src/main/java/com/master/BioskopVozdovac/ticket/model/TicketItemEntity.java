@@ -3,6 +3,7 @@ package com.master.BioskopVozdovac.ticket.model;
 import com.master.BioskopVozdovac.project.model.ProjectEntity;
 import com.master.BioskopVozdovac.seat.model.SeatEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +34,7 @@ public class TicketItemEntity {
      * The ticket associated with this ticket item.
      * Represents the many-to-one relationship between TicketItemEntity and TicketEntity.
      */
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "ticket_id")
     private TicketEntity ticket;
@@ -41,6 +43,7 @@ public class TicketItemEntity {
      * The projection associated with this ticket item.
      * Represents the many-to-one relationship between TicketItemEntity and ProjectEntity.
      */
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "project_id")
     private ProjectEntity project;
@@ -49,6 +52,7 @@ public class TicketItemEntity {
      * The seat associated with this ticket item.
      * Represents the one-to-one relationship between TicketItemEntity and SeatEntity.
      */
+    @NotNull
     @OneToOne
     @JoinColumn(name = "seat_id")
     private SeatEntity seat;
