@@ -96,4 +96,9 @@ public class TicketController {
         return new ResponseEntity<>(ticketService.getRefundRequests(), HttpStatus.OK);
     }
 
+    @GetMapping("/booked-seats/{id}")
+    public ResponseEntity<List<TicketItems>> bookedSeatsForProjection(@PathVariable Long id) {
+        return new ResponseEntity<>(ticketService.getBookedSeatsForProjection(id), HttpStatus.OK);
+    }
+
 }

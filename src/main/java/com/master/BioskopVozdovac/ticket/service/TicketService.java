@@ -63,4 +63,16 @@ public class TicketService {
         return entities.stream().map(ticketAdapter::entityToDTO).collect(Collectors.toList());
     }
 
+    public List<TicketItems> getBookedSeatsForProjection(Long id) {
+        List<TicketItemEntity> items = ticketRepository.findByStatusAndProjectID(TicketStatus.PAID, id);
+        List<TicketItems> itemsList = new ArrayList<>();
+        for (TicketItemEntity item : items) {
+            TicketItems ti = new TicketItems();
+            ti.setProjectDTO(projectAdapter.entityToDTO(item.getProject()));
+            ti.setSeatDTO(seatAdapter.entityToDTO(item.getSeat()));
+            itemsList.add(ti);
+        }
+        return itemsList;
+    }
+    
 }
