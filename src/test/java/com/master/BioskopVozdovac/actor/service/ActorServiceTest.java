@@ -1,18 +1,22 @@
-package com.master.BioskopVozdovac.service;
+package com.master.BioskopVozdovac.actor.service;
 
 import com.master.BioskopVozdovac.actor.adapter.ActorAdapter;
 import com.master.BioskopVozdovac.actor.model.ActorDTO;
 import com.master.BioskopVozdovac.actor.model.ActorEntity;
 import com.master.BioskopVozdovac.actor.repository.ActorRepository;
-import com.master.BioskopVozdovac.actor.service.ActorService;
+import com.master.BioskopVozdovac.enums.Gender;
+import com.master.BioskopVozdovac.exception.UserException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static com.master.BioskopVozdovac.input.ActorData.*;
@@ -34,8 +38,8 @@ public class ActorServiceTest {
     @PersistenceContext
     EntityManager entityManager;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         MockitoAnnotations.openMocks(this);
 
         when(actorAdapter.entityToDTO(ACTOR_ENTITY))
@@ -46,7 +50,7 @@ public class ActorServiceTest {
     }
 
     @Test
-    public void testSaveActor() {
+    void testSaveActor() {
         when(actorRepository.saveAndFlush(any(ActorEntity.class)))
                 .thenReturn(ACTOR_ENTITY);
 
@@ -63,7 +67,40 @@ public class ActorServiceTest {
     }
 
     @Test
-    public void testUpdateActor() {
+    void testGetActorById() {
+        ActorEntity actorEntity = ACTOR_ENTITY;
+
+        ActorDTO actorDTO = new ActorDTO();
+        actorDTO.setActorID(0L);
+        actorDTO.setFirstName("Jack");
+        actorDTO.setLastName("Sparrow");
+        actorDTO.setGender(Gender.MALE);
+
+        when(actorRepository.findById(anyLong())).thenReturn(Optional.of(actorEntity));
+        when(actorAdapter.entityToDTO(any(ActorEntity.class))).thenReturn(actorDTO);
+
+        ActorDTO found = actorService.getActorById(0L);
+
+        assertNotNull(found);
+        assertEquals("Jack", found.getFirstName());
+        verify(actorRepository, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void testGetActorByIdNotFound() {
+        when(actorRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        UserException exception = assertThrows(UserException.class, () -> {
+            actorService.getActorById(1L);
+        });
+
+        assertEquals("Could not find actor with id: 1", exception.getMessage());
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
+        verify(actorRepository, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void testUpdateActor() {
         when(actorRepository.saveAndFlush(ACTOR_ENTITY)).thenReturn(ACTOR_ENTITY);
         when(actorRepository.findById(ACTOR_ENTITY.getActorID())).thenReturn(Optional.of(ACTOR_ENTITY));
         when(actorRepository.saveAndFlush(UPDATED_ACTOR_ENTITY)).thenReturn(UPDATED_ACTOR_ENTITY);
@@ -88,6 +125,40 @@ public class ActorServiceTest {
 
         verify(actorRepository, times(1)).deleteById(actorID);
         assertEquals("Successfully deleted actor with id: " + actorID, message);
+    }
+
+    @Test
+    void testGetAll() {
+        List<ActorEntity> entites = new ArrayList<>();
+        entites.add(ACTOR_ENTITY);
+        UPDATED_ACTOR_ENTITY.setActorID(2L);
+        UPDATED_ACTOR_ENTITY.setGender(Gender.MALE);
+        entites.add(UPDATED_ACTOR_ENTITY);
+
+        List<ActorDTO> dtos = new ArrayList<>();
+        dtos.add(ACTOR_DTO);
+        UPDATED_ACTOR_DTO.setActorID(2L);
+        UPDATED_ACTOR_DTO.setGender(Gender.MALE);
+        dtos.add(UPDATED_ACTOR_DTO);
+
+        when(actorRepository.findAll()).thenReturn(entites);
+        when(actorAdapter.toDTO(anyList())).thenReturn(dtos);
+
+        List<ActorDTO> all = actorService.getAll();
+
+        assertNotNull(all);
+        assertEquals(2, all.size());
+
+        verify(actorRepository, times(1)).findAll();
+        verify(actorAdapter, times(1)).toDTO(anyList());
+
+        assertEquals(0L, all.get(0).getActorID());
+        assertEquals("Jack", all.get(0).getFirstName());
+        assertEquals("Sparrow", all.get(0).getLastName());
+
+        assertEquals(2L, all.get(1).getActorID());
+        assertEquals("Jackie", all.get(1).getFirstName());
+        assertEquals("Chan", all.get(1).getLastName());
     }
 
 }
