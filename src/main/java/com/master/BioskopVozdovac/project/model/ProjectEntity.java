@@ -5,6 +5,7 @@ import com.master.BioskopVozdovac.movie.model.MovieEntity;
 import com.master.BioskopVozdovac.ticket.model.TicketItemEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -56,18 +57,21 @@ public class ProjectEntity {
     /**
      * The start time of the projection.
      */
+    @NotNull
     @Column(name = "starts_at")
     private LocalDateTime time;
 
     /**
      * The end time of the projection.
      */
+    @NotNull
     @Column(name = "ends_at")
     private LocalDateTime projectEnd;
 
     /**
      * The price of the projection.
      */
+    @Positive
     @Column(name = "price")
     private Long price;
 

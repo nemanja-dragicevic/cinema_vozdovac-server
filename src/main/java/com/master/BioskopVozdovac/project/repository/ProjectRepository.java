@@ -20,7 +20,7 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Long> {
             "and p.starts_at >= ?2 " +
             "and p.starts_at <= ?3 " +
             "order by 1 ", nativeQuery = true)
-    List<Object[]> getAvailableTimes(final Long hallID, final LocalDateTime startTime, final LocalDateTime endTime, final long duration);
+    List<Object[]> getAvailableTimes(final Long hallID, final LocalDateTime startTime, final LocalDateTime endTime);
 
     @Query(value = "select * " +
             "from \"public\".projects p " +
@@ -58,6 +58,11 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Long> {
             "and cast(p.starts_at as date) <= ?3 " +
             "order by 1", nativeQuery = true)
     List<Object[]> findAllByHallAndDates(Long hallID, Date startDate, Date endDate);
+
+    @Query(value = "select * " +
+            "from \"public\".projects p " +
+            "where cast(p.starts_at as date) = current_date ", nativeQuery = true)
+    List<ProjectEntity> findTodaysProjections();
 
 //    @Query(value = "with filtered as (select distinct to_char(p.project, 'HH24:MI') as hour " +
 //            "from \"public\".projects p " +
