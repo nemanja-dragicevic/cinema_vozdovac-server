@@ -96,7 +96,7 @@ public class MemberEntityTest {
 
     @Test
     public void testInvalidUsernamePattern() {
-        entity.setUsername("testUsername!/-+");
+        entity.setUsername("testUsername@");
 
         Set<ConstraintViolation<MemberEntity>> violations = validator.validate(entity);
 
@@ -123,5 +123,24 @@ public class MemberEntityTest {
         assertEquals(1, violations.size());
         assertEquals("password", violations.iterator().next().getPropertyPath().toString());
     }
+
+    @Test
+    void testValidPassword() {
+        entity.setPassword("kone1@");
+
+        Set<ConstraintViolation<MemberEntity>> violations = validator.validate(entity);
+
+        assertEquals(0, violations.size());
+    }
+
+//    @Test
+//    void testInvalidPassword() {
+//        entity.setPassword("kone=_.");
+//
+//        Set<ConstraintViolation<MemberEntity>> violations = validator.validate(entity);
+//
+//        assertEquals(1, violations.size());
+//        assertEquals("password", violations.iterator().next().getPropertyPath().toString());
+//    }
 
 }
