@@ -5,7 +5,6 @@ import com.master.BioskopVozdovac.movie.model.MovieDTO;
 import com.master.BioskopVozdovac.movie.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,18 +33,21 @@ public class MovieController {
      * Endpoint for saving a new movie.
      *
      * @param movieJSON JSON string representing the MovieDTO.
-     * @param file      MultipartFile representing the movie poster image.
+     * @param small      MultipartFile representing the movie thumbnail image.
+     * @param big      MultipartFile representing the movie poster image.
      * @return ResponseEntity containing the saved MovieDTO and HttpStatus.OK on success,
      *         or INTERNAL_SERVER_ERROR status on failure.
      */
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping//(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<MovieDTO> saveMovie(@RequestParam("movie") String movieJSON, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<MovieDTO> saveMovie(@RequestParam("movie") String movieJSON,
+                                              @RequestParam("smallPicture") MultipartFile small,
+                                              @RequestParam("bigPicture") MultipartFile big) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             objectMapper.findAndRegisterModules();  // Nece da se parsira LocalDate
             MovieDTO dto = objectMapper.readValue(movieJSON, MovieDTO.class);
-            return new ResponseEntity<>(movieService.saveMovie(dto, file), HttpStatus.OK);
+            return new ResponseEntity<>(movieService.saveMovie(dto, small, big), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
