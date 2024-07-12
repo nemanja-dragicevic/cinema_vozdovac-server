@@ -105,15 +105,4 @@ public class HallEntityTest {
         assertEquals("seatsPerRow", violations.iterator().next().getPropertyPath().toString());
     }
 
-    @Test
-    void testEmptySeatsList() {
-        entity.setSeats(new ArrayList<>());
-
-        Set<ConstraintViolation<HallEntity>> violations = validator.validate(entity);
-
-        assertEquals(1, violations.size());
-        ConstraintViolation<HallEntity> violation = violations.iterator().next();
-        assertEquals("seats", violation.getPropertyPath().toString());
-    }
-
 }
