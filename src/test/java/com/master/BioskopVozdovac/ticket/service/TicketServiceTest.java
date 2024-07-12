@@ -2,20 +2,30 @@ package com.master.BioskopVozdovac.ticket.service;
 
 import com.master.BioskopVozdovac.enums.TicketStatus;
 import com.master.BioskopVozdovac.member.model.MemberEntity;
+import com.master.BioskopVozdovac.project.adapter.ProjectAdapter;
+import com.master.BioskopVozdovac.project.model.ProjectDTO;
+import com.master.BioskopVozdovac.project.model.ProjectEntity;
+import com.master.BioskopVozdovac.seat.adapter.SeatAdapter;
+import com.master.BioskopVozdovac.seat.model.SeatDTO;
+import com.master.BioskopVozdovac.seat.model.SeatEntity;
 import com.master.BioskopVozdovac.ticket.adapter.TicketAdapter;
 import com.master.BioskopVozdovac.ticket.model.TicketDTO;
 import com.master.BioskopVozdovac.ticket.model.TicketEntity;
+import com.master.BioskopVozdovac.ticket.model.TicketItemEntity;
+import com.master.BioskopVozdovac.ticket.model.TicketItems;
 import com.master.BioskopVozdovac.ticket.repository.TicketRepository;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.*;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -25,13 +35,65 @@ public class TicketServiceTest {
     private TicketRepository ticketRepository;
     @Mock
     private TicketAdapter ticketAdapter;
+    @Mock
+    private ProjectAdapter projectAdapter;
+    @Mock
+    private SeatAdapter seatAdapter;
 
     @InjectMocks
     private TicketService ticketService;
 
-    @Before
+    private TicketEntity ticket;
+    private TicketDTO ticketDTO;
+
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+
+        ticket = new TicketEntity();
+        ticket.setId(1L);
+        ticket.setPayinTime(LocalDateTime.now());
+        ticket.setTotal(100L);
+        ticket.setStatus(TicketStatus.PAID);
+        ticket.setTotalSeats(2);
+        ticket.setTicketItems(new HashSet<>());
+
+        ticketDTO = new TicketDTO();
+        ticketDTO.setId(1L);
+        ticketDTO.setPayinTime(LocalDateTime.now());
+        ticketDTO.setTotal(100L);
+        ticketDTO.setStatus(TicketStatus.PAID);
+        ticketDTO.setTotalSeats(2);
+        ticketDTO.setTicketItems(new HashSet<>());
+    }
+
+    @Test
+    void testGetTicketsUser() {
+        when(ticketRepository.findByMemberMemberID(anyLong())).thenReturn(Collections.singletonList(ticket));
+        when(ticketAdapter.toDTOs(anyList())).thenReturn(Collections.singletonList(ticketDTO));
+
+        List<TicketDTO> result = ticketService.getTicketsUser(1L);
+
+        assertThat(result).isNotEmpty();
+        assertThat(result.get(0).getId()).isEqualTo(1L);
+        verify(ticketRepository, times(1)).findByMemberMemberID(1L);
+    }
+
+    @Test
+    void testGetTicketItems() {
+        TicketItemEntity ticketItemEntity = new TicketItemEntity();
+        ticketItemEntity.setProject(new ProjectEntity());
+        ticketItemEntity.setSeat(new SeatEntity());
+        ticket.setTicketItems(Set.of(ticketItemEntity));
+
+        when(ticketRepository.findById(anyLong())).thenReturn(Optional.of(ticket));
+        when(projectAdapter.entityToDTO(any(ProjectEntity.class))).thenReturn(new ProjectDTO());
+        when(seatAdapter.entityToDTO(any(SeatEntity.class))).thenReturn(new SeatDTO());
+
+        List<TicketItems> result = ticketService.getTicketItems(1L);
+
+        assertThat(result).isNotEmpty();
+        verify(ticketRepository, times(1)).findById(1L);
     }
 
     @Test
@@ -79,6 +141,59 @@ public class TicketServiceTest {
 
         verify(ticketAdapter, times(1)).entityToDTO(ticketEntity);
         verifyNoMoreInteractions(ticketAdapter);
+    }
+
+    @Test
+    public void testSendForApprovalInvalidMember() {
+        MemberEntity member = new MemberEntity();
+        member.setMemberID(2L);
+        ticket.setMember(member);
+
+        when(ticketRepository.findById(anyLong())).thenReturn(Optional.of(ticket));
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ticketService.sendForApproval(1L, 1L));
+
+        assertEquals("Please select your ticket", exception.getMessage());
+        verify(ticketRepository, times(0)).saveAndFlush(ticket);
+    }
+
+    @Test
+    public void testSendForApprovalNoSuchTicket() {
+        when(ticketRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> ticketService.sendForApproval(1L, 1L));
+
+        assertEquals("There is no such ticket", exception.getMessage());
+        verify(ticketRepository, times(0)).saveAndFlush(ticket);
+    }
+
+    @Test
+    void testGetRefundRequests() {
+        ticket.setStatus(TicketStatus.UNDER_REVIEW);
+        ticketDTO.setStatus(TicketStatus.UNDER_REVIEW);
+        when(ticketRepository.findByStatus(TicketStatus.UNDER_REVIEW)).thenReturn(Collections.singletonList(ticket));
+        when(ticketAdapter.entityToDTO(any(TicketEntity.class))).thenReturn(ticketDTO);
+
+        List<TicketDTO> result = ticketService.getRefundRequests();
+
+        assertThat(result).isNotEmpty();
+        verify(ticketRepository, times(1)).findByStatus(TicketStatus.UNDER_REVIEW);
+    }
+
+    @Test
+    void testGetBookedSeatsForProjection() {
+        TicketItemEntity ticketItemEntity = new TicketItemEntity();
+        ticketItemEntity.setProject(new ProjectEntity());
+        ticketItemEntity.setSeat(new SeatEntity());
+
+        when(ticketRepository.findByStatusAndProjectID(TicketStatus.PAID, 1L)).thenReturn(Collections.singletonList(ticketItemEntity));
+        when(projectAdapter.entityToDTO(any(ProjectEntity.class))).thenReturn(new ProjectDTO());
+        when(seatAdapter.entityToDTO(any(SeatEntity.class))).thenReturn(new SeatDTO());
+
+        List<TicketItems> result = ticketService.getBookedSeatsForProjection(1L);
+
+        assertThat(result).isNotEmpty();
+        verify(ticketRepository, times(1)).findByStatusAndProjectID(TicketStatus.PAID, 1L);
     }
 
 }

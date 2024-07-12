@@ -1,6 +1,5 @@
-package com.master.BioskopVozdovac.model;
+package com.master.BioskopVozdovac.hall.model;
 
-import com.master.BioskopVozdovac.hall.model.HallEntity;
 import com.master.BioskopVozdovac.input.HallData;
 import com.master.BioskopVozdovac.seat.model.SeatEntity;
 import jakarta.validation.ConstraintViolation;
@@ -104,6 +103,17 @@ public class HallEntityTest {
 
         assertEquals(1, violations.size());
         assertEquals("seatsPerRow", violations.iterator().next().getPropertyPath().toString());
+    }
+
+    @Test
+    void testEmptySeatsList() {
+        entity.setSeats(new ArrayList<>());
+
+        Set<ConstraintViolation<HallEntity>> violations = validator.validate(entity);
+
+        assertEquals(1, violations.size());
+        ConstraintViolation<HallEntity> violation = violations.iterator().next();
+        assertEquals("seats", violation.getPropertyPath().toString());
     }
 
 }

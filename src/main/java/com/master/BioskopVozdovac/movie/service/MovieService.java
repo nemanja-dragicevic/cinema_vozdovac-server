@@ -186,17 +186,17 @@ public class MovieService {
         movieRepository.save(movieAdapter.dtoToEntity(dto));
     }
 
-    public MovieDTO trySaveMovie(MovieDTO dto) {
+//    public MovieDTO trySaveMovie(MovieDTO dto) {
 //        LocalDate currentDate = dto.getStartTime();
 //        LocalTime time = LocalTime.of(7, 0);
-        Set<RoleEntity> roleEntities = roleAdapter.toEntities(dto.getRoleDTO());
-        MovieEntity entity = movieAdapter.dtoToEntity(dto);
-
-        for (RoleEntity r : roleEntities)
-            r.setMovie(entity);
-        entity.setRoles(roleEntities);
-
-        MovieEntity movieEntity = movieRepository.save(entity);
+//        Set<RoleEntity> roleEntities = roleAdapter.toEntities(dto.getRoleDTO());
+//        MovieEntity entity = movieAdapter.dtoToEntity(dto);
+//
+//        for (RoleEntity r : roleEntities)
+//            r.setMovie(entity);
+//        entity.setRoles(roleEntities);
+//
+//        MovieEntity movieEntity = movieRepository.save(entity);
 
 //        for (String s : times) {
 //            System.out.println(LocalTime.parse(s));
@@ -219,9 +219,9 @@ public class MovieService {
 //            currentDate = currentDate.plusDays(1);
 //        }
 
-        return movieAdapter.entityToDTO(entity);
+//        return movieAdapter.entityToDTO(entity);
 //        return null;
-    }
+//    }
 
     public List<MovieDTO> getMoviesWithoutProjections() {
         List<MovieEntity> movies = movieRepository.findAllWOProjections();

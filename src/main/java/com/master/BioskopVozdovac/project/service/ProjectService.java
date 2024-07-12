@@ -60,8 +60,7 @@ public class ProjectService {
         return projectRepository.getAvailableTimes(
                 dto.getHall().getHallID(),
                 dto.getMovie().getStartTime().atTime(12, 0, 0),
-                dto.getMovie().getEndTime().atTime(23, 0, 0),
-                0).stream()
+                dto.getMovie().getEndTime().atTime(23, 0, 0)).stream()
                 .map(result -> new ProjectTimes(
                         LocalTime.parse(result[0].toString()),
                         LocalTime.parse(result[1].toString())
@@ -129,5 +128,10 @@ public class ProjectService {
         Date endDate = Date.valueOf(currentDate.plusDays(2));
         List<ProjectEntity> projections = projectRepository.findByMovieMovieID(id, startDate, endDate);
         return projections.stream().map(projectAdapter::entityToDTO).collect(Collectors.toList());
+    }
+
+    public List<ProjectDTO> todaysProjections() {
+        List<ProjectEntity> entities = projectRepository.findTodaysProjections();
+        return entities.stream().map(projectAdapter::entityToDTO).collect(Collectors.toList());
     }
 }

@@ -3,8 +3,8 @@ package com.master.BioskopVozdovac.ticket.model;
 import com.master.BioskopVozdovac.project.model.ProjectEntity;
 import com.master.BioskopVozdovac.seat.model.SeatEntity;
 import jakarta.validation.*;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -30,7 +30,7 @@ public class TicketItemEntityTest {
     @Mock
     private SeatEntity seatEntity;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
 

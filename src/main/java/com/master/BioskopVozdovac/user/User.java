@@ -7,6 +7,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * Base abstract class representing a user in the system.
+ * This class serves as a blueprint for user entities with common properties like username, password, and email.
+ *
+ * @author Nemanja Dragićević
+ */
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,10 +21,21 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public abstract class User {
 
+    /**
+     * The username of the user.
+     */
     protected String username;
 
+
+    /**
+     * The password of the user.
+     */
     protected String password;
 
+
+    /**
+     * The email of the user.
+     */
     protected String email;
 
 }

@@ -70,6 +70,11 @@ public class ProjectController {
         return new ResponseEntity<>(projectService.getProjectionsForDateAndHall(date, hallID), HttpStatus.OK);
     }
 
+    @GetMapping("/today")
+    public ResponseEntity<List<ProjectDTO>> getTodaysProjections() {
+        return new ResponseEntity<>(projectService.todaysProjections(), HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ProjectDTO> updateProjection(@RequestBody ProjectDTO dto) {
         return new ResponseEntity<>(projectService.updateProjection(dto), HttpStatus.OK);

@@ -77,6 +77,12 @@ public class ActorService {
         return "Successfully deleted actor with id: " + id;
     }
 
+    /**
+     * Retrieves a list of all actors from the database and converts them to DTOs (Data Transfer Objects).
+     * Uses the ActorAdapter to convert entities fetched from the ActorRepository into ActorDTOs.
+     *
+     * @return List of ActorDTO objects representing all actors in the database.
+     */
     public List<ActorDTO> getAll() {
         return actorAdapter.toDTO(actorRepository.findAll());
     }

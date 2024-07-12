@@ -111,10 +111,10 @@ public class MovieController {
         return new ResponseEntity<>(movieService.getMoviesWithoutProjections(), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/try")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<MovieDTO> saveMovie(@RequestBody MovieDTO dto) {
-        return new ResponseEntity<>(movieService.trySaveMovie(dto), HttpStatus.OK);
+//    @PostMapping(value = "/try")
+//    @PreAuthorize("hasAuthority('ADMIN')")
+//    public ResponseEntity<MovieDTO> saveMovie(@RequestBody MovieDTO dto) {
+//        return new ResponseEntity<>(movieService.trySaveMovie(dto), HttpStatus.OK);
 //        ObjectMapper objectMapper = new ObjectMapper();
 //        try {
 //            objectMapper.findAndRegisterModules();
@@ -124,6 +124,6 @@ public class MovieController {
 //            e.printStackTrace();
 //            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 //        }
-    }
+//    }
 
 }

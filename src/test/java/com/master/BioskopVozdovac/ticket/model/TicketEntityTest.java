@@ -6,8 +6,8 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 import java.time.LocalDateTime;
@@ -28,7 +28,7 @@ public class TicketEntityTest {
     @Mock
     private TicketItemEntity ticketItemEntity;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.validatorFactory = Validation.buildDefaultValidatorFactory();
         this.validator = validatorFactory.getValidator();
