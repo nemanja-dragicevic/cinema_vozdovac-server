@@ -64,6 +64,7 @@ public class ProjectEntityTest {
         projectEntity.setTime(LocalDateTime.now());
         projectEntity.setProjectEnd(LocalDateTime.now());
         projectEntity.setMovie(new MovieEntity());
+        projectEntity.setHall(new HallEntity());
         projectEntity.setPrice(-1L);
 
         Set<ConstraintViolation<ProjectEntity>> violations = validator.validate(projectEntity);
