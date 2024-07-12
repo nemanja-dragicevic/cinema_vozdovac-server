@@ -4,6 +4,7 @@ import com.master.BioskopVozdovac.hall.model.HallEntity;
 import com.master.BioskopVozdovac.ticket.model.TicketItemEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,7 @@ public class SeatEntity {
      * The row number of the seat.
      */
     @NotNull
+    @Positive
     @Column(name = "row_number")
     private int rowNumber;
 
@@ -41,6 +43,7 @@ public class SeatEntity {
      * The seat number within the row.
      */
     @NotNull
+    @Positive
     @Column(name = "seat_number")
     private int seatNumber;
 
@@ -48,6 +51,7 @@ public class SeatEntity {
      * The hall to which this seat belongs.
      * Represents the many-to-one relationship between SeatEntity and HallEntity.
      */
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hall_id")
     private HallEntity hall;
