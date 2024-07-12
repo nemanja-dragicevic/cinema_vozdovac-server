@@ -50,6 +50,7 @@ public class RoleEntity {
     /**
      * The name of the role actor played in certain movie.
      */
+    @NotNull
     private String roleName;
 
 }
