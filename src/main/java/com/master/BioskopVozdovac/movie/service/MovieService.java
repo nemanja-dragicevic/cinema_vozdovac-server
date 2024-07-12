@@ -55,11 +55,12 @@ public class MovieService {
      * Saves a new movie along with its poster image to the database and S3 storage.
      *
      * @param dto  The MovieDTO containing movie details.
-     * @param file The MultipartFile representing the movie poster image.
+     * @param small The MultipartFile representing the movie thumbnail image.
+     * @param big The MultipartFile representing the movie poster image.
      * @return The saved MovieDTO.
      * @throws RuntimeException if there is an error during file upload to S3.
      */
-    public MovieDTO saveMovie(MovieDTO dto, MultipartFile file) {
+    public MovieDTO saveMovie(MovieDTO dto, MultipartFile small, MultipartFile big) {
         Set<RoleEntity> roleEntities = roleAdapter.toEntities(dto.getRoleDTO());
         MovieEntity entity = movieAdapter.dtoToEntity(dto);
 
@@ -70,8 +71,8 @@ public class MovieService {
         entity = movieRepository.save(entity);
 
         try {
-            s3Service.uploadFile(dto.getName() + ".webp", file);
-            s3Service.uploadFile(dto.getName() + " big.webp", file);
+            s3Service.uploadFile(dto.getName() + ".webp", small);
+            s3Service.uploadFile(dto.getName() + " big.webp", big);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

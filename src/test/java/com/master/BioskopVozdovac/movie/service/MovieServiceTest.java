@@ -67,13 +67,14 @@ public class MovieServiceTest {
 
     @Test
     void testSaveMovie() throws IOException {
-        MultipartFile file = mock(MultipartFile.class);
+        MultipartFile small = mock(MultipartFile.class);
+        MultipartFile big = mock(MultipartFile.class);
         when(movieAdapter.dtoToEntity(any(MovieDTO.class))).thenReturn(movieEntity);
         when(roleAdapter.toEntities(anySet())).thenReturn(new HashSet<>());
         when(movieRepository.save(any(MovieEntity.class))).thenReturn(movieEntity);
         when(movieAdapter.entityToDTO(any(MovieEntity.class))).thenReturn(movieDTO);
 
-        MovieDTO result = movieService.saveMovie(movieDTO, file);
+        MovieDTO result = movieService.saveMovie(movieDTO, small, big);
 
         assertNotNull(result);
         verify(movieRepository, times(1)).save(any(MovieEntity.class));
@@ -83,13 +84,14 @@ public class MovieServiceTest {
 
     @Test
     void testSaveMovieException() throws IOException {
-        MultipartFile file = mock(MultipartFile.class);
+        MultipartFile small = mock(MultipartFile.class);
+        MultipartFile big = mock(MultipartFile.class);
         when(movieAdapter.dtoToEntity(any(MovieDTO.class))).thenReturn(movieEntity);
         when(roleAdapter.toEntities(anySet())).thenReturn(new HashSet<>());
         when(movieRepository.save(any(MovieEntity.class))).thenReturn(movieEntity);
         doThrow(IOException.class).when(s3Service).uploadFile(anyString(), any(MultipartFile.class));
 
-        assertThrows(RuntimeException.class, () -> movieService.saveMovie(movieDTO, file));
+        assertThrows(RuntimeException.class, () -> movieService.saveMovie(movieDTO, small, big));
     }
 
     @Test

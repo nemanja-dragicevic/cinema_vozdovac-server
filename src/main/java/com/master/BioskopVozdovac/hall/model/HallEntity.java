@@ -62,7 +62,7 @@ public class HallEntity {
     /**
      * The list of seats in the hall.
      */
-    @NotEmpty
+//    @NotEmpty
     @OneToMany(mappedBy = "hall", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SeatEntity> seats = new ArrayList<>();
 
