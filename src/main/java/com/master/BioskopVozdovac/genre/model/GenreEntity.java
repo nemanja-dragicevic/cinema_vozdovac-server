@@ -45,10 +45,6 @@ public class GenreEntity {
      * Represents the many-to-many relationship between GenreEntity and MovieEntity.
      */
     @ManyToMany(mappedBy = "genres")
-//    @JoinTable(
-//            name = "movie_genres",
-//            joinColumns = @JoinColumn(name = "genre_id"),
-//            inverseJoinColumns = @JoinColumn(name = "movie_id"))
     @JsonIgnore
     private Set<MovieEntity> movies;
 

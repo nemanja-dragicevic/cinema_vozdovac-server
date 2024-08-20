@@ -85,7 +85,6 @@ public class MemberEntity extends User {
      * The password of the member.
      */
     @NotEmpty
-//    @Pattern(regexp = PatternUtils.PASSWORD_PATTERN)
     private String password;
 
     /**
