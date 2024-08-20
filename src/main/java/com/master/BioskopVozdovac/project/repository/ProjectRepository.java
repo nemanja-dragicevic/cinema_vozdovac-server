@@ -61,7 +61,7 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Long> {
 
     @Query(value = "select * " +
             "from \"public\".projects p " +
-            "where cast(p.starts_at as date) = current_date ", nativeQuery = true)
+            "where p.starts_at >= CURRENT_TIMESTAMP ", nativeQuery = true)
     List<ProjectEntity> findTodaysProjections();
 
 //    @Query(value = "with filtered as (select distinct to_char(p.project, 'HH24:MI') as hour " +
