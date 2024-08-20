@@ -151,8 +151,7 @@ public class MovieService {
      * @return A list of MovieDTOs with AWS details.
      */
     public List<MovieDTO> getAllMoviesWithAWS() {
-//        List<MovieDTO> dtos = movieAdapter.toDto(movieRepository.findAllShowing());
-        List<MovieEntity> entities = movieRepository.findAllShowing();
+        List<MovieEntity> entities = movieRepository.findCurrentAndUpcomingMovies();
         List<MovieDTO> dtos = new ArrayList<>();
 
         for (MovieEntity entity : entities) {
