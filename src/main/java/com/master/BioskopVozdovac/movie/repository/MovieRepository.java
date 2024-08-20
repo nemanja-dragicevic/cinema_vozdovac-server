@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
 
-    @Query("select m from MovieEntity m where m.startTime <= current_date")
+    @Query("select m from MovieEntity m where m.startTime <= current_date and m.endTime >= current_date")
     List<MovieEntity> findAllShowing();
 
     @Query("select m from MovieEntity m where (m.startTime <= current_date and m.endTime > current_date) or " +
