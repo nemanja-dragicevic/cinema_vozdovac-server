@@ -1,13 +1,9 @@
 package com.master.BioskopVozdovac.genre.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.master.BioskopVozdovac.movie.model.MovieEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
@@ -20,7 +16,6 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
 @Table(name = "genre")
@@ -37,7 +32,6 @@ public class GenreEntity {
     /**
      * The name of the genre.
      */
-    @NotEmpty
     private String name;
 
     /**
@@ -45,7 +39,16 @@ public class GenreEntity {
      * Represents the many-to-many relationship between GenreEntity and MovieEntity.
      */
     @ManyToMany(mappedBy = "genres")
-    @JsonIgnore
+    @JsonBackReference
     private Set<MovieEntity> movies;
+
+    private GenreEntity(Long genreID, String name) {
+        this.genreID = genreID;
+        this.name = name;
+    }
+
+    public static GenreEntity create(Long genreID, String name) {
+        return new GenreEntity(genreID, name);
+    }
 
 }

@@ -4,12 +4,7 @@ import com.master.BioskopVozdovac.hall.model.HallEntity;
 import com.master.BioskopVozdovac.movie.model.MovieEntity;
 import com.master.BioskopVozdovac.ticket.model.TicketItemEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -26,6 +21,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "projects")
+@Builder
 public class ProjectEntity {
 
     /**
@@ -41,7 +37,6 @@ public class ProjectEntity {
      * Represents the many-to-one relationship between ProjectEntity and MovieEntity.
      */
     @ManyToOne
-    @NotNull
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
     private MovieEntity movie;
 
@@ -50,28 +45,24 @@ public class ProjectEntity {
      * Represents the many-to-one relationship between ProjectEntity and HallEntity.
      */
     @ManyToOne
-    @NotNull
     @JoinColumn(name = "hall_id", referencedColumnName = "id")
     private HallEntity hall;
 
     /**
      * The start time of the projection.
      */
-    @NotNull
     @Column(name = "starts_at")
     private LocalDateTime time;
 
     /**
      * The end time of the projection.
      */
-    @NotNull
     @Column(name = "ends_at")
     private LocalDateTime projectEnd;
 
     /**
      * The price of the projection.
      */
-    @Positive
     @Column(name = "price")
     private Long price;
 

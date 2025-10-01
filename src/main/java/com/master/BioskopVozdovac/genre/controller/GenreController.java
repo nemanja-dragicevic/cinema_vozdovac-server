@@ -25,7 +25,7 @@ public class GenreController {
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<GenreDTO> saveGenre(@RequestBody GenreDTO dto) {
-        return new ResponseEntity<>(genreService.saveGenre(dto), HttpStatus.OK);
+        return new ResponseEntity<>(genreService.saveGenre(dto), HttpStatus.CREATED);
     }
 
     @PutMapping

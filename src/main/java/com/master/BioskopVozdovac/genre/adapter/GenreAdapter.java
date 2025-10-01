@@ -2,59 +2,51 @@ package com.master.BioskopVozdovac.genre.adapter;
 
 import com.master.BioskopVozdovac.genre.model.GenreDTO;
 import com.master.BioskopVozdovac.genre.model.GenreEntity;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component
-public class GenreAdapter {
+public final class GenreAdapter {
 
-    public GenreDTO entityToDTO(final GenreEntity entity) {
+    private GenreAdapter() {
+        throw new AssertionError();
+    }
+
+    public static GenreDTO entityToDTO(final GenreEntity entity) {
         if (entity == null)
             return null;
 
-        final GenreDTO dto = new GenreDTO();
-
-        dto.setGenreID(entity.getGenreID());
-        dto.setName(entity.getName());
-
-        return dto;
+        return new GenreDTO(entity.getGenreID(), entity.getName());
     }
 
-    public GenreEntity dtoToEntity(final GenreDTO dto) {
+    public static GenreEntity dtoToEntity(final GenreDTO dto) {
         if (dto == null)
             return null;
 
-        final GenreEntity entity = new GenreEntity();
-
-        entity.setGenreID(dto.getGenreID());
-        entity.setName(dto.getName());
-
-        return entity;
+        return GenreEntity.create(dto.genreID(), dto.name());
     }
 
-    public Set<GenreDTO> toDto(final Set<GenreEntity> entities) {
+    public static Set<GenreDTO> toDto(final Set<GenreEntity> entities) {
         if (Objects.isNull(entities))
-            return null;
+            return Set.of();
 
-        return entities.stream().map(this::entityToDTO).collect(Collectors.toSet());
+        return entities.stream().map(GenreAdapter::entityToDTO).collect(Collectors.toSet());
     }
 
-    public List<GenreDTO> toDto(final List<GenreEntity> entities) {
+    public static List<GenreDTO> toDto(final List<GenreEntity> entities) {
         if (Objects.isNull(entities))
-            return null;
+            return List.of();
 
-        return entities.stream().map(this::entityToDTO).collect(Collectors.toList());
+        return entities.stream().map(GenreAdapter::entityToDTO).toList();
     }
 
-    public Set<GenreEntity> toEntity(final Set<GenreDTO> dtos) {
+    public static Set<GenreEntity> toEntity(final Set<GenreDTO> dtos) {
         if (Objects.isNull(dtos))
-            return null;
+            return Set.of();
 
-        return dtos.stream().map(this::dtoToEntity).collect(Collectors.toSet());
+        return dtos.stream().map(GenreAdapter::dtoToEntity).collect(Collectors.toSet());
     }
 
 }

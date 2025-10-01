@@ -46,7 +46,7 @@ public class ActorController {
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ActorDTO> saveActor(@Valid @RequestBody ActorDTO dto) {
-        return new ResponseEntity<>(actorService.saveActor(dto), HttpStatus.OK);
+        return new ResponseEntity<>(actorService.saveActor(dto), HttpStatus.CREATED);
     }
 
     /**
@@ -71,7 +71,7 @@ public class ActorController {
      */
     @PutMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<ActorDTO> updateActor(@RequestBody ActorDTO dto) {
+    public ResponseEntity<ActorDTO> updateActor(@RequestBody @Valid ActorDTO dto) {
         return new ResponseEntity<>(actorService.updateActor(dto), HttpStatus.OK);
     }
 

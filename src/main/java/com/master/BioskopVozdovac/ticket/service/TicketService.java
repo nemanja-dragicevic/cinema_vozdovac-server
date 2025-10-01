@@ -24,7 +24,6 @@ public class TicketService {
     private final TicketAdapter ticketAdapter;
     private final TicketRepository ticketRepository;
     private final ProjectAdapter projectAdapter;
-    private final SeatAdapter seatAdapter;
 
     public List<TicketDTO> getTicketsUser(Long id) {
         List<TicketEntity> entities = ticketRepository.findByMemberMemberID(id);
@@ -39,7 +38,7 @@ public class TicketService {
         for (TicketItemEntity ticketItem: ticket.getTicketItems()) {
             TicketItems item = new TicketItems();
             item.setProjectDTO(projectAdapter.entityToDTO(ticketItem.getProject()));
-            item.setSeatDTO(seatAdapter.entityToDTO(ticketItem.getSeat()));
+            item.setSeatDTO(SeatAdapter.entityToDTO(ticketItem.getSeat()));
             ticketItems.add(item);
         }
         return ticketItems;
@@ -69,7 +68,7 @@ public class TicketService {
         for (TicketItemEntity item : items) {
             TicketItems ti = new TicketItems();
             ti.setProjectDTO(projectAdapter.entityToDTO(item.getProject()));
-            ti.setSeatDTO(seatAdapter.entityToDTO(item.getSeat()));
+            ti.setSeatDTO(SeatAdapter.entityToDTO(item.getSeat()));
             itemsList.add(ti);
         }
         return itemsList;

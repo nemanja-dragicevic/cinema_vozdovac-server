@@ -1,7 +1,9 @@
 package com.master.BioskopVozdovac.member.service;
 
 import com.master.BioskopVozdovac.enums.MemberRole;
+import com.master.BioskopVozdovac.exception.NotFoundException;
 import com.master.BioskopVozdovac.exception.UserException;
+import com.master.BioskopVozdovac.exception.UsernamePasswordException;
 import com.master.BioskopVozdovac.member.adapter.MemberAdapter;
 import com.master.BioskopVozdovac.member.model.ChangePassword;
 import com.master.BioskopVozdovac.member.model.MemberDTO;
@@ -21,14 +23,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final MemberAdapter memberAdapter;
+    private static final String USERNAME_PASSWORD_ERROR = "Wrong username or password";
 
     private final MemberRepository memberRepository;
 
     private final PasswordEncoder passwordEncoder;
 
     public MemberDTO create(MemberEntity entity) {
-        return memberAdapter.entityToDTO(memberRepository.saveAndFlush(entity));
+        return MemberAdapter.entityToDTO(memberRepository.save(entity));
     }
 
     /**
@@ -47,30 +49,29 @@ public class MemberService {
         Optional<MemberEntity> entities = memberRepository.findByUsername(dto.getUsername());
 
         if (entities.isPresent())
-            throw new UserException("Username already taken", HttpStatus.CONFLICT);
+            throw new UserException("Username already taken");
 
         dto.setPassword(passwordEncoder.encode(CharBuffer.wrap(dto.getPassword())));
         dto.setRole(MemberRole.USER);
 
-        MemberEntity entity = memberRepository.saveAndFlush(memberAdapter.dtoToEntity(dto));
+        MemberEntity entity = memberRepository.save(MemberAdapter.dtoToEntity(dto));
         entity.setPassword(null);
 
-        return memberAdapter.entityToDTO(entity);
+        return MemberAdapter.entityToDTO(entity);
     }
 
     public MemberDTO getDtoById(Long id) {
         MemberEntity entity = memberRepository.findById(id).orElseThrow(()
                 -> new NoSuchElementException("There is no member with id: " + id));
-        return memberAdapter.entityToDTO(entity);
+        return MemberAdapter.entityToDTO(entity);
     }
 
     public MemberDTO updateMember(@RequestBody MemberDTO dto) {
         MemberEntity entity = memberRepository.findById(dto.getMemberID()).orElseThrow(()
-                    -> new UserException("Member with id: " + dto.getMemberID() + " doesn't exist",
-                    HttpStatus.NOT_FOUND));
-        MemberEntity updated = memberAdapter.dtoToEntity(dto);
+                    -> new NotFoundException("Member with id: " + dto.getMemberID() + " doesn't exist"));
+        MemberEntity updated = MemberAdapter.dtoToEntity(dto);
         updated.setPassword(entity.getPassword());
-        return memberAdapter.entityToDTO(memberRepository.saveAndFlush(updated));
+        return MemberAdapter.entityToDTO(memberRepository.saveAndFlush(updated));
     }
 
     public String deleteMember(Long id) {
@@ -80,30 +81,30 @@ public class MemberService {
 
     public MemberDTO login(MemberDTO dto) {
         MemberEntity entity = memberRepository.findByUsername(dto.getUsername()).
-                orElseThrow(() -> new UserException("User not found", HttpStatus.NOT_FOUND));
+                orElseThrow(() -> new UsernamePasswordException(USERNAME_PASSWORD_ERROR));
 
         if (!passwordEncoder.matches(CharBuffer.wrap(dto.getPassword()), entity.getPassword()))
-            throw new UserException("Wrong password", HttpStatus.UNAUTHORIZED);
+            throw new UsernamePasswordException(USERNAME_PASSWORD_ERROR);
 
         entity.setPassword(null);
-        return memberAdapter.entityToDTO(entity);
+        return MemberAdapter.entityToDTO(entity);
     }
 
     public MemberDTO findByUsername(String username) {
         MemberEntity member = memberRepository.findByUsername(username)
-                .orElseThrow(() -> new UserException("There is no such username", HttpStatus.NOT_FOUND));
-        return memberAdapter.entityToDTO(member);
+                .orElseThrow(() -> new UsernamePasswordException(USERNAME_PASSWORD_ERROR));
+        return MemberAdapter.entityToDTO(member);
     }
 
     public MemberDTO changePassword(ChangePassword dto) {
         MemberEntity entity = memberRepository.findByUsername(dto.getMember().getUsername()).
-                orElseThrow(() -> new UserException("User not found", HttpStatus.NOT_FOUND));
+                orElseThrow(() -> new UsernamePasswordException(USERNAME_PASSWORD_ERROR));
 
         if (!passwordEncoder.matches(CharBuffer.wrap(dto.getOldPassword()), entity.getPassword()))
-            throw new UserException("Wrong password", HttpStatus.UNAUTHORIZED);
+            throw new UsernamePasswordException(USERNAME_PASSWORD_ERROR);
 
         entity.setPassword(passwordEncoder.encode(CharBuffer.wrap(dto.getNewPassword())));
 
-        return memberAdapter.entityToDTO(memberRepository.save(entity));
+        return MemberAdapter.entityToDTO(memberRepository.save(entity));
     }
 }

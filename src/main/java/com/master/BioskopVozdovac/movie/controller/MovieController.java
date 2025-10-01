@@ -47,7 +47,7 @@ public class MovieController {
         try {
             objectMapper.findAndRegisterModules();  // Nece da se parsira LocalDate
             MovieDTO dto = objectMapper.readValue(movieJSON, MovieDTO.class);
-            return new ResponseEntity<>(movieService.saveMovie(dto, small, big), HttpStatus.OK);
+            return new ResponseEntity<>(movieService.saveMovie(dto, small, big), HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

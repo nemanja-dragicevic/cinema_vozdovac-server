@@ -2,6 +2,8 @@ package com.master.BioskopVozdovac.project.model;
 
 import com.master.BioskopVozdovac.hall.model.HallDTO;
 import com.master.BioskopVozdovac.movie.model.MovieDTO;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -11,13 +13,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Builder
 public class ProjectDTO {
 
     private Long id;
-    private MovieDTO movie;
-    private HallDTO hall;
-    private LocalDateTime projectTime;
-    private LocalDateTime projectEnd;
-    private Long price;
+    @NotNull private MovieDTO movie;
+    @NotNull private HallDTO hall;
+    @NotNull private LocalDateTime projectTime;
+    @NotNull private LocalDateTime projectEnd;
+    @NotNull @Positive private Long price;
 
 }

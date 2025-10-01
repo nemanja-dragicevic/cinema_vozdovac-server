@@ -16,17 +16,15 @@ import java.util.Optional;
 public class GenreService {
 
     private final GenreRepository genreRepository;
-    private final GenreAdapter genreAdapter;
 
     public List<GenreDTO> getAllGenres() {
-        return genreAdapter.toDto(genreRepository.findAll());
+        return GenreAdapter.toDto(genreRepository.findAll());
     }
 
     public GenreDTO saveGenre(GenreDTO dto) {
-        GenreEntity entity = genreRepository.saveAndFlush(genreAdapter.dtoToEntity(dto));
-        dto.setGenreID(entity.getGenreID());
+        GenreEntity entity = genreRepository.saveAndFlush(GenreAdapter.dtoToEntity(dto));
 
-        return dto;
+        return GenreAdapter.entityToDTO(entity);
     }
 
     public String deleteGenre(Long id) {
@@ -35,13 +33,13 @@ public class GenreService {
     }
 
     public GenreDTO updateGenre(GenreDTO dto) {
-        Optional<GenreEntity> dbEntity = genreRepository.findById(dto.getGenreID());
+        Optional<GenreEntity> dbEntity = genreRepository.findById(dto.genreID());
 
         if (dbEntity.isEmpty())
-            throw new NoSuchElementException("There is no element with id: " + dto.getGenreID());
+            throw new NoSuchElementException("There is no element with id: " + dto.genreID());
 
-        GenreEntity entity = genreAdapter.dtoToEntity(dto);
+        GenreEntity entity = GenreAdapter.dtoToEntity(dto);
 
-        return genreAdapter.entityToDTO(genreRepository.saveAndFlush(entity));
+        return GenreAdapter.entityToDTO(genreRepository.saveAndFlush(entity));
     }
 }

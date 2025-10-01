@@ -2,31 +2,31 @@ package com.master.BioskopVozdovac.member.adapter;
 
 import com.master.BioskopVozdovac.member.model.MemberDTO;
 import com.master.BioskopVozdovac.member.model.MemberEntity;
-import org.springframework.stereotype.Component;
 
-@Component
-public class MemberAdapter {
+public final class MemberAdapter {
 
-    public MemberEntity dtoToEntity(MemberDTO dto) {
+    private MemberAdapter(){
+        throw new AssertionError();
+    }
+
+    public static MemberEntity dtoToEntity(MemberDTO dto) {
         if(dto == null)
             return null;
 
-        final MemberEntity entity =new MemberEntity();
-
-        entity.setMemberID(dto.getMemberID());
-        entity.setFirstName(dto.getFirstName());
-        entity.setLastName(dto.getLastName());
-        entity.setBirthDate(dto.getBirthDate());
-        entity.setGender(dto.getGender());
-        entity.setRole(dto.getRole());
-        entity.setEmail(dto.getEmail());
-        entity.setUsername(dto.getUsername());
-        entity.setPassword(dto.getPassword());
-
-        return entity;
+        return MemberEntity.builder()
+                .memberID(dto.getMemberID())
+                .firstName(dto.getFirstName())
+                .lastName(dto.getLastName())
+                .email(dto.getEmail())
+                .birthDate(dto.getBirthDate())
+                .gender(dto.getGender())
+                .role(dto.getRole())
+                .username(dto.getUsername())
+                .password(dto.getPassword())
+                .build();
     }
 
-    public MemberDTO entityToDTO(MemberEntity entity) {
+    public static MemberDTO entityToDTO(MemberEntity entity) {
         if (entity == null)
             return null;
         final MemberDTO dto = new MemberDTO();

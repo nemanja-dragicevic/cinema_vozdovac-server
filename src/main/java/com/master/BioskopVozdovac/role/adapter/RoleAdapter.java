@@ -1,13 +1,12 @@
 package com.master.BioskopVozdovac.role.adapter;
 
-import com.master.BioskopVozdovac.actor.adapter.ActorAdapter;
-import com.master.BioskopVozdovac.movie.adapter.MovieAdapter;
+import com.master.BioskopVozdovac.actor.repository.ActorRepository;
+import com.master.BioskopVozdovac.movie.repository.MovieRepository;
 import com.master.BioskopVozdovac.role.model.RoleDTO;
 import com.master.BioskopVozdovac.role.model.RoleEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,27 +14,23 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RoleAdapter {
 
-    private final ActorAdapter actorAdapter;
-
-    private final MovieAdapter movieAdapter;
-
+    private final MovieRepository movieRepository;
+    private final ActorRepository actorRepository;
 
     public RoleDTO toDTO(final RoleEntity entity) {
         if (entity == null)
             return null;
 
-        final RoleDTO dto = new RoleDTO();
-        dto.setRoleID(entity.getRoleID());
-        dto.setActor(actorAdapter.entityToDTO(entity.getActor()));
-        dto.setMovie(movieAdapter.entityToDTO(entity.getMovie()));
-        dto.setRoleName(entity.getRoleName());
-
-        return dto;
+        return new RoleDTO(
+                entity.getRoleID(),
+                entity.getActor().getActorID(),
+                entity.getMovie().getMovieID(),
+                entity.getRoleName());
     }
 
     public Set<RoleDTO> toDTOs(final Set<RoleEntity> list) {
         if(list == null)
-            return null;
+            return Set.of();
 
         return list.stream().map(this::toDTO).collect(Collectors.toSet());
     }
@@ -46,26 +41,19 @@ public class RoleAdapter {
 
         final RoleEntity entity = new RoleEntity();
 
-        entity.setRoleID(dto.getRoleID());
-        entity.setMovie(movieAdapter.dtoToEntity(dto.getMovie()));
-        entity.setActor(actorAdapter.dtoToEntity(dto.getActor()));
-        entity.setRoleName(dto.getRoleName());
+        entity.setRoleID(dto.roleID());
+        entity.setMovie(movieRepository.findById(dto.movieID()).orElse(null));
+        entity.setActor(actorRepository.findById(dto.actorID()).orElse(null));
+        entity.setRoleName(dto.roleName());
 
         return entity;
     }
 
     public Set<RoleEntity> toEntities(Set<RoleDTO> roles) {
         if (roles == null)
-            return null;
+            return Set.of();
 
         return roles.stream().map(this::toEntity).collect(Collectors.toSet());
-    }
-
-    public List<RoleDTO> toDTOs(final List<RoleEntity> entities) {
-        if (entities == null)
-            return null;
-
-        return entities.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
 }

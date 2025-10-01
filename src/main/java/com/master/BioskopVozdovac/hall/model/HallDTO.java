@@ -1,29 +1,17 @@
 package com.master.BioskopVozdovac.hall.model;
 
 import com.master.BioskopVozdovac.seat.model.SeatDTO;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
+import lombok.*;
 
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@SuperBuilder(toBuilder = true)
-public class HallDTO {
-
-    private Long hallID;
-
-    private String hallName;
-
-    private int rowsCount;
-
-    private int seatsPerRow;
-
-    private List<SeatDTO> seats;
-
+@Builder
+public record HallDTO(Long hallID,
+                      @NotBlank String hallName,
+                      @Positive int rowsCount,
+                      @Positive int seatsPerRow,
+                      @NotEmpty List<SeatDTO> seats) {
 }

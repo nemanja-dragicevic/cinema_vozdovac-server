@@ -21,11 +21,13 @@ public class ActorData {
             .build();
 
     public static final ActorEntity UPDATED_ACTOR_ENTITY = ACTOR_ENTITY.toBuilder()
+            .actorID(0L)
             .firstName("Jackie")
             .lastName("Chan")
+            .gender(Gender.MALE)
             .build();
 
-    public static final ActorDTO UPDATED_ACTOR_DTO = ACTOR_DTO.toBuilder()
+    public static final ActorDTO UPDATED_ACTOR_DTO = ActorDTO.builder()
             .firstName("Jackie")
             .lastName("Chan")
             .build();

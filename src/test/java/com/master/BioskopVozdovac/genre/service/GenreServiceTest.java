@@ -1,6 +1,5 @@
 package com.master.BioskopVozdovac.genre.service;
 
-import com.master.BioskopVozdovac.genre.adapter.GenreAdapter;
 import com.master.BioskopVozdovac.genre.model.GenreDTO;
 import com.master.BioskopVozdovac.genre.model.GenreEntity;
 import com.master.BioskopVozdovac.genre.repository.GenreRepository;
@@ -23,9 +22,6 @@ public class GenreServiceTest {
     @Mock
     private GenreRepository genreRepository;
 
-    @Mock
-    private GenreAdapter genreAdapter;
-
     @InjectMocks
     private GenreService genreService;
 
@@ -44,27 +40,24 @@ public class GenreServiceTest {
     @Test
     void testGetAllGenres() {
         when(genreRepository.findAll()).thenReturn(List.of(genreEntity));
-        when(genreAdapter.toDto(anyList())).thenReturn(List.of(genreDTO));
 
         List<GenreDTO> genres = genreService.getAllGenres();
 
         assertNotNull(genres);
         assertEquals(1, genres.size());
-        assertEquals("Action", genres.get(0).getName());
+        assertEquals("Action", genres.get(0).name());
         verify(genreRepository, times(1)).findAll();
-        verify(genreAdapter, times(1)).toDto(anyList());
     }
 
     @Test
     void testSaveGenre() {
-        when(genreAdapter.dtoToEntity(any(GenreDTO.class))).thenReturn(genreEntity);
         when(genreRepository.saveAndFlush(any(GenreEntity.class))).thenReturn(genreEntity);
 
         GenreDTO saved = genreService.saveGenre(genreDTO);
 
         assertNotNull(saved);
-        assertEquals(1, saved.getGenreID());
-        assertEquals("Action", saved.getName());
+        assertEquals(1, saved.genreID());
+        assertEquals("Action", saved.name());
         verify(genreRepository, times(1)).saveAndFlush(any(GenreEntity.class));
     }
 
@@ -81,15 +74,13 @@ public class GenreServiceTest {
     @Test
     void testUpdateGenre() {
         when(genreRepository.findById(anyLong())).thenReturn(Optional.of(genreEntity));
-        when(genreAdapter.dtoToEntity(any(GenreDTO.class))).thenReturn(genreEntity);
         when(genreRepository.saveAndFlush(any(GenreEntity.class))).thenReturn(genreEntity);
-        when(genreAdapter.entityToDTO(any(GenreEntity.class))).thenReturn(genreDTO);
 
         GenreDTO updated = genreService.updateGenre(genreDTO);
 
         assertNotNull(updated);
-        assertEquals(1L, updated.getGenreID());
-        assertEquals("Action", updated.getName());
+        assertEquals(1L, updated.genreID());
+        assertEquals("Action", updated.name());
         verify(genreRepository, times(1)).findById(anyLong());
         verify(genreRepository, times(1)).saveAndFlush(any(GenreEntity.class));
     }

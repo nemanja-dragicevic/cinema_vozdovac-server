@@ -6,12 +6,8 @@ import com.master.BioskopVozdovac.ticket.model.TicketEntity;
 import com.master.BioskopVozdovac.user.User;
 import com.master.BioskopVozdovac.util.PatternUtils;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
@@ -43,17 +39,15 @@ public class MemberEntity extends User {
     /**
      * The first name of the member.
      */
-    @NotEmpty
     private String firstName;
 
     /**
      * The last name of the member.
      */
-    @NotEmpty
     private String lastName;
 
     /**
-     * The birth date of the member.
+     * The birthdate of the member.
      */
     private LocalDate birthDate;
 
@@ -77,14 +71,12 @@ public class MemberEntity extends User {
     /**
      * The username of the member.
      */
-    @NotEmpty
     @Pattern(regexp = PatternUtils.USERNAME_PATTERN)
     private String username;
 
     /**
      * The password of the member.
      */
-    @NotEmpty
     private String password;
 
     /**

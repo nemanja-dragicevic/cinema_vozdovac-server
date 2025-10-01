@@ -3,18 +3,17 @@ package com.master.BioskopVozdovac.movie.adapter;
 import com.master.BioskopVozdovac.genre.adapter.GenreAdapter;
 import com.master.BioskopVozdovac.movie.model.MovieDTO;
 import com.master.BioskopVozdovac.movie.model.MovieEntity;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Component
-@RequiredArgsConstructor
-public class MovieAdapter {
-    private final GenreAdapter genreAdapter;
+public final class MovieAdapter {
 
-    public MovieEntity dtoToEntity(final MovieDTO dto) {
+    private MovieAdapter(){
+        throw new AssertionError();
+    }
+
+    public static MovieEntity dtoToEntity(final MovieDTO dto) {
         if (dto == null)
             return null;
 
@@ -26,12 +25,12 @@ public class MovieAdapter {
         entity.setEndTime(dto.getEndTime());
         entity.setDescription(dto.getDescription());
         entity.setDuration(dto.getDuration());
-        entity.setGenres(genreAdapter.toEntity(dto.getGenres()));
+        entity.setGenres(GenreAdapter.toEntity(dto.getGenres()));
         
         return entity;
     }
 
-    public MovieDTO entityToDTO(final MovieEntity entity) {
+    public static MovieDTO entityToDTO(final MovieEntity entity) {
         if (entity == null)
             return null;
 
@@ -43,16 +42,16 @@ public class MovieAdapter {
         dto.setEndTime(entity.getEndTime());
         dto.setDescription(entity.getDescription());
         dto.setDuration(entity.getDuration());
-        dto.setGenres(genreAdapter.toDto(entity.getGenres()));
+        dto.setGenres(GenreAdapter.toDto(entity.getGenres()));
 
         return dto;
     }
 
-    public List<MovieDTO> toDto(List<MovieEntity> entities) {
+    public static List<MovieDTO> toDto(List<MovieEntity> entities) {
         if (entities == null)
-            return null;
+            return Collections.emptyList();
 
-        return entities.stream().map(this::entityToDTO).collect(Collectors.toList());
+        return entities.stream().map(MovieAdapter::entityToDTO).toList();
     }
 
 }

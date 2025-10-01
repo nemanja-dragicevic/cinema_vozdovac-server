@@ -1,10 +1,8 @@
 package com.master.BioskopVozdovac.hall.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.master.BioskopVozdovac.seat.model.SeatEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,23 +37,18 @@ public class HallEntity {
     /**
      * The name of the hall.
      */
-    @NotEmpty
     @Column(name = "hall_name")
     private String hallName;
 
     /**
      * The number of rows in the hall.
      */
-    @NotNull
-    @Positive
     @Column(name = "rows_count")
     private int rowsCount;
 
     /**
      * The number of seats per row in the hall.
      */
-    @NotNull
-    @Positive
     @Column(name = "seats_per_row")
     private int seatsPerRow;
 
@@ -63,6 +56,7 @@ public class HallEntity {
      * The list of seats in the hall.
      */
     @OneToMany(mappedBy = "hall", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<SeatEntity> seats = new ArrayList<>();
 
 }

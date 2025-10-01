@@ -1,24 +1,13 @@
 package com.master.BioskopVozdovac.role.model;
 
-import com.master.BioskopVozdovac.actor.model.ActorDTO;
-import com.master.BioskopVozdovac.movie.model.MovieDTO;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class RoleDTO {
 
-    private Long roleID;
-
-    private ActorDTO actor;
-
-    private MovieDTO movie;
-
-    private String roleName;
-
+@Builder
+public record RoleDTO(Long roleID,
+                      @NotNull Long actorID,
+                      @NotNull Long movieID,
+                      @NotBlank String roleName) {
 }

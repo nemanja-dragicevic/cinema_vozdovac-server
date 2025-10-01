@@ -4,11 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.master.BioskopVozdovac.enums.Gender;
 import com.master.BioskopVozdovac.role.model.RoleEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
@@ -22,7 +18,6 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name="actor")
 @SuperBuilder(toBuilder = true)
@@ -39,13 +34,11 @@ public class ActorEntity {
     /**
      * The first name of the actor.
      */
-    @NotEmpty
     private String firstName;
 
     /**
      * The last name of the actor.
      */
-    @NotEmpty
     private String lastName;
 
     /**
@@ -61,5 +54,16 @@ public class ActorEntity {
     @OneToMany(mappedBy = "actor", cascade = CascadeType.ALL)
     @JsonBackReference
     private Set<RoleEntity> roles = new HashSet<>();
+
+    private ActorEntity(Long id, String firstName, String lastName, Gender gender) {
+        this.actorID = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+    }
+
+    public static ActorEntity create(Long id, String firstName, String lastName, Gender gender) {
+        return new ActorEntity(id, firstName, lastName, gender);
+    }
 
 }

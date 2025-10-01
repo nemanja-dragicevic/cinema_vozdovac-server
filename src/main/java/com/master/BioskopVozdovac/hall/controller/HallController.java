@@ -2,6 +2,7 @@ package com.master.BioskopVozdovac.hall.controller;
 
 import com.master.BioskopVozdovac.hall.model.HallDTO;
 import com.master.BioskopVozdovac.hall.service.HallService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,8 +46,8 @@ public class HallController {
      */
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<HallDTO> createHall(@RequestBody HallDTO dto) {
-        return new ResponseEntity<>(hallService.createHall(dto), HttpStatus.OK);
+    public ResponseEntity<HallDTO> createHall(@RequestBody @Valid HallDTO dto) {
+        return new ResponseEntity<>(hallService.createHall(dto), HttpStatus.CREATED);
     }
 
     /**

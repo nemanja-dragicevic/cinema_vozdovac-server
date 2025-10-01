@@ -1,9 +1,9 @@
 package com.master.BioskopVozdovac.role.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.master.BioskopVozdovac.actor.model.ActorEntity;
 import com.master.BioskopVozdovac.movie.model.MovieEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +34,6 @@ public class RoleEntity {
      * Represents the many-to-one relationship between RoleEntity and ActorEntity.
      */
     @ManyToOne
-    @NotNull
     @JoinColumn(name = "actor_id", referencedColumnName = "id")
     private ActorEntity actor;
 
@@ -43,14 +42,17 @@ public class RoleEntity {
      * Represents the many-to-one relationship between RoleEntity and MovieEntity.
      */
     @ManyToOne(cascade = CascadeType.ALL)
-    @NotNull
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
+    @JsonBackReference
     private MovieEntity movie;
 
     /**
      * The name of the role actor played in certain movie.
      */
-    @NotNull
     private String roleName;
+
+    public static RoleEntity create(Long roleID, ActorEntity actor, MovieEntity movie, String roleName) {
+        return new RoleEntity(roleID, actor, movie, roleName);
+    }
 
 }

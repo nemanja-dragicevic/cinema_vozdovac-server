@@ -1,19 +1,15 @@
 package com.master.BioskopVozdovac.actor.service;
 
-import com.master.BioskopVozdovac.actor.adapter.ActorAdapter;
 import com.master.BioskopVozdovac.actor.model.ActorDTO;
 import com.master.BioskopVozdovac.actor.model.ActorEntity;
 import com.master.BioskopVozdovac.actor.repository.ActorRepository;
 import com.master.BioskopVozdovac.enums.Gender;
-import com.master.BioskopVozdovac.exception.UserException;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import org.junit.jupiter.api.BeforeEach;
+import com.master.BioskopVozdovac.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,65 +20,38 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class ActorServiceTest {
-
-    @Mock
-    private ActorRepository actorRepository;
-
-    @Mock
-    private ActorAdapter actorAdapter;
+@ExtendWith(MockitoExtension.class)
+class ActorServiceTest {
 
     @InjectMocks
     private ActorService actorService;
 
-    @PersistenceContext
-    EntityManager entityManager;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-
-        when(actorAdapter.entityToDTO(ACTOR_ENTITY))
-                .thenReturn(ACTOR_DTO);
-
-        when(actorAdapter.dtoToEntity(ACTOR_DTO))
-                .thenReturn(ACTOR_ENTITY);
-    }
+    @Mock
+    private ActorRepository actorRepository;
 
     @Test
     void testSaveActor() {
-        when(actorRepository.saveAndFlush(any(ActorEntity.class)))
+        when(actorRepository.save(any(ActorEntity.class)))
                 .thenReturn(ACTOR_ENTITY);
 
         ActorDTO resultDto = actorService.saveActor(ACTOR_DTO);
 
-        verify(actorAdapter, times(1)).dtoToEntity(ACTOR_DTO);
-        verify(actorRepository, times(1)).saveAndFlush(any(ActorEntity.class));
-        verify(actorAdapter, times(1)).entityToDTO(ACTOR_ENTITY);
+        verify(actorRepository, times(1)).save(any(ActorEntity.class));
 
-        assertEquals(ACTOR_ENTITY.getActorID(), resultDto.getActorID());
-        assertEquals(ACTOR_ENTITY.getFirstName(), resultDto.getFirstName());
-        assertEquals(ACTOR_ENTITY.getLastName(), resultDto.getLastName());
-        assertEquals(ACTOR_ENTITY.getGender(), resultDto.getGender());
+        assertEquals(ACTOR_ENTITY.getActorID(), resultDto.actorID());
+        assertEquals(ACTOR_ENTITY.getFirstName(), resultDto.firstName());
+        assertEquals(ACTOR_ENTITY.getLastName(), resultDto.lastName());
+        assertEquals(ACTOR_ENTITY.getGender(), resultDto.gender());
     }
 
     @Test
     void testGetActorById() {
-        ActorEntity actorEntity = ACTOR_ENTITY;
-
-        ActorDTO actorDTO = new ActorDTO();
-        actorDTO.setActorID(0L);
-        actorDTO.setFirstName("Jack");
-        actorDTO.setLastName("Sparrow");
-        actorDTO.setGender(Gender.MALE);
-
-        when(actorRepository.findById(anyLong())).thenReturn(Optional.of(actorEntity));
-        when(actorAdapter.entityToDTO(any(ActorEntity.class))).thenReturn(actorDTO);
+        when(actorRepository.findById(anyLong())).thenReturn(Optional.of(ACTOR_ENTITY));
 
         ActorDTO found = actorService.getActorById(0L);
 
         assertNotNull(found);
-        assertEquals("Jack", found.getFirstName());
+        assertEquals("Jack", found.firstName());
         verify(actorRepository, times(1)).findById(anyLong());
     }
 
@@ -90,41 +59,61 @@ public class ActorServiceTest {
     void testGetActorByIdNotFound() {
         when(actorRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        UserException exception = assertThrows(UserException.class, () -> {
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
             actorService.getActorById(1L);
         });
 
         assertEquals("Could not find actor with id: 1", exception.getMessage());
-        assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
         verify(actorRepository, times(1)).findById(anyLong());
     }
 
     @Test
     void testUpdateActor() {
-        when(actorRepository.saveAndFlush(ACTOR_ENTITY)).thenReturn(ACTOR_ENTITY);
-        when(actorRepository.findById(ACTOR_ENTITY.getActorID())).thenReturn(Optional.of(ACTOR_ENTITY));
-        when(actorRepository.saveAndFlush(UPDATED_ACTOR_ENTITY)).thenReturn(UPDATED_ACTOR_ENTITY);
-        when(actorAdapter.entityToDTO(UPDATED_ACTOR_ENTITY)).thenReturn(UPDATED_ACTOR_DTO);
-        when(actorAdapter.dtoToEntity(UPDATED_ACTOR_DTO)).thenReturn(UPDATED_ACTOR_ENTITY);
+        when(actorRepository.findById(anyLong())).thenReturn(Optional.ofNullable(ACTOR_ENTITY));
+        when(actorRepository.save(any(ActorEntity.class))).thenReturn(ACTOR_ENTITY);
 
-        ActorDTO created = actorService.saveActor(ACTOR_DTO);
-
-        ActorDTO updated = actorService.updateActor(UPDATED_ACTOR_DTO);
+        ActorDTO updated = actorService.updateActor(ACTOR_DTO);
 
         assertNotNull(updated);
-
-        assertNotEquals(updated.getFirstName(), created.getFirstName());
-        assertNotEquals(updated.getLastName(), created.getLastName());
+        assertEquals(ACTOR_DTO.firstName(), updated.firstName());
+        assertEquals(ACTOR_DTO.lastName(), updated.lastName());
+        assertEquals(ACTOR_DTO.gender(), updated.gender());
     }
 
     @Test
-    public void testDeleteActor() {
-        Long actorID = 1L;
+    void testUpdateActorNotFound() {
+        when(actorRepository.findById(anyLong())).thenReturn(Optional.empty());
 
+        NotFoundException e = assertThrows(NotFoundException.class, () -> {
+            actorService.updateActor(ACTOR_DTO);
+        });
+
+        assertEquals("Actor not found", e.getMessage());
+        verify(actorRepository, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void testDeleteActor() {
+        when(actorRepository.existsById(anyLong())).thenReturn(true);
+        doNothing().when(actorRepository).deleteById(anyLong());
+
+        Long actorID = 1L;
         String message = actorService.deleteActorById(actorID);
 
         verify(actorRepository, times(1)).deleteById(actorID);
         assertEquals("Successfully deleted actor with id: " + actorID, message);
+    }
+
+    @Test
+    void testDeleteActorNotFound() {
+        when(actorRepository.existsById(anyLong())).thenReturn(false);
+
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
+            actorService.deleteActorById(1L);
+        });
+
+        assertEquals("Actor not found", exception.getMessage());
+        verify(actorRepository, times(1)).existsById(anyLong());
     }
 
     @Test
@@ -137,12 +126,9 @@ public class ActorServiceTest {
 
         List<ActorDTO> dtos = new ArrayList<>();
         dtos.add(ACTOR_DTO);
-        UPDATED_ACTOR_DTO.setActorID(2L);
-        UPDATED_ACTOR_DTO.setGender(Gender.MALE);
         dtos.add(UPDATED_ACTOR_DTO);
 
         when(actorRepository.findAll()).thenReturn(entites);
-        when(actorAdapter.toDTO(anyList())).thenReturn(dtos);
 
         List<ActorDTO> all = actorService.getAll();
 
@@ -150,15 +136,13 @@ public class ActorServiceTest {
         assertEquals(2, all.size());
 
         verify(actorRepository, times(1)).findAll();
-        verify(actorAdapter, times(1)).toDTO(anyList());
 
-        assertEquals(0L, all.get(0).getActorID());
-        assertEquals("Jack", all.get(0).getFirstName());
-        assertEquals("Sparrow", all.get(0).getLastName());
+        assertEquals("Jack", all.get(0).firstName());
+        assertEquals("Sparrow", all.get(0).lastName());
 
-        assertEquals(2L, all.get(1).getActorID());
-        assertEquals("Jackie", all.get(1).getFirstName());
-        assertEquals("Chan", all.get(1).getLastName());
+        assertEquals(2L, all.get(1).actorID());
+        assertEquals("Jackie", all.get(1).firstName());
+        assertEquals("Chan", all.get(1).lastName());
     }
 
 }

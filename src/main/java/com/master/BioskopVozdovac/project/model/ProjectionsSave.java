@@ -2,24 +2,16 @@ package com.master.BioskopVozdovac.project.model;
 
 import com.master.BioskopVozdovac.hall.model.HallDTO;
 import com.master.BioskopVozdovac.movie.model.MovieDTO;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 import java.time.LocalTime;
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class ProjectionsSave {
-
-    private Long id;
-    private MovieDTO movie;
-    private HallDTO hall;
-    private List<LocalTime> projectionTime;
-    private Long price;
-
+public record ProjectionsSave(Long id,
+                              @NotNull MovieDTO movie,
+                              @NotNull HallDTO hall,
+                              @NotEmpty List<LocalTime> projectionTime,
+                              @Positive Long price) {
 }

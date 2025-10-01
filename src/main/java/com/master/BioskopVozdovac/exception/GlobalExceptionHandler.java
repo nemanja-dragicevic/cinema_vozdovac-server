@@ -1,9 +1,8 @@
 package com.master.BioskopVozdovac.exception;
 
-import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -12,13 +11,37 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserException.class)
     public ResponseEntity<String> handleUserException(UserException ex) {
-        return ResponseEntity.status(ex.getStatus()).body(ex.getTitle());
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ex.getMessage());
     }
 
-    @ExceptionHandler({ValidationException.class, MethodArgumentNotValidException.class})
-    public ResponseEntity<ExceptionResponse> handleValidatorResponse(Exception ex) {
-        ExceptionResponse response = new ExceptionResponse("Validation error", ex.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(UsernamePasswordException.class)
+    public ResponseEntity<String> handleUsernamePasswordException(UsernamePasswordException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException ex) {
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ex.getMessage());
     }
 
 }
