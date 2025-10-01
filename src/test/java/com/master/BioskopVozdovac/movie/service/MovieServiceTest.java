@@ -3,7 +3,6 @@ package com.master.BioskopVozdovac.movie.service;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import com.master.BioskopVozdovac.aws.S3Service;
-import com.master.BioskopVozdovac.movie.adapter.MovieAdapter;
 import com.master.BioskopVozdovac.movie.model.MovieDTO;
 import com.master.BioskopVozdovac.movie.model.MovieEntity;
 import com.master.BioskopVozdovac.movie.repository.MovieRepository;
@@ -25,13 +24,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.Mockito.*;
 
-public class MovieServiceTest {
+class MovieServiceTest {
 
     @Mock
     private MovieRepository movieRepository;
-
-    @Mock
-    private MovieAdapter movieAdapter;
 
     @Mock
     private S3Service s3Service;
@@ -69,24 +65,20 @@ public class MovieServiceTest {
     void testSaveMovie() throws IOException {
         MultipartFile small = mock(MultipartFile.class);
         MultipartFile big = mock(MultipartFile.class);
-        when(movieAdapter.dtoToEntity(any(MovieDTO.class))).thenReturn(movieEntity);
         when(roleAdapter.toEntities(anySet())).thenReturn(new HashSet<>());
         when(movieRepository.save(any(MovieEntity.class))).thenReturn(movieEntity);
-        when(movieAdapter.entityToDTO(any(MovieEntity.class))).thenReturn(movieDTO);
 
         MovieDTO result = movieService.saveMovie(movieDTO, small, big);
 
         assertNotNull(result);
         verify(movieRepository, times(1)).save(any(MovieEntity.class));
         verify(s3Service, times(2)).uploadFile(anyString(), any(MultipartFile.class));
-        verify(movieAdapter, times(1)).entityToDTO(any(MovieEntity.class));
     }
 
     @Test
     void testSaveMovieException() throws IOException {
         MultipartFile small = mock(MultipartFile.class);
         MultipartFile big = mock(MultipartFile.class);
-        when(movieAdapter.dtoToEntity(any(MovieDTO.class))).thenReturn(movieEntity);
         when(roleAdapter.toEntities(anySet())).thenReturn(new HashSet<>());
         when(movieRepository.save(any(MovieEntity.class))).thenReturn(movieEntity);
         doThrow(IOException.class).when(s3Service).uploadFile(anyString(), any(MultipartFile.class));
@@ -97,14 +89,12 @@ public class MovieServiceTest {
     @Test
     void testGetMovieById() {
         when(movieRepository.findById(anyLong())).thenReturn(Optional.of(movieEntity));
-        when(movieAdapter.entityToDTO(any(MovieEntity.class))).thenReturn(movieDTO);
 
         MovieDTO result = movieService.getMovieById(1L);
 
         assertNotNull(result);
         assertEquals(movieDTO.getName(), result.getName());
         verify(movieRepository, times(1)).findById(anyLong());
-        verify(movieAdapter, times(1)).entityToDTO(any(MovieEntity.class));
     }
 
     @Test
@@ -118,10 +108,8 @@ public class MovieServiceTest {
     void testUpdateMovie() throws IOException {
         MultipartFile smallFile = mock(MultipartFile.class);
         MultipartFile bigFile = mock(MultipartFile.class);
-        when(movieAdapter.dtoToEntity(any(MovieDTO.class))).thenReturn(movieEntity);
         when(roleAdapter.toEntities(anySet())).thenReturn(new HashSet<>());
         when(movieRepository.save(any(MovieEntity.class))).thenReturn(movieEntity);
-        when(movieAdapter.entityToDTO(any(MovieEntity.class))).thenReturn(movieDTO);
 
         MovieDTO result = movieService.updateMovie(movieDTO, smallFile, bigFile);
 
@@ -129,14 +117,12 @@ public class MovieServiceTest {
         verify(movieRepository, times(1)).save(any(MovieEntity.class));
         verify(s3Service, times(1)).uploadFile(eq(movieDTO.getName() + ".webp"), any(MultipartFile.class));
         verify(s3Service, times(1)).uploadFile(eq(movieDTO.getName() + " big.webp"), any(MultipartFile.class));
-        verify(movieAdapter, times(1)).entityToDTO(any(MovieEntity.class));
     }
 
     @Test
     void testUpdateMovieException() throws IOException {
         MultipartFile smallFile = mock(MultipartFile.class);
         MultipartFile bigFile = mock(MultipartFile.class);
-        when(movieAdapter.dtoToEntity(any(MovieDTO.class))).thenReturn(movieEntity);
         when(roleAdapter.toEntities(anySet())).thenReturn(new HashSet<>());
         when(movieRepository.save(any(MovieEntity.class))).thenReturn(movieEntity);
         doThrow(IOException.class).when(s3Service).uploadFile(anyString(), any(MultipartFile.class));
@@ -169,7 +155,6 @@ public class MovieServiceTest {
         List<MovieEntity> movieEntities = Arrays.asList(movieEntity);
         List<MovieDTO> movieDTOs = Arrays.asList(movieDTO);
         when(movieRepository.findCurrentAndUpcomingMovies()).thenReturn(movieEntities);
-        when(movieAdapter.toDto(anyList())).thenReturn(movieDTOs);
 
         List<MovieDTO> result = movieService.getAllMovies();
 
@@ -177,7 +162,6 @@ public class MovieServiceTest {
         assertFalse(result.isEmpty());
         assertEquals(movieDTOs.size(), result.size());
         verify(movieRepository, times(1)).findCurrentAndUpcomingMovies();
-        verify(movieAdapter, times(1)).toDto(anyList());
     }
 
     @Test
@@ -191,8 +175,7 @@ public class MovieServiceTest {
         movieDTO.setMovieID(1L);
         movieDTO.setName("Test Movie");
 
-        when(movieRepository.findAllShowing()).thenReturn(entities);
-        when(movieAdapter.entityToDTO(any(MovieEntity.class))).thenReturn(movieDTO);
+        when(movieRepository.findCurrentAndUpcomingMovies()).thenReturn(entities);
         when(roleService.getRolesForMovie(anyLong())).thenReturn(new HashSet<>());
 
         String pictureContent = Base64.getEncoder().encodeToString("fake-image-content".getBytes());
@@ -222,7 +205,6 @@ public class MovieServiceTest {
         movieEntity.setMovieID(1L);
         movieEntity.setName("Test Movie");
 
-        when(movieAdapter.dtoToEntity(any(MovieDTO.class))).thenReturn(movieEntity);
         when(movieRepository.save(any(MovieEntity.class))).thenReturn(movieEntity);
 
         movieService.saveStartAndEndDates(movieDTO);
@@ -242,7 +224,6 @@ public class MovieServiceTest {
         movieDTO.setName("Test Movie");
 
         when(movieRepository.findAllWOProjections()).thenReturn(entities);
-        when(movieAdapter.entityToDTO(any(MovieEntity.class))).thenReturn(movieDTO);
 
         List<MovieDTO> result = movieService.getMoviesWithoutProjections();
 

@@ -21,8 +21,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProjectAdapter {
 
-    private final MovieAdapter movieAdapter;
-    private final HallAdapter hallAdapter;
     private final MovieRepository movieRepository;
     private final HallRepository hallRepository;
 
@@ -33,8 +31,8 @@ public class ProjectAdapter {
         final ProjectDTO dto = new ProjectDTO();
 
         dto.setId(entity.getProjectID());
-        dto.setMovie(movieAdapter.entityToDTO(entity.getMovie()));
-        dto.setHall(hallAdapter.entityToDTO(entity.getHall()));
+        dto.setMovie(MovieAdapter.entityToDTO(entity.getMovie()));
+        dto.setHall(HallAdapter.entityToDTO(entity.getHall()));
         dto.setProjectTime(entity.getTime());
         dto.setProjectEnd(entity.getProjectEnd());
         dto.setPrice(entity.getPrice());
@@ -74,11 +72,11 @@ public class ProjectAdapter {
     }
 
     private HallEntity prepareHall(HallDTO hall) {
-        if (hall == null || hall.getHallID() == null)
+        if (hall == null || hall.hallID() == null)
             return null;
 
-        return hallRepository.findById(hall.getHallID()).orElseThrow(() ->
-                new NoSuchElementException("No hall with id: " + hall.getHallID()));
+        return hallRepository.findById(hall.hallID()).orElseThrow(() ->
+                new NoSuchElementException("No hall with id: " + hall.hallID()));
     }
 
 }

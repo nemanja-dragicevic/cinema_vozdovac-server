@@ -1,10 +1,9 @@
 package com.master.BioskopVozdovac.ticket.model;
 
 import com.master.BioskopVozdovac.enums.TicketStatus;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -14,14 +13,15 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class TicketDTO {
 
     private Long id;
-    private Long memberID;
+    @NotNull @Positive private Long memberID;
     private LocalDateTime payinTime;
-    private Long total;
+    @NotNull @Positive private Long total;
     private TicketStatus status;
-    private int totalSeats;
+    @Positive private int totalSeats;
     private Set<TicketItemDTO> ticketItems = new HashSet<>();
 
 }

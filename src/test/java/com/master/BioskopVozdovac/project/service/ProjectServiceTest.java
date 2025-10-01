@@ -24,12 +24,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import static com.master.BioskopVozdovac.input.HallData.HALL_DTO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class ProjectServiceTest {
+class ProjectServiceTest {
 
     @Mock
     private ProjectRepository projectRepository;
@@ -50,14 +51,15 @@ public class ProjectServiceTest {
 
     @Test
     void testSaveMovieProjections() {
-        ProjectionsSave dto = new ProjectionsSave();
         MovieDTO movieDTO = new MovieDTO();
         movieDTO.setStartTime(LocalDate.now());
         movieDTO.setEndTime(LocalDate.now().plusDays(2));
         movieDTO.setDuration(120);
-        dto.setMovie(movieDTO);
-        dto.setProjectionTime(List.of(LocalTime.of(10, 0), LocalTime.of(14, 0)));
-        dto.setPrice(10L);
+        ProjectionsSave dto = new ProjectionsSave(0L,
+                movieDTO,
+                HALL_DTO,
+                List.of(LocalTime.of(10, 0), LocalTime.of(14, 0)),
+                10L);
 
         when(projectAdapter.dtoToEntity(any(ProjectDTO.class))).thenReturn(new ProjectEntity());
 
@@ -70,7 +72,6 @@ public class ProjectServiceTest {
 
     @Test
     void testGetAvailableTimes() {
-        ProjectionsSave dto = new ProjectionsSave();
         MovieDTO movieDTO = new MovieDTO();
         movieDTO.setMovieID(1L);
         movieDTO.setStartTime(LocalDate.now());
@@ -79,22 +80,18 @@ public class ProjectServiceTest {
         movieDTO.setName("asd");
         movieDTO.setRoleDTO(new HashSet<>());
         movieDTO.setDuration(100);
-        dto.setMovie(movieDTO);
 
         List<Object[]> availableTimes = new ArrayList<>();
 
         when(projectRepository.getAvailableTimes(anyLong(), any(LocalDateTime.class), any(LocalDateTime.class)))
                 .thenReturn(availableTimes);
 
-        HallDTO hallDTO = new HallDTO();
-        hallDTO.setHallID(1L);
-        hallDTO.setHallName("Sala Uno");
+        HallDTO hallDTO = HallDTO.builder()
+                .hallID(1L)
+                .hallName("Sala Uno")
+                .build();
 
-        dto.setHall(hallDTO);
-
-        dto.setId(1L);
-        dto.setPrice(1000L);
-        dto.setProjectionTime(new ArrayList<>());
+        ProjectionsSave dto = new ProjectionsSave(1L, movieDTO, hallDTO, new ArrayList<>(), 1000L);
 
         availableTimes.add(new Object[]{LocalTime.of(10, 0), LocalTime.of(12, 0)});
         availableTimes.add(new Object[]{LocalTime.of(14, 0), LocalTime.of(16, 0)});
@@ -103,10 +100,10 @@ public class ProjectServiceTest {
 
         assertNotNull(result);
         assertEquals(2, result.size());
-        assertEquals(LocalTime.of(10, 0), result.get(0).getStart());
-        assertEquals(LocalTime.of(12, 0), result.get(0).getEnd());
-        assertEquals(LocalTime.of(14, 0), result.get(1).getStart());
-        assertEquals(LocalTime.of(16, 0), result.get(1).getEnd());
+        assertEquals(LocalTime.of(10, 0), result.get(0).start());
+        assertEquals(LocalTime.of(12, 0), result.get(0).end());
+        assertEquals(LocalTime.of(14, 0), result.get(1).start());
+        assertEquals(LocalTime.of(16, 0), result.get(1).end());
     }
 
     @Test
@@ -175,8 +172,8 @@ public class ProjectServiceTest {
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals("10:00", result.get(0).getStart().toString());
-        assertEquals("12:00", result.get(0).getEnd().toString());
+        assertEquals("10:00", result.get(0).start().toString());
+        assertEquals("12:00", result.get(0).end().toString());
     }
 
     @Test

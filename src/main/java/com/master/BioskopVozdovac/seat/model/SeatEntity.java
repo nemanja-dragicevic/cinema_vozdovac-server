@@ -1,14 +1,10 @@
 package com.master.BioskopVozdovac.seat.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.master.BioskopVozdovac.hall.model.HallEntity;
 import com.master.BioskopVozdovac.ticket.model.TicketItemEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * Represents a seat entity in the application.
@@ -21,6 +17,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "seat")
+@Builder
 public class SeatEntity {
 
     /**
@@ -34,16 +31,12 @@ public class SeatEntity {
     /**
      * The row number of the seat.
      */
-    @NotNull
-    @Positive
     @Column(name = "row_number")
     private int rowNumber;
 
     /**
      * The seat number within the row.
      */
-    @NotNull
-    @Positive
     @Column(name = "seat_number")
     private int seatNumber;
 
@@ -51,9 +44,9 @@ public class SeatEntity {
      * The hall to which this seat belongs.
      * Represents the many-to-one relationship between SeatEntity and HallEntity.
      */
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hall_id")
+    @JsonBackReference
     private HallEntity hall;
 
     /**

@@ -2,47 +2,39 @@ package com.master.BioskopVozdovac.actor.adapter;
 
 import com.master.BioskopVozdovac.actor.model.ActorDTO;
 import com.master.BioskopVozdovac.actor.model.ActorEntity;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Component
-public class ActorAdapter {
+public final class ActorAdapter {
 
-    public ActorEntity dtoToEntity(final ActorDTO dto) {
+    private ActorAdapter(){
+        throw new AssertionError();
+    }
+
+    public static ActorEntity dtoToEntity(final ActorDTO dto) {
         if (dto == null)
             return null;
 
-        final ActorEntity entity = new ActorEntity();
-
-        entity.setActorID(dto.getActorID());
-        entity.setFirstName(dto.getFirstName());
-        entity.setLastName(dto.getLastName());
-        entity.setGender(dto.getGender());
-
-        return entity;
+        return ActorEntity.create(dto.actorID(), dto.firstName(), dto.lastName(), dto.gender());
     }
 
-    public ActorDTO entityToDTO(final ActorEntity entity) {
+    public static ActorDTO entityToDTO(final ActorEntity entity) {
         if (entity == null)
             return null;
 
-        final ActorDTO dto = new ActorDTO();
-
-        dto.setActorID(entity.getActorID());
-        dto.setFirstName(entity.getFirstName());
-        dto.setLastName(entity.getLastName());
-        dto.setGender(entity.getGender());
-
-        return dto;
+        return ActorDTO.builder()
+                .actorID(entity.getActorID())
+                .firstName(entity.getFirstName())
+                .lastName(entity.getLastName())
+                .gender(entity.getGender())
+                .build();
     }
 
-    public List<ActorDTO> toDTO(final List<ActorEntity> entities) {
+    public static List<ActorDTO> toDTO(final List<ActorEntity> entities) {
         if (entities == null)
-            return null;
+            return List.of();
 
-        return entities.stream().map(this::entityToDTO).collect(Collectors.toList());
+        return entities.stream().map(ActorAdapter::entityToDTO).toList();
     }
 
 }

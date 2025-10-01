@@ -28,19 +28,15 @@ public class HallService {
     private final HallRepository hallRepository;
 
     /**
-     * Adapter for converting between DTOs and entities
-     */
-    private final HallAdapter hallAdapter;
-
-    /**
      * Creates a new hall with seats based on the provided HallDTO.
      *
      * @param dto The HallDTO containing hall details including number of rows and seats per row.
      * @return The created HallDTO after saving to the database.
      */
     public HallDTO createHall(HallDTO dto) {
-        HallEntity entity = hallAdapter.dtoToEntity(dto);
-        int numberOfRows = dto.getRowsCount(), seatsPerRow = dto.getSeatsPerRow();
+        HallEntity entity = HallAdapter.dtoToEntity(dto);
+        int numberOfRows = dto.rowsCount();
+        int seatsPerRow = dto.seatsPerRow();
 
         for (int i = 1; i <= numberOfRows; i++) {
             for (int j = 1; j <= seatsPerRow; j++) {
@@ -52,7 +48,7 @@ public class HallService {
             }
         }
 
-        return hallAdapter.entityToDTO(hallRepository.save(entity));
+        return HallAdapter.entityToDTO(hallRepository.save(entity));
     }
 
     /**
@@ -74,7 +70,7 @@ public class HallService {
      */
     public List<HallDTO> getAll() {
         List<HallEntity> entities = hallRepository.findAll();
-        return hallAdapter.toDTO(entities);
+        return HallAdapter.toDTO(entities);
     }
 
     /**
@@ -84,11 +80,11 @@ public class HallService {
      * @return The updated HallDTO after saving the updated entity to the database.
      */
     public HallDTO updateHall(HallDTO dto) {
-        HallEntity entity = hallAdapter.dtoToEntity(dto);
+        HallEntity entity = HallAdapter.dtoToEntity(dto);
         entity.setSeats(new ArrayList<>());
 
-        for (int i = 1; i <= dto.getRowsCount(); i++) {
-            for (int j = 1; j <= dto.getSeatsPerRow(); j++) {
+        for (int i = 1; i <= dto.rowsCount(); i++) {
+            for (int j = 1; j <= dto.seatsPerRow(); j++) {
                 SeatEntity seat = new SeatEntity();
                 seat.setRowNumber(i);
                 seat.setSeatNumber(j);
@@ -98,6 +94,6 @@ public class HallService {
         }
 
         //TODO: When there are movies currently projecting in this hall, no update allowed
-        return hallAdapter.entityToDTO(hallRepository.saveAndFlush(entity));
+        return HallAdapter.entityToDTO(hallRepository.saveAndFlush(entity));
     }
 }

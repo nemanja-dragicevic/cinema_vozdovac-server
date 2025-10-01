@@ -16,6 +16,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class RoleService {
 
     private final RoleRepository roleRepository;
@@ -28,8 +29,9 @@ public class RoleService {
         return roleAdapter.toDTOs(new HashSet<>(roleRepository.findAll()));
     }
 
+    @Transactional
     public RoleDTO saveRole(RoleDTO dto) {
-        RoleEntity entity = roleRepository.saveAndFlush(roleAdapter.toEntity(dto));
+        RoleEntity entity = roleRepository.save(roleAdapter.toEntity(dto));
         return roleAdapter.toDTO(entity);
     }
 

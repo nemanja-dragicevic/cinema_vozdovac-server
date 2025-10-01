@@ -1,19 +1,8 @@
 package com.master.BioskopVozdovac.genre.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@SuperBuilder(toBuilder = true)
-public class GenreDTO {
-
-    private Long genreID;
-    private String name;
-
-}
+@Builder
+public record GenreDTO(Long genreID,
+                @NotBlank String name) {}

@@ -32,35 +32,35 @@ public class ProjectService {
     }
 
     public String saveMovieProjections(ProjectionsSave dto) {
-        LocalDate startDate = dto.getMovie().getStartTime();
-        LocalDate endDate = dto.getMovie().getEndTime();
+        LocalDate startDate = dto.movie().getStartTime();
+        LocalDate endDate = dto.movie().getEndTime();
 
-        dto.getMovie().setStartTime(startDate);
-        dto.getMovie().setEndTime(endDate);
+        dto.movie().setStartTime(startDate);
+        dto.movie().setEndTime(endDate);
 
         while (!startDate.isAfter(endDate)) {
             ProjectDTO project = new ProjectDTO();
-            project.setMovie(dto.getMovie());
-            project.setHall(dto.getHall());
-            project.setPrice(dto.getPrice());
+            project.setMovie(dto.movie());
+            project.setHall(dto.hall());
+            project.setPrice(dto.price());
 
-            for (LocalTime lt : dto.getProjectionTime()) {
+            for (LocalTime lt : dto.projectionTime()) {
                 project.setProjectTime(LocalDateTime.of(startDate, lt));
-                project.setProjectEnd(LocalDateTime.of(startDate, lt.plusMinutes(dto.getMovie().getDuration())));
+                project.setProjectEnd(LocalDateTime.of(startDate, lt.plusMinutes(dto.movie().getDuration())));
                 projectRepository.save(projectAdapter.dtoToEntity(project));
             }
             startDate = startDate.plusDays(1);
         }
-        movieService.saveStartAndEndDates(dto.getMovie());
+        movieService.saveStartAndEndDates(dto.movie());
 
         return "Successfully saved movie projection(s)!!!";
     }
 
     public List<ProjectTimes> getAvailableTimes(ProjectionsSave dto) {
         return projectRepository.getAvailableTimes(
-                dto.getHall().getHallID(),
-                dto.getMovie().getStartTime().atTime(12, 0, 0),
-                dto.getMovie().getEndTime().atTime(23, 0, 0)).stream()
+                dto.hall().hallID(),
+                dto.movie().getStartTime().atTime(12, 0, 0),
+                dto.movie().getEndTime().atTime(23, 0, 0)).stream()
                 .map(result -> new ProjectTimes(
                         LocalTime.parse(result[0].toString()),
                         LocalTime.parse(result[1].toString())
@@ -68,11 +68,11 @@ public class ProjectService {
     }
 
     private boolean isTimeValid(List<ProjectTimes> times, LocalTime value, LocalTime endTime) {
-        if (times.size() == 0)
+        if (times.isEmpty())
             return true;
 
         for (ProjectTimes time : times) {
-            if (value.isBefore(time.getStart()) && endTime.isBefore(time.getStart()))
+            if (value.isBefore(time.start()) && endTime.isBefore(time.start()))
                 return true;
         }
 
@@ -88,14 +88,14 @@ public class ProjectService {
     public List<ProjectTimes> getProjectionsForDateAndHall(final Date date, final Long hallID) {
         List<Object[]> results = projectRepository.findAllByDateAndHall(date, hallID);
 
-        return results.stream().map(result -> new ProjectTimes(result[0].toString(),
-                result[1].toString())).toList();
+        return results.stream().map(result -> new ProjectTimes(
+                LocalTime.parse(result[0].toString()),
+                LocalTime.parse(result[1].toString()))).toList();
     }
 
     public String deleteProjectionWithID(Long id) {
-        ProjectEntity entity = projectRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException("There is no such projection")
-        );
+        projectRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("There is no such projection"));
 
         projectRepository.deleteById(id);
         return "Successfully deleted projection";
@@ -118,8 +118,9 @@ public class ProjectService {
     public List<ProjectTimes> getProjectionsForHallAndDates(Long hallID, Date startDate, Date endDate) {
         List<Object[]> results = projectRepository.findAllByHallAndDates(hallID, startDate, endDate);
 
-        return results.stream().map(result -> new ProjectTimes(result[0].toString(),
-                result[1].toString())).toList();
+        return results.stream().map(result -> new ProjectTimes(
+                LocalTime.parse(result[0].toString()),
+                LocalTime.parse(result[1].toString()))).toList();
     }
 
     public List<ProjectDTO> getProjectionsForCertainMovie(Long id) {

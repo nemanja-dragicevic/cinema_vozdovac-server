@@ -1,22 +1,10 @@
 package com.master.BioskopVozdovac.seat.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class SeatDTO {
-
-    private Long id;
-
-    private Long hallID;
-
-    private int rowNumber;
-
-    private int seatNumber;
-
+public record SeatDTO(Long id,
+                      @NotNull Long hallID,
+                      @Positive int rowNumber,
+                      @Positive int seatNumber) {
 }
