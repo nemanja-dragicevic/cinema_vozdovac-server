@@ -1,0 +1,113 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/001_create_tables.sql
+  - changeSet:
+      id: 002
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/002_create_actor.sql
+  - changeSet:
+      id: 003
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/003_create_movie.sql
+  - changeSet:
+      id: 004
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/004_create_roles.sql
+  - changeSet:
+      id: 005
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/007_create_genre.sql
+  - changeSet:
+      id: 006
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/008_create_movie_genres.sql
+  - changeSet:
+      id: 007
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/005_create_hall.sql
+  - changeSet:
+      id: 008
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/006_create_projects.sql
+  - changeSet:
+      id: 009
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/009_alter_members.sql
+  - changeSet:
+      id: 010
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/010_alter_members_phone.sql
+  - changeSet:
+      id: 011
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/011_alter_members_role.sql
+  - changeSet:
+      id: 012
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/012_alter_roles.sql
+  - changeSet:
+      id: 013
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/013_create_seat.sql
+  - changeSet:
+      id: 014
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/014_create_ticket_and_ticket_item.sql
+  - changeSet:
+      id: 015
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/015_add_payment_intent.sql
+  - changeSet:
+      id: 016
+      author: byCone
+      changes:
+        - sqlFile:
+            encoding: UTF-8
+            path: db/changes/016_insert_members.sql

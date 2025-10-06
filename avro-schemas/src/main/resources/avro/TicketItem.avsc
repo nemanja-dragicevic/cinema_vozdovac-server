@@ -1,0 +1,19 @@
+{
+  "namespace": "com.cinema_platform.avro",
+  "type": "record",
+  "name": "TicketItem",
+  "fields": [
+    {
+      "name": "projection",
+      "type": [
+        "null",
+        "com.cinema_platform.avro.Projection"
+      ],
+      "default": null
+    },
+    {
+      "name": "seat",
+      "type": "int"
+    }
+  ]
+}

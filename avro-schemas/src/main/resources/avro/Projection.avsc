@@ -1,0 +1,19 @@
+{
+  "namespace": "com.cinema_platform.avro",
+  "type": "record",
+  "name": "Projection",
+  "fields": [
+    {
+      "name": "movieName",
+      "type": "string"
+    },
+    {
+      "name": "hallName",
+      "type": "string"
+    },
+    {
+      "name": "projectionTime",
+      "type": "long"
+    }
+  ]
+}

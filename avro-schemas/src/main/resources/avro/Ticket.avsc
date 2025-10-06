@@ -1,0 +1,34 @@
+{
+  "namespace": "com.cinema_platform.avro",
+  "type": "record",
+  "name": "Ticket",
+  "fields": [
+    {
+      "name": "id",
+      "type": "long"
+    },
+    {
+      "name": "memberName",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "payinTime",
+      "type": "long"
+    },
+    {
+      "name": "total",
+      "type": "int"
+    },
+    {
+      "name": "items",
+      "type": {
+        "type": "array",
+        "items": "TicketItem"
+      }
+    }
+  ]
+}
