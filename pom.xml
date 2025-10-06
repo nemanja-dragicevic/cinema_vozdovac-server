@@ -21,9 +21,9 @@
     <description>Parent project for Cinema Platform services</description>
 
     <modules>
+        <module>avro-schemas</module>
         <module>cinema_vozdovac-server</module>
         <module>email-sender</module>
-        <module>avro-schemas</module>
     </modules>
 
     <properties>

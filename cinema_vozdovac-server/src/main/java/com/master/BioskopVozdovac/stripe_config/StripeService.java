@@ -1,12 +1,15 @@
 package com.master.BioskopVozdovac.stripe_config;
 
+import com.cinema_platform.avro.Ticket;
 import com.master.BioskopVozdovac.enums.TicketStatus;
 import com.master.BioskopVozdovac.exception.ExceptionResponse;
+import com.master.BioskopVozdovac.kafka.ConfirmationProducer;
 import com.master.BioskopVozdovac.project.model.ProjectEntity;
 import com.master.BioskopVozdovac.project.repository.ProjectRepository;
 import com.master.BioskopVozdovac.stripe_config.model.CreatePaymentResponse;
 import com.master.BioskopVozdovac.stripe_config.model.StripeResponse;
 import com.master.BioskopVozdovac.ticket.adapter.TicketAdapter;
+import com.master.BioskopVozdovac.ticket.adapter.TicketAvroAdapter;
 import com.master.BioskopVozdovac.ticket.model.TicketDTO;
 import com.master.BioskopVozdovac.ticket.model.TicketEntity;
 import com.master.BioskopVozdovac.ticket.model.TicketItemDTO;
@@ -48,6 +51,11 @@ public class StripeService {
      * Repository for managing projection entities in the database.
      */
     private final ProjectRepository projectRepository;
+
+    /**
+     * Kafka Producer for sending confirmation emails
+     */
+    private final ConfirmationProducer confirmationProducer;
 
     /**
      * Adapter for converting between DTOs and entities related to tickets.
@@ -187,13 +195,18 @@ public class StripeService {
             entity.setPaymentIntent(session.getPaymentIntent());
             ticketRepository.save(entity);
 
+            final Ticket ticketAvro = TicketAvroAdapter.entityToAvro(entity);
+            confirmationProducer.sendConfirmation(ticketAvro);
+
             return ticket;
         } catch (StripeException e) {
             // Handle capture failure, log the error, and return false
-            e.printStackTrace();
+            log.error(e.getMessage());
             throw new ExceptionResponse("Payment capture failed", e.getMessage());
         }
     }
+
+
 
     /**
      * Initiates a refund for a ticket identified by the provided ID.
