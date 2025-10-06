@@ -2,7 +2,6 @@ package com.master.BioskopVozdovac.kafka;
 
 import com.cinema_platform.avro.Employee;
 import com.cinema_platform.avro.Ticket;
-//import com.javatechie.dto.Employee;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
